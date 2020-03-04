@@ -21,7 +21,7 @@ const DEFAULT_STATE = {
  * Reduces the Redux actions of the feature features/feedback.
  */
 ReducerRegistry.register(
-    'features/feedback',
+    'features/jameda/feedback',
     (state = DEFAULT_STATE, action) => {
         switch (action.type) {
         case CANCEL_FEEDBACK: {

@@ -361,7 +361,7 @@ class JamedaFeedbackDialog extends Component<Props, State> {
  * }}
  */
 function _mapStateToProps(state) {
-    const { message, score } = state['features/feedback'];
+    const { message, score } = state['features/jameda/feedback'];
 
     return {
         /**

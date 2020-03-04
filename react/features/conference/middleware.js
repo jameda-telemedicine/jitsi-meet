@@ -14,6 +14,7 @@ import { pinParticipant } from '../base/participants';
 import { SET_REDUCED_UI } from '../base/responsive-ui';
 import { MiddlewareRegistry, StateListenerRegistry } from '../base/redux';
 import { FeedbackDialog } from '../feedback';
+import { JamedaFeedbackDialog } from '../jameda/feedback';
 import { setFilmstripEnabled } from '../filmstrip';
 import { setToolboxEnabled } from '../toolbox';
 
@@ -77,8 +78,12 @@ StateListenerRegistry.register(
             // we want to hide is a lot longer. Thus we take a bit of a shortcut
             // and explicitly check.
             if (typeof authRequired === 'undefined'
-                    && typeof passwordRequired === 'undefined'
-                    && !isDialogOpen(getState(), FeedbackDialog)) {
+                && typeof passwordRequired === 'undefined'
+                && (
+                    !isDialogOpen(getState(), JamedaFeedbackDialog)
+                    && !isDialogOpen(getState(), FeedbackDialog)
+                )
+            ) {
                 // Conference changed, left or failed... and there is no
                 // pending authentication, nor feedback request, so close any
                 // dialog we might have open.
