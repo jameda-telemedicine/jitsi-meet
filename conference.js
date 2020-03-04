@@ -116,6 +116,10 @@ import {
     maybeOpenFeedbackDialog,
     submitFeedback
 } from './react/features/feedback';
+import {
+    maybeOpenJamedaFeedbackDialog,
+    submitJamedaFeedback
+} from './react/features/jameda/feedback';
 import { mediaPermissionPromptVisibilityChanged } from './react/features/overlay';
 import { suspendDetected } from './react/features/power-monitor';
 import { setSharedVideoStatus } from './react/features/shared-video';
@@ -2716,7 +2720,8 @@ export default {
 
         if (requestFeedback) {
             requestFeedbackPromise
-                = APP.store.dispatch(maybeOpenFeedbackDialog(room))
+                // = APP.store.dispatch(maybeOpenFeedbackDialog(room))
+                = APP.store.dispatch(maybeOpenJamedaFeedbackDialog(room))
 
                     // false because the thank you dialog shouldn't be displayed
                     .catch(() => Promise.resolve(false));
