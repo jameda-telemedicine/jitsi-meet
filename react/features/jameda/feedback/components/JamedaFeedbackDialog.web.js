@@ -1,16 +1,13 @@
 // @flow
 
-import { FieldTextAreaStateless } from '@atlaskit/field-text-area';
-import StarIcon from '@atlaskit/icon/glyph/star';
-import StarFilledIcon from '@atlaskit/icon/glyph/star-filled';
+// import { FieldTextAreaStateless } from '@atlaskit/field-text-area';
+// import StarIcon from '@atlaskit/icon/glyph/star';
+// import StarFilledIcon from '@atlaskit/icon/glyph/star-filled';
 import React, { Component } from 'react';
 import { connect } from '../../../base/redux';
 import type { Dispatch } from 'redux';
 
-import {
-    createFeedbackOpenEvent,
-    sendAnalytics
-} from '../../../analytics';
+import { createFeedbackOpenEvent, sendAnalytics } from '../../../analytics';
 import { Dialog } from '../../../base/dialog';
 import { translate } from '../../../base/i18n';
 
@@ -19,8 +16,7 @@ import { cancelFeedback, submitJamedaFeedback } from '../actions';
 declare var APP: Object;
 declare var interfaceConfig: Object;
 
-const scoreAnimationClass
-    = interfaceConfig.ENABLE_FEEDBACK_ANIMATION ? 'shake-rotate' : '';
+// const scoreAnimationClass = interfaceConfig.ENABLE_FEEDBACK_ANIMATION ? 'shake-rotate' : '';
 
 /**
  * The scores to display for selecting. The score is the index in the array and
@@ -196,7 +192,7 @@ class JamedaFeedbackDialog extends Component<Props, State> {
      * @inheritdoc
      * @returns {ReactElement}
      */
-    render() {
+    /* render() {
         const { message, mousedOverScore, score } = this.state;
         const scoreToDisplayAsSelected
             = mousedOverScore > -1 ? mousedOverScore : score;
@@ -256,6 +252,30 @@ class JamedaFeedbackDialog extends Component<Props, State> {
                             shouldFitContainer = { true }
                             value = { message } />
                     </div>
+                </div>
+            </Dialog>
+        );
+    } */
+
+    /**
+     * Implements React's {@link Component#render()}.
+     *
+     * @inheritdoc
+     * @returns {ReactElement}
+     */
+    render() {
+        return (
+            <Dialog
+                okKey = 'dialog.Submit'
+                onCancel = { this._onCancel }
+                onSubmit = { this._onSubmit }
+                titleKey = 'Jameda Feedback'>
+                <div className = 'feedback-dialog'>
+                    <iframe
+                        frameBorder = '0'
+                        height = '710px'
+                        src = 'https://survey.zohopublic.eu/zs/2AB84n?id=1&email=admin@patientus.de&aid=1'
+                        width = '100%' />
                 </div>
             </Dialog>
         );
