@@ -107,6 +107,10 @@ function initCommands() {
             sendAnalytics(createApiEvent('submit.feedback'));
             APP.conference.submitFeedback(feedback.score, feedback.message);
         },
+        'submit-jameda-feedback': feedback => {
+            sendAnalytics(createApiEvent('submit.feedback'));
+            APP.conference.submitJamedaFeedback(feedback.score, feedback.message);
+        },
         'toggle-audio': () => {
             sendAnalytics(createApiEvent('toggle-audio'));
             logger.log('Audio toggle: API command received');

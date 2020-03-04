@@ -113,7 +113,6 @@ import { getJitsiMeetGlobalNS } from './react/features/base/util';
 import { showDesktopPicker } from './react/features/desktop-picker';
 import { appendSuffix } from './react/features/display-name';
 import {
-    maybeOpenFeedbackDialog,
     submitFeedback
 } from './react/features/feedback';
 import {
@@ -2720,6 +2719,7 @@ export default {
 
         if (requestFeedback) {
             requestFeedbackPromise
+
                 // = APP.store.dispatch(maybeOpenFeedbackDialog(room))
                 = APP.store.dispatch(maybeOpenJamedaFeedbackDialog(room))
 
@@ -3025,6 +3025,22 @@ export default {
     submitFeedback(score = -1, message = '') {
         if (score === -1 || (score >= 1 && score <= 5)) {
             APP.store.dispatch(submitFeedback(score, message, room));
+        }
+    },
+
+    /**
+     * Dispatches the passed in feedback for submission. The submitted score
+     * should be a number inclusively between 1 through 5, or -1 for no score.
+     *
+     * @param {number} score - a number between 1 and 5 (inclusive) or -1 for no
+     * score.
+     * @param {string} message - An optional message to attach to the feedback
+     * in addition to the score.
+     * @returns {void}
+     */
+    submitJamedaFeedback(score = -1, message = '') {
+        if (score === -1 || (score >= 1 && score <= 5)) {
+            APP.store.dispatch(submitJamedaFeedback(score, message, room));
         }
     },
 
