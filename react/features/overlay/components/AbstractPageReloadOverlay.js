@@ -145,6 +145,8 @@ export default class AbstractPageReloadOverlay<P: Props>
          */
         const timeoutSeconds = 10 + randomInt(0, 20);
 
+        // const timeoutSeconds = 10 + randomInt(0, 20);
+
         let message, title;
 
         if (this.props.isNetworkFailure) {

@@ -77,6 +77,7 @@
                     var showMoreText = "show more";
                     var showLessText = "show less";
 
+                    // FIXME Slow internet connection !!!
                     document.body.innerHTML
                         = "<div style='"
                         + "position: absolute;top: 50%;left: 50%;"
@@ -144,7 +145,7 @@
     <script><!--#include virtual="/config.js" --></script><!-- adapt to your needs, i.e. set hosts and bosh path -->
     <!--#include virtual="connection_optimization/connection_optimization.html" -->
     <script src="libs/do_external_connect.min.js?v=1"></script>
-    <script><!--#include virtual="/interface_config.js" --></script>
+    <script src="interface_config.js"></script>
     <script><!--#include virtual="/logging_config.js" --></script>
     <script src="libs/lib-jitsi-meet.min.js?v=139"></script>
     <script src="libs/app.bundle.min.js?v=139"></script>

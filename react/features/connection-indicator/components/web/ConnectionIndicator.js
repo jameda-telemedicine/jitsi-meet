@@ -149,6 +149,7 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
         const indicatorContainerClassNames
             = `connection-indicator indicator ${colorClass}`;
 
+        // FIXME: INTERRUPTED this is the place which needs to get fixed
         return (
             <Popover
                 className = { rootClassNames }
