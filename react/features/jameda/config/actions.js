@@ -9,13 +9,13 @@ declare var interfaceConfig: Object;
 /**
  * Update jameda config in the redux store.
  *
- * @param {JamedaConfig} jamedaConfig - jameda configuration object.
+ * @param {Object} jamedaConfig - Jameda configuration object.
  * @returns {{
  *     type: JAMEDA_CONFIG_UPDATED,
- *     payload: JamedaConfig
+ *     payload: Object
  * }}
  */
-export function jamedaConfigUpdated(jamedaConfig = {}) {
+export function jamedaConfigUpdated(jamedaConfig: Object = {}) {
     return {
         type: JAMEDA_CONFIG_UPDATED,
         payload: {
