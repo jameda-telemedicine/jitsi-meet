@@ -57,6 +57,11 @@ type Props = {
     conference: Object,
 
     /**
+     * The jameda feedback url.
+     */
+    feedbackUrl: string,
+
+    /**
      * Invoked to signal feedback submission or canceling.
      */
     dispatch: Dispatch<any>,
@@ -274,7 +279,7 @@ class JamedaFeedbackDialog extends Component<Props, State> {
                     <iframe
                         frameBorder = '0'
                         height = '710px'
-                        src = 'https://survey.zohopublic.eu/zs/2AB84n?id=1&email=admin@patientus.de&aid=1'
+                        src = { this.props.feedbackUrl }
                         width = '100%' />
                 </div>
             </Dialog>

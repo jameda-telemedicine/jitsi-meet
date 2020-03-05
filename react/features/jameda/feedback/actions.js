@@ -72,14 +72,19 @@ export function maybeOpenJamedaFeedbackDialog(conference: Object) {
             });
         } else if (conference.isCallstatsEnabled() && feedbackPercentage > Math.random() * 100) {
             return new Promise(resolve => {
-                dispatch(openJamedaFeedbackDialog(conference, () => {
-                    const { submitted } = getState()['features/jameda/feedback'];
+                dispatch(openJamedaFeedbackDialog(
+                    conference,
+                    () => {
+                        const { submitted } = getState()['features/jameda/feedback'];
 
-                    resolve({
-                        feedbackSubmitted: submitted,
-                        showThankYou: false
-                    });
-                }));
+                        resolve({
+                            feedbackSubmitted: submitted,
+                            showThankYou: false
+                        });
+                    },
+                    state['features/jameda/config'].feedbackUrl
+                )
+                );
             });
         }
 
@@ -101,12 +106,14 @@ export function maybeOpenJamedaFeedbackDialog(conference: Object) {
  * conference has been left, so references to it may no longer exist in redux.
  * @param {Function} [onClose] - An optional callback to invoke when the dialog
  * is closed.
+ * @param {string} [feedbackUrl] - An optional feedback url.
  * @returns {Object}
  */
-export function openJamedaFeedbackDialog(conference: Object, onClose: ?Function) {
+export function openJamedaFeedbackDialog(conference: Object, onClose: ?Function, feedbackUrl: ?string) {
     return openDialog(JamedaFeedbackDialog, {
         conference,
-        onClose
+        onClose,
+        feedbackUrl
     });
 }
 

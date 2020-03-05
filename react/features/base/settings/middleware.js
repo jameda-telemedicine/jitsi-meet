@@ -10,6 +10,7 @@ import { MiddlewareRegistry } from '../redux';
 
 import { SETTINGS_UPDATED } from './actionTypes';
 import { handleCallIntegrationChange } from './functions';
+import { jamedaConfigUpdated } from '../../jameda/config';
 
 /**
  * The middleware of the feature base/settings. Distributes changes to the state
@@ -163,14 +164,13 @@ function _updateLocalParticipantFromUrl({ dispatch, getState }) {
 function _updateJamedaConfFromUrl({ dispatch, getState }) {
     const urlParams
         = parseURLParams(getState()['features/base/connection'].locationURL);
-    const urlJamedaConf = urlParams.jamedaConf;
+    const urlFeedbackUrl = urlParams['jamedaConf.feedbackUrl'];
 
-    console.log('urlParams', urlParams);
-    console.log('jamedaConf', urlJamedaConf);
-
-    if (!urlJamedaConf) {
+    if (!urlFeedbackUrl) {
         return;
     }
 
-    dispatch();
+    dispatch(jamedaConfigUpdated({
+        feedbackUrl: urlFeedbackUrl
+    }));
 }
