@@ -268,7 +268,7 @@ class JamedaFeedbackDialog extends Component<Props, State> {
             <Dialog
                 okKey = 'dialog.Submit'
                 onCancel = { this._onCancel }
-                onSubmit = { this._onSubmit }
+                submitDisabled = { true }
                 titleKey = 'Jameda Feedback'>
                 <div className = 'feedback-dialog'>
                     <iframe
