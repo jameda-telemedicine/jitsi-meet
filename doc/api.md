@@ -31,6 +31,7 @@ Its constructor gets a number of options:
     * **invitees**: (optional) Array of objects containing information about new participants that will be invited in the call.
     * **devices**: (optional) A map containing information about the initial devices that will be used in the call.
     * **userInfo**: (optional) JS object containing information about the participant opening the meeting, such as `email`.
+    * **jamedaConf**: (optional) JS object providing Jameda config.
 
 Example:
 

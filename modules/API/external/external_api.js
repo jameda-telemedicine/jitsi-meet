@@ -249,7 +249,8 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             onload = undefined,
             invitees,
             devices,
-            userInfo
+            userInfo,
+            jamedaConf
         } = parseArguments(args);
 
         this._parentNode = parentNode;
@@ -260,8 +261,12 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             noSSL,
             roomName,
             devices,
-            userInfo
+            userInfo,
+            jamedaConf
         });
+
+        // eslint-disable-next-line max-len
+        // https://localhost:8080/conference1?jamedaConf.feedbackUrl="https%3A%2F%2Fsurvey.zohopublic.eu%2Fzs%2F2AB84n%3Fid%3D1%26email%3Dadmin%40patientus.de%26aid%3D1"
         this._createIFrame(height, width, onload);
         this._transport = new Transport({
             backend: new PostMessageTransportBackend({

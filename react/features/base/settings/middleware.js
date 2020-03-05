@@ -33,6 +33,7 @@ MiddlewareRegistry.register(store => next => action => {
         break;
     case SET_LOCATION_URL:
         _updateLocalParticipantFromUrl(store);
+        _updateJamedaConfFromUrl(store);
         break;
     }
 
@@ -150,4 +151,26 @@ function _updateLocalParticipantFromUrl({ dispatch, getState }) {
             email: _.escape(urlEmail)
         }));
     }
+}
+
+/**
+ * Returns the jamedaConf set in the URL.
+ *
+ * @param {Store} store - The redux store.
+ * @private
+ * @returns {void}
+ */
+function _updateJamedaConfFromUrl({ dispatch, getState }) {
+    const urlParams
+        = parseURLParams(getState()['features/base/connection'].locationURL);
+    const urlJamedaConf = urlParams.jamedaConf;
+
+    console.log('urlParams', urlParams);
+    console.log('jamedaConf', urlJamedaConf);
+
+    if (!urlJamedaConf) {
+        return;
+    }
+
+    dispatch();
 }
