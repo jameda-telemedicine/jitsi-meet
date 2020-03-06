@@ -7,7 +7,8 @@ import {
 } from './actionTypes';
 
 const DEFAULT_STATE = {
-    feedbackUrl: null
+    feedbackUrl: null,
+    forceDeviceSelectionPopup: false
 };
 
 /**

@@ -32,6 +32,7 @@ import {
 } from '../AbstractConference';
 import type { AbstractProps } from '../AbstractConference';
 
+import { openSettingsDialog, SETTINGS_TABS } from '../../../settings';
 declare var APP: Object;
 declare var config: Object;
 declare var interfaceConfig: Object;
@@ -78,6 +79,12 @@ type Props = AbstractProps & {
      */
     _layoutClassName: string,
 
+    /**
+     * The condition which gives ability to force showing popup with
+     * device selection.
+     */
+    _forceDeviceSelectionPopup: boolean,
+
     dispatch: Function,
     t: Function
 }
@@ -121,7 +128,25 @@ class Conference extends AbstractConference<Props, *> {
      */
     componentDidMount() {
         document.title = interfaceConfig.APP_NAME;
-        this._start();
+        const { dispatch, _forceDeviceSelectionPopup } = this.props;
+
+        // dispatch(openDeviceSelectionPopup());
+
+        // TODO: based on jameda config condition trigger start conference by default
+        //  or e.g. trigger popup with device settings
+
+        if (_forceDeviceSelectionPopup) {
+
+            // FIXME: Implement component for selecting device.
+
+            dispatch(openSettingsDialog(SETTINGS_TABS.DEVICES)).then(() => {
+                this._start();
+            });
+
+        } else {
+            this._start();
+        }
+
     }
 
     /**
@@ -230,6 +255,7 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     _start() {
+        console.log('Jameda - start conference');
         APP.UI.start();
 
         APP.UI.registerListeners();
@@ -263,7 +289,8 @@ function _mapStateToProps(state) {
     return {
         ...abstractMapStateToProps(state),
         _iAmRecorder: state['features/base/config'].iAmRecorder,
-        _layoutClassName: LAYOUT_CLASSNAMES[currentLayout]
+        _layoutClassName: LAYOUT_CLASSNAMES[currentLayout],
+        _forceDeviceSelectionPopup: state['features/jameda/config'].forceDeviceSelectionPopup
     };
 }
 

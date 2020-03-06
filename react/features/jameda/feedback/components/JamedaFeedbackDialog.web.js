@@ -276,11 +276,18 @@ class JamedaFeedbackDialog extends Component<Props, State> {
                 submitDisabled = { true }
                 titleKey = 'Jameda Feedback'>
                 <div className = 'feedback-dialog'>
-                    <iframe
-                        frameBorder = '0'
-                        height = '710px'
-                        src = { this.props.feedbackUrl }
-                        width = '100%' />
+                    { this.props.feedbackUrl
+                        ? (<iframe
+                            frameBorder = '0'
+                            height = '710px'
+                            src = { this.props.feedbackUrl }
+                            width = '100%' />)
+                        : (
+                            <span>
+                                Jameda feedback url not provided!
+                            </span>
+                        )
+                    }
                 </div>
             </Dialog>
         );
