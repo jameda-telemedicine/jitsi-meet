@@ -258,17 +258,17 @@ var config = {
 
     // Whether to use a welcome page or not. In case it's false a random room
     // will be joined when no room is specified.
-    enableWelcomePage: false,
+    enableWelcomePage: true,
 
     // Enabling the close page will ignore the welcome page redirection when
     // a call is hangup.
-    enableClosePage: true,
+    // enableClosePage: false,
 
     // Disable hiding of remote thumbnails when in a 1-on-1 conference call.
     // disable1On1Mode: false,
 
     // Default language for the user interface.
-    defaultLanguage: 'de',
+    defaultLanguage: 'en',
 
     // If true all users without a token will be considered guests and all users
     // with token will be considered non-guests. Only guests will be allowed to
