@@ -378,7 +378,7 @@ var config = {
 
     // Whether to use a welcome page or not. In case it's false a random room
     // will be joined when no room is specified.
-    enableWelcomePage: true,
+    enableWelcomePage: false,
 
     // Disable app shortcuts that are registered upon joining a conference
     // disableShortcuts: false,
@@ -389,7 +389,7 @@ var config = {
 
     // Enabling the close page will ignore the welcome page redirection when
     // a call is hangup.
-    // enableClosePage: false,
+    enableClosePage: true,
 
     // Disable hiding of remote thumbnails when in a 1-on-1 conference call.
     // Setting this to null, will also disable showing the remote videos
@@ -397,7 +397,7 @@ var config = {
     // disable1On1Mode: null | false | true,
 
     // Default language for the user interface.
-    // defaultLanguage: 'en',
+    defaultLanguage: 'de',
 
     // Disables profile and the edit of all fields from the profile settings (display name and email)
     // disableProfile: false,
