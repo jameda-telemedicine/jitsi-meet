@@ -53,6 +53,8 @@ export const PARTICIPANT_JOINED_SOUND_ID = 'PARTICIPANT_JOINED_SOUND';
  */
 export const PARTICIPANT_LEFT_SOUND_ID = 'PARTICIPANT_LEFT_SOUND';
 
+// Some changes here
+
 /**
  * The set of possible XMPP MUC roles for conference participants.
  *

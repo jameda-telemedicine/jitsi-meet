@@ -62,6 +62,8 @@ let beforeUnloadHandler;
 MiddlewareRegistry.register(store => next => action => {
     switch (action.type) {
     case CONFERENCE_FAILED:
+        console.log('#######: CONFERENCE_FAILED');
+
         return _conferenceFailed(store, next, action);
 
     case CONFERENCE_JOINED:
@@ -71,6 +73,8 @@ MiddlewareRegistry.register(store => next => action => {
         return _connectionEstablished(store, next, action);
 
     case CONNECTION_FAILED:
+        console.log('#######: CONNECTION_FAILED');
+
         return _connectionFailed(store, next, action);
 
     case CONFERENCE_SUBJECT_CHANGED:

@@ -243,7 +243,9 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             height = '100%',
             parentNode = document.body,
             configOverwrite = {},
-            interfaceConfigOverwrite = {},
+            interfaceConfigOverwrite = {
+                // ...
+            },
             noSSL = false,
             jwt = undefined,
             onload = undefined,

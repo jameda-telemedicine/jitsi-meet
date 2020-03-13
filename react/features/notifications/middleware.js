@@ -45,6 +45,7 @@ MiddlewareRegistry.register(store => next => action => {
             // Do not show the notification for mobile and also when the focus indicator is disabled.
             const displayName = getParticipantDisplayName(getState, p.id);
 
+            // PARTICIPANT_JOINED
             dispatch(showNotification({
                 descriptionArguments: { to: displayName || '$t(notify.somebody)' },
                 descriptionKey: 'notify.grantedTo',

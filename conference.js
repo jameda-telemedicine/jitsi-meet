@@ -1871,6 +1871,7 @@ export default {
             this._onConferenceJoined();
         });
 
+        // Conference Left
         room.on(
             JitsiConferenceEvents.CONFERENCE_LEFT,
             (...args) => {
@@ -1897,6 +1898,7 @@ export default {
             APP.UI.addUser(user);
         });
 
+        // User Left
         room.on(JitsiConferenceEvents.USER_LEFT, (id, user) => {
             // The logic shared between RN and web.
             commonUserLeftHandling(APP.store, room, user);
@@ -1983,6 +1985,7 @@ export default {
             (jitsiConference, p2p) =>
                 APP.store.dispatch(p2pStatusChanged(p2p)));
 
+        // Participant connection status changed
         room.on(
             JitsiConferenceEvents.PARTICIPANT_CONN_STATUS_CHANGED,
             (id, connectionStatus) => APP.store.dispatch(
@@ -1996,11 +1999,13 @@ export default {
             JitsiConferenceEvents.CONFERENCE_CREATED_TIMESTAMP,
             conferenceTimestamp => APP.store.dispatch(conferenceTimestampChanged(conferenceTimestamp)));
 
+        // Connection Interrupted
         room.on(JitsiConferenceEvents.CONNECTION_INTERRUPTED, () => {
             APP.store.dispatch(localParticipantConnectionStatusChanged(
                 JitsiParticipantConnectionStatus.INTERRUPTED));
         });
 
+        // Connection Restored
         room.on(JitsiConferenceEvents.CONNECTION_RESTORED, () => {
             APP.store.dispatch(localParticipantConnectionStatusChanged(
                 JitsiParticipantConnectionStatus.ACTIVE));
@@ -2078,6 +2083,7 @@ export default {
             // FIXME close
         });
 
+        // Participant kicked
         room.on(JitsiConferenceEvents.PARTICIPANT_KICKED, (kicker, kicked) => {
             APP.store.dispatch(participantKicked(kicker, kicked));
         });

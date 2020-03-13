@@ -38,7 +38,7 @@ class PageReloadOverlay extends AbstractPageReloadOverlay<Props> {
                     <span className = 'reload_overlay_text'>
                         { t(message, { seconds: timeLeft }) }
                     </span>
-                    {/* { this._renderProgressBar() }*/}
+                    { this._renderProgressBar() }
                     { this._renderButton() }
                 </div>
             </OverlayFrame>
@@ -46,9 +46,7 @@ class PageReloadOverlay extends AbstractPageReloadOverlay<Props> {
     }
 
     _renderButton: () => React$Element<*>
-
-    // Commented the progressBar due to not needed
-    // _renderProgressBar: () => React$Element<*>
+    _renderProgressBar: () => React$Element<*>
 }
 
 export default translate(connect(abstractMapStateToProps)(PageReloadOverlay));

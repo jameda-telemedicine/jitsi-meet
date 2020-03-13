@@ -4,17 +4,67 @@
         <meta http-equiv="content-type" content="text/html;charset=utf-8">
     </head>
     <body>
-        <script src="https://meet.jit.si/external_api.js"></script>
+        <script src="/tmp/external_api.min.js"></script>
         <script>
-            var domain = "meet.jit.si";
+            var domain = "localhost:8080";
             var options = {
-                roomName: "JitsiMeetAPIExample",
-                width: 700,
-                height: 180,
+                roomName: "Necky",
+                width: 900,
+                height: 880,
                 parentNode: undefined,
-                configOverwrite: {},
+                configOverwrite: {
+                    enableClosePage: true,
+                    defaultLanguage: 'de',
+                    // enableUserRolesBasedOnToken: true,
+                    // lockRoomGuestEnabled: false,
+                    desktopSharingChromeSources: true,
+                    enableWelcomePage: false
+                },
                 interfaceConfigOverwrite: {
-                    filmStripOnly: true
+                    filmStripOnly: false,
+                    SHOW_JITSI_WATERMARK: false,
+                    SHOW_WATERMARK_FOR_GUESTS: false,
+                    DEFAULT_REMOTE_DISPLAY_NAME: '',
+                    DEFAULT_LOCAL_DISPLAY_NAME: '',
+                    APP_NAME: 'Telemedicine',
+                    NATIVE_APP_NAME: 'Telemedicine',
+                    PROVIDER_NAME: 'jameda GmbH',
+                    TOOLBAR_BUTTONS: [
+                        'microphone',
+                        'camera',
+                        'closedcaptions',
+                        'desktop',
+                        'fullscreen',
+                        // 'fodeviceselection',
+                        'hangup',
+                        'profile',
+                        // 'info',
+                        'chat',
+                        // 'recording',
+                        // 'livestreaming',
+                        // 'etherpad',
+                        // 'sharedvideo',
+                        'settings',
+                        // 'raisehand',
+                        'videoquality',
+                        'filmstrip',
+                        // 'invite',
+                        // 'feedback',
+                        'stats',
+                        // 'shortcuts',
+                        'tileview',
+                        'videobackgroundblur',
+                        // 'download',
+                        'help',
+                        // 'mute-everyone'
+                    ],
+                    SETTINGS_SECTIONS: [
+                        'devices',
+                        'language',
+                        // 'moderator',
+                        'profile',
+                        // 'calendar'
+                    ]
                 }
             }
             var api = new JitsiMeetExternalAPI(domain, options);

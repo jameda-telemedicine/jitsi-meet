@@ -23,6 +23,17 @@ export default class HangupButton extends AbstractHangupButton<Props, *> {
      */
     _doHangup() {
         api.executeCommand('hangup');
+
+        // TODO
+        // #1 Case:
+        // When Moderator (Doctor) hangs up, the participant will be kicked off
+        // the call
+
+        // #2 Case:
+        // When Participant hangs up, the Moderator (Doctor) remains in the call
+
+        console.log('################### HANG UP!');
+
         window.close();
     }
 }

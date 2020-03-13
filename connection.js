@@ -102,6 +102,7 @@ function connect(id, password, roomName) {
         connection.addFeature(DISCO_JIBRI_FEATURE);
     }
 
+    // JitsiConnectionEvents
     return new Promise((resolve, reject) => {
         connection.addEventListener(
             JitsiConnectionEvents.CONNECTION_ESTABLISHED,
@@ -127,6 +128,8 @@ function connect(id, password, roomName) {
                         message,
                         name: error
                     }));
+
+            console.log('###################### connectionFailedHandler!!!!');
 
             if (isFatalJitsiConnectionError(error)) {
                 connection.removeEventListener(
