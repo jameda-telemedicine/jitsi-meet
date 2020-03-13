@@ -47,14 +47,44 @@ var interfaceConfig = {
      * jwt.
      */
     TOOLBAR_BUTTONS: [
-        'microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen',
-        'fodeviceselection', 'hangup', 'profile', 'info', 'chat', 'recording',
-        'livestreaming', 'etherpad', 'sharedvideo', 'settings', 'raisehand',
-        'videoquality', 'filmstrip', 'invite', 'feedback', 'stats', 'shortcuts',
-        'tileview', 'videobackgroundblur', 'download', 'help', 'mute-everyone'
+        'microphone',
+        'camera',
+        'closedcaptions',
+        'desktop',
+        'fullscreen',
+        'hangup',
+        'profile',
+        'chat',
+        'settings',
+        'videoquality',
+        'filmstrip',
+        'stats',
+        'tileview',
+        'videobackgroundblur',
+        'help'
+
+        // 'fodeviceselection',
+        // 'info',
+        // 'recording',
+        // 'livestreaming',
+        // 'etherpad',
+        // 'sharedvideo',
+        // 'raisehand',
+        // 'invite',
+        // 'feedback',
+        // 'shortcuts',
+        // 'download',
+        // 'mute-everyone'
     ],
 
-    SETTINGS_SECTIONS: [ 'devices', 'language', 'moderator', 'profile', 'calendar' ],
+    SETTINGS_SECTIONS: [
+        'devices',
+        'profile',
+        'language'
+
+        // 'moderator',
+        // 'calendar'
+    ],
 
     // Determines how the video would fit the screen. 'both' would fit the whole
     // screen, 'height' would fit the original video height to the height of the
