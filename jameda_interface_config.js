@@ -54,7 +54,6 @@ var interfaceConfig = {
         'fullscreen',
         'hangup',
         'profile',
-        'chat',
         'settings',
         'videoquality',
         'filmstrip',
@@ -63,6 +62,7 @@ var interfaceConfig = {
         'videobackgroundblur',
         'help'
 
+        // 'chat',
         // 'fodeviceselection',
         // 'info',
         // 'recording',
