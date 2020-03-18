@@ -152,12 +152,14 @@
             let script = document.createElement('script');
             script.type = 'text/javascript';
             script.src = 'jameda_interface_config_mobile.js';
-            document.head.appendChild(script);
+            document.head.append(script);
+            console.log('###### Load interface mobile config');
         } else {
             let script = document.createElement('script');
             script.type = 'text/javascript';
             script.src = 'jameda_interface_config.js';
-            document.head.appendChild(script);
+            document.head.append(script);
+            console.log('$$$$$$ Load Interface config');
         }
     </script>
     <!-- adapt to your needs, i.e. set hosts and bosh path -->
