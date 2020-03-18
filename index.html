@@ -152,13 +152,13 @@
             let script = document.createElement('script');
             script.type = 'text/javascript';
             script.src = 'jameda_interface_config_mobile.js';
-            document.head.append(script);
+            document.getElementsByTagName('head')[0].appendChild(script);
             console.log('###### Load interface mobile config');
         } else {
             let script = document.createElement('script');
             script.type = 'text/javascript';
             script.src = 'jameda_interface_config.js';
-            document.head.append(script);
+            document.getElementsByTagName('head')[0].appendChild(script);
             console.log('$$$$$$ Load Interface config');
         }
     </script>
