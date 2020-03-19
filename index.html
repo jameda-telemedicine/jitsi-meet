@@ -151,14 +151,14 @@
         if (screen.height < 830 || screen.width < 420) {
             let script = document.createElement('script');
             script.type = 'text/javascript';
-            script.src = 'jameda_interface_config_mobile.js';
-            document.getElementsByTagName('head')[0].appendChild(script);
+            script.setAttribute('src', 'jameda_interface_config_mobile.js');
+            document.head.appendChild(script);
             console.log('###### Load interface mobile config');
         } else {
             let script = document.createElement('script');
             script.type = 'text/javascript';
-            script.src = 'jameda_interface_config.js';
-            document.getElementsByTagName('head')[0].appendChild(script);
+            script.setAttribute('src', 'jameda_interface_config.js');
+            document.head.appendChild(script);
             console.log('$$$$$$ Load Interface config');
         }
     </script>
