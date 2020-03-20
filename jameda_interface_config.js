@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars, no-var, max-len */
 
+const { userAgent } = navigator;
+let OS;
+
 var interfaceConfig = {
     // TO FIX: this needs to be handled from SASS variables. There are some
     // methods allowing to use variables both in css and js.
@@ -278,5 +281,43 @@ var interfaceConfig = {
      PHONE_NUMBER_REGEX
     */
 };
+
+if (userAgent.match(/Android/i)) {
+    OS = 'android';
+} else if (userAgent.match(/iP(ad|hone|od)/i)) {
+    OS = 'ios';
+} else if (userAgent.match(/Mac(intosh| OS X)/i)) {
+    OS = 'macos';
+} else if (userAgent.match(/Windows/i)) {
+    OS = 'windows';
+}
+
+/**
+ * Checks if the browser is android or ios (mobile).
+ * @returns {?boolean}
+ */
+function isMobileBrowser() {
+    return OS === 'android' || OS === 'ios';
+}
+
+if (isMobileBrowser()) { // Override features
+    interfaceConfig.TOOLBAR_BUTTONS = [
+        'microphone',
+        'camera',
+        'hangup'
+    ];
+    interfaceConfig.SETTINGS_SECTIONS = [
+
+        // 'profile',
+        // 'devices',
+        // 'language'
+        // 'moderator',
+        // 'calendar'
+    ];
+    interfaceConfig.filmStripOnly = true;
+    interfaceConfig.MOBILE_APP_PROMO = false;
+} else {
+    // Do nothing
+}
 
 /* eslint-enable no-unused-vars, no-var, max-len */
