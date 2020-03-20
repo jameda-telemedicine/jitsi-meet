@@ -147,9 +147,9 @@
     </script>
     <script src="config.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        window.onload = function () {
             appendInterfaceConfigScript();
-        });
+        };
 
         function appendInterfaceConfigScript() {
             // Load interfaceConfig file based on resolution
