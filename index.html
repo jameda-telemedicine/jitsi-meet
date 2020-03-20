@@ -147,27 +147,21 @@
     </script>
     <script src="config.js"></script>
     <script>
-        window.onload = function () {
-            appendInterfaceConfigScript();
-        };
+        // Load interfaceConfig file based on resolution
+        let head = document.getElementsByTagName('head')[0];
+        let script = document.createElement('script');
+        script.type = 'text/javascript';
 
-        function appendInterfaceConfigScript() {
-            // Load interfaceConfig file based on resolution
-            let head = document.getElementsByTagName('head')[0];
-            let script = document.createElement('script');
-            script.type = 'text/javascript';
-
-            if (screen.height < 830 || screen.width < 420) {
-                script.src = 'jameda_interface_config_mobile.js';
-                console.log('###### Load interface mobile config');
-            } else {
-                script.src = 'jameda_interface_config.js';
-                console.log('$$$$$$ Load Interface config');
-            }
-
-            console.log('OOOOOOOscripttttttt::: ', script);
-            head.appendChild(script);
+        if (screen.height < 830 || screen.width < 420) {
+            script.src = 'jameda_interface_config_mobile.js';
+            console.log('###### Load interface mobile config');
+        } else {
+            script.src = 'jameda_interface_config.js';
+            console.log('$$$$$$ Load Interface config');
         }
+
+        console.log('OOOOOOOscripttttttt::: ', script);
+        head.appendChild(script);
     </script>
     <!-- adapt to your needs, i.e. set hosts and bosh path -->
     <!--#include virtual="connection_optimization/connection_optimization.html" -->
