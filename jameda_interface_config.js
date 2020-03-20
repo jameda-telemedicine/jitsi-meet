@@ -314,6 +314,8 @@ if (isMobileBrowser()) { // Override features
         // 'moderator',
         // 'calendar'
     ];
+    interfaceConfig.filmStripOnly = true;
+    interfaceConfig.MOBILE_APP_PROMO = false;
 } else {
     // Do nothing
 }
