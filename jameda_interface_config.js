@@ -300,7 +300,7 @@ function isMobileBrowser() {
     return OS === 'android' || OS === 'ios';
 }
 
-if (isMobileBrowser()) { // Override features
+if (isMobileBrowser()) {
     interfaceConfig.TOOLBAR_BUTTONS = [
         'microphone',
         'camera',
@@ -316,8 +316,6 @@ if (isMobileBrowser()) { // Override features
     ];
     interfaceConfig.filmStripOnly = true;
     interfaceConfig.MOBILE_APP_PROMO = false;
-} else {
-    // Do nothing
 }
 
 /* eslint-enable no-unused-vars, no-var, max-len */
