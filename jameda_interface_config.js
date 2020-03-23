@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars, no-var, max-len */
 
 const { userAgent } = navigator;
-let OS;
 
 var interfaceConfig = {
     // TO FIX: this needs to be handled from SASS variables. There are some
@@ -282,22 +281,22 @@ var interfaceConfig = {
     */
 };
 
-if (userAgent.match(/Android/i)) {
-    OS = 'android';
-} else if (userAgent.match(/iP(ad|hone|od)/i)) {
-    OS = 'ios';
-} else if (userAgent.match(/Mac(intosh| OS X)/i)) {
-    OS = 'macos';
-} else if (userAgent.match(/Windows/i)) {
-    OS = 'windows';
-}
-
 /**
  * Checks if the browser is android or ios (mobile).
  * @returns {?boolean}
  */
 function isMobileBrowser() {
-    return OS === 'android' || OS === 'ios';
+    if (userAgent.match(/Android/i)) {
+        return true;
+    } else if (userAgent.match(/iP(ad|hone|od)/i)) {
+        return true;
+    } else if (userAgent.match(/Mac(intosh| OS X)/i)) {
+        return true;
+    } else if (userAgent.match(/Windows/i)) {
+        return true;
+    }
+
+    return false;
 }
 
 if (isMobileBrowser()) {
