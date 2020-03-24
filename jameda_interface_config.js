@@ -144,7 +144,7 @@ var interfaceConfig = {
      *
      * @type {boolean}
      */
-    MOBILE_APP_PROMO: true,
+    MOBILE_APP_PROMO: false,
 
     /**
      * Maximum coeficient of the ratio of the large video to the visible area
@@ -311,7 +311,6 @@ if (isMobileBrowser()) {
         // 'calendar'
     ];
     interfaceConfig.filmStripOnly = true;
-    interfaceConfig.MOBILE_APP_PROMO = false;
 }
 
 /* eslint-enable no-unused-vars, no-var, max-len */
