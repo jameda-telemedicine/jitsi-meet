@@ -146,20 +146,7 @@
             'error', loadErrHandler, true /* capture phase type of listener */);
     </script>
     <script src="config.js"></script>
-    <script>
-        // Load interfaceConfig file based on resolution
-        if (screen.height < 830 || screen.width < 420) {
-            let script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'jameda_interface_config_mobile.js';
-            document.head.appendChild(script);
-        } else {
-            let script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'jameda_interface_config.js';
-            document.head.appendChild(script);
-        }
-    </script>
+    <script src="jameda_interface_config.js"></script>
     <!-- adapt to your needs, i.e. set hosts and bosh path -->
     <!--#include virtual="connection_optimization/connection_optimization.html" -->
     <script src="libs/do_external_connect.min.js?v=1"></script>
