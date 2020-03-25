@@ -91,9 +91,14 @@ class ConferenceTimer extends Component<Props, State> {
         const { timerValue } = this.state;
         const { _startTimestamp } = this.props;
 
+        // console.log('########## timerValue: ', timerValue);
+        // console.log('########## _startTimestamp: ', _startTimestamp);
+
         if (!_startTimestamp) {
             return null;
         }
+
+        console.log('####### renderConferenceTimer(timerValue): ', renderConferenceTimer(timerValue));
 
         return renderConferenceTimer(timerValue);
     }

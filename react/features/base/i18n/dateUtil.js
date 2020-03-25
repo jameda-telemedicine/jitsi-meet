@@ -67,6 +67,8 @@ export function getLocalizedDurationFormatter(duration: number) {
         return moment.duration(duration).format('h:mm:ss');
     }
 
+    console.log('##### Return def', moment.duration(duration).format('mm:ss', { trim: false }));
+
     return moment.duration(duration).format('mm:ss', { trim: false });
 }
 
