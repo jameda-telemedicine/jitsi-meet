@@ -29,7 +29,7 @@
     },
     "calendarSync": {
         "addMeetingURL": "Meeting-Link hinzufügen",
-        "confirmAddLink": "Wollen Sie einen Jitsi-Link zu dieser Veranstaltung hinzufügen?",
+        "confirmAddLink": "Wollen Sie einen {{app}} zu dieser Veranstaltung hinzufügen?",
         "error": {
             "appConfiguration": "Kalenderintegration ist nicht richtig konfiguriert.",
             "generic": "Ein Fehler ist aufgetreten. Prüfen Sie Ihre Kalendereinstellungen oder versuchen Sie, den Kalender zu aktualisieren.",
@@ -302,7 +302,7 @@
         "answer": "Antworten",
         "audioCallTitle": "Eingehender Anruf",
         "decline": "OK",
-        "productLabel": "von Jitsi Meet",
+        "productLabel": "von {{app}}",
         "videoCallTitle": "Eingehender Videoanruf"
     },
     "info": {
