@@ -6,29 +6,29 @@ var config = {
 
     hosts: {
         // XMPP domain.
-        domain: 'jitsi-meet.example.com',
+        domain: 'meet.jitsi',
 
         // When using authentication, domain for guest users.
         // anonymousdomain: 'guest.example.com',
 
         // Domain for authenticated users. Defaults to <domain>.
-        // authdomain: 'jitsi-meet.example.com',
+        authdomain: 'meet.jitsi',
 
         // Jirecon recording component domain.
-        // jirecon: 'jirecon.jitsi-meet.example.com',
+        // jirecon: 'jirecon.meet.jitsi',
 
         // Call control component (Jigasi).
-        // call_control: 'callcontrol.jitsi-meet.example.com',
+        // call_control: 'callcontrol.meet.jitsi',
 
         // Focus component domain. Defaults to focus.<domain>.
-        // focus: 'focus.jitsi-meet.example.com',
+        // focus: 'focus.meet.jitsi',
 
         // XMPP MUC domain. FIXME: use XEP-0030 to discover it.
-        muc: 'conference.jitsi-meet.example.com'
+        muc: 'muc.meet.jitsi'
     },
 
     // BOSH URL. FIXME: use XEP-0156 to discover it.
-    bosh: '//jitsi-meet.example.com/http-bind',
+    bosh: 'http://localhost:8443/http-bind',
 
     // Websocket URL
     // websocket: 'wss://jitsi-meet.example.com/xmpp-websocket',
@@ -159,7 +159,7 @@ var config = {
 
     // The media sources to use when using screen sharing with the Chrome
     // extension.
-    desktopSharingChromeSources: [ 'screen', 'window', 'tab' ],
+    desktopSharingChromeSources: ['screen', 'window', 'tab'],
 
     // Required version of Chrome extension
     desktopSharingChromeMinExtVersion: '0.1',
@@ -343,10 +343,16 @@ var config = {
         // The STUN servers that will be used in the peer to peer connections
         stunServers: [
 
+            { urls: 'stun:turn.patientus.de:443' },
+            {
+                urls: 'turns:turn.patientus.de:443',
+                credential: 'ZhFL93-ru.PA4G26T',
+                username: 'patientus'
+            }
             // { urls: 'stun:jitsi-meet.example.com:443' },
-            { urls: 'stun:stun.l.google.com:19302' },
-            { urls: 'stun:stun1.l.google.com:19302' },
-            { urls: 'stun:stun2.l.google.com:19302' }
+            // { urls: 'stun:stun.l.google.com:19302' },
+            // { urls: 'stun:stun1.l.google.com:19302' },
+            // { urls: 'stun:stun2.l.google.com:19302' }
         ],
 
         // Sets the ICE transport policy for the p2p connection. At the time
