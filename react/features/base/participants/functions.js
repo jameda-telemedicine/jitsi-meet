@@ -167,13 +167,13 @@ export function getParticipantDisplayName(
         if (participant.local) {
             return typeof interfaceConfig === 'object'
                 ? interfaceConfig.DEFAULT_LOCAL_DISPLAY_NAME
-                : 'me';
+                : '';
         }
     }
 
     return typeof interfaceConfig === 'object'
         ? interfaceConfig.DEFAULT_REMOTE_DISPLAY_NAME
-        : 'Fellow Jitster';
+        : '';
 }
 
 /**
