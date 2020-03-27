@@ -110,7 +110,7 @@ var config = {
 
     // w3c spec-compliant video constraints to use for video capture. Currently
     // used by browsers that return true from lib-jitsi-meet's
-    // util#browser#usesNewGumFlow. The constraints are independency from
+    // util#browser#usesNewGumFlow. The constraints are independent from
     // this config's resolution value. Defaults to requesting an ideal aspect
     // ratio of 16:9 with an ideal resolution of 720.
     // constraints: {
@@ -263,11 +263,6 @@ var config = {
     // Enabling the close page will ignore the welcome page redirection when
     // a call is hangup.
     // enableClosePage: true,
-
-    // Enabling pre join page will add an additional step before starting the meeting,
-    // where the user can configure its devices and choose the way he
-    // joins audio (by phone/or web).
-    // prejoinPageEnabled: false,
 
     // Disable hiding of remote thumbnails when in a 1-on-1 conference call.
     // disable1On1Mode: false,
