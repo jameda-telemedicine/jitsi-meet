@@ -310,7 +310,6 @@ if (isMobileBrowser()) {
         // 'moderator',
         // 'calendar'
     ];
-    interfaceConfig.filmStripOnly = true;
 }
 
 /* eslint-enable no-unused-vars, no-var, max-len */
