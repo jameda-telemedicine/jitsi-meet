@@ -15,7 +15,7 @@ var interfaceConfig = {
     TOOLBAR_TIMEOUT: 4000,
     TOOLBAR_ALWAYS_VISIBLE: false,
     DEFAULT_REMOTE_DISPLAY_NAME: '',
-    DEFAULT_LOCAL_DISPLAY_NAME: '',
+    DEFAULT_LOCAL_DISPLAY_NAME: 'My profile',
     SHOW_JITSI_WATERMARK: false,
     JITSI_WATERMARK_LINK: 'https://jitsi.org',
 
@@ -229,7 +229,7 @@ var interfaceConfig = {
     /**
      * If true, notifications regarding joining/leaving are no longer displayed.
      */
-    DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
+    DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
 
     /**
     * Decides whether the chrome extension banner should be rendered on the landing page and during the meeting.
@@ -300,13 +300,17 @@ if (isMobileBrowser()) {
     interfaceConfig.TOOLBAR_BUTTONS = [
         'microphone',
         'camera',
-        'hangup'
+        'hangup',
+        'profile',
+        'settings',
+        'videoquality',
+        'videobackgroundblur'
     ];
     interfaceConfig.SETTINGS_SECTIONS = [
+        'devices',
+        'profile',
+        'language'
 
-        // 'profile',
-        // 'devices',
-        // 'language'
         // 'moderator',
         // 'calendar'
     ];
