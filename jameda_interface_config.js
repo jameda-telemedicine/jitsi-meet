@@ -300,13 +300,17 @@ if (isMobileBrowser()) {
     interfaceConfig.TOOLBAR_BUTTONS = [
         'microphone',
         'camera',
-        'hangup'
+        'hangup',
+        'profile',
+        'settings',
+        'videoquality',
+        'videobackgroundblur'
     ];
     interfaceConfig.SETTINGS_SECTIONS = [
+        'devices',
+        'profile',
+        'language'
 
-        // 'profile',
-        // 'devices',
-        // 'language'
         // 'moderator',
         // 'calendar'
     ];
