@@ -79,7 +79,6 @@ class ProfileTab extends AbstractDialogTab<Props> {
      */
     render() {
         const {
-            authEnabled,
             displayName,
             email,
             t
@@ -120,7 +119,6 @@ class ProfileTab extends AbstractDialogTab<Props> {
                             value = { email } />
                     </div>
                 </div>
-                { authEnabled && this._renderAuth() }
             </div>
         );
     }

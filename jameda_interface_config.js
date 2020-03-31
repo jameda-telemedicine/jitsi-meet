@@ -15,7 +15,7 @@ var interfaceConfig = {
     TOOLBAR_TIMEOUT: 4000,
     TOOLBAR_ALWAYS_VISIBLE: false,
     DEFAULT_REMOTE_DISPLAY_NAME: '',
-    DEFAULT_LOCAL_DISPLAY_NAME: '',
+    DEFAULT_LOCAL_DISPLAY_NAME: 'My profile',
     SHOW_JITSI_WATERMARK: false,
     JITSI_WATERMARK_LINK: 'https://jitsi.org',
 
