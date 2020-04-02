@@ -23,12 +23,13 @@ Finally on the same machine test that you can ping the FQDN with: `ping "$(hostn
 ### Add the Jitsi package repository
 ```sh
 echo 'deb https://download.jitsi.org stable/' >> /etc/apt/sources.list.d/jitsi-stable.list
-wget -qO -  https://download.jitsi.org/jitsi-key.gpg.key | apt-key add -
+wget -qO -  https://download.jitsi.org/jitsi-key.gpg.key | sudo apt-key add -
 ```
 
 ### Install Jitsi Meet
 
 _Note_: The installer will check if [Nginx](https://nginx.org/) or [Apache](https://httpd.apache.org/) is present (in that order) and configure a virtualhost within the web server it finds to serve Jitsi Meet. If none of the above is found it then defaults to Nginx.
+If you are already running Nginx on port 443 on the same machine you better skip the turnserver configuration as it will conflict with your current port 443, so use the command `apt install --no-install-recommends jitsi-meet`.
 
 ```sh
 # Ensure support is available for apt repositories served via HTTPS
@@ -60,13 +61,14 @@ Simply run the following in your shell:
 Note that this script uses the [HTTP-01 challenge type](https://letsencrypt.org/docs/challenge-types/) and thus your instance needs to be accessible from the public internet. If you want to use a different challenge type, don't use this script and instead choose ___I want to use my own certificate___ during jitsi-meet installation.
 
 #### Advanced configuration
-If the installation is on a machine [behind NAT](https://github.com/jitsi/jitsi-meet/blob/master/doc/faq.md) further configuration of jitsi-videobridge is needed in order for it to be accessible from outside.
+If the installation is on a machine [behind NAT](https://github.com/jitsi/jitsi-meet/blob/master/doc/faq.md) jitsi-videobridge should configure itself automatically on boot. If three way call does not work further configuration of jitsi-videobridge is needed in order for it to be accessible from outside.
 Provided that all required ports are routed (forwarded) to the machine that it runs on. By default these ports are (TCP/443 or TCP/4443 and UDP/10000).
-The following extra lines need to be added the file `/etc/jitsi/videobridge/sip-communicator.properties`:
+The following extra lines need to be added to the file `/etc/jitsi/videobridge/sip-communicator.properties`:
 ```
 org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS=<Local.IP.Address>
 org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS=<Public.IP.Address>
 ```
+And comment the existing `org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES`.
 See [the documentation of ice4j](https://github.com/jitsi/ice4j/blob/master/doc/configuration.md)
 for details.
 
@@ -118,7 +120,7 @@ Enjoy!
 ## Uninstall
 
 ```sh
-apt-get purge jigasi jitsi-meet jitsi-meet-web-config jitsi-meet-prosody jitsi-meet-turnserver jitsi-meet-web jicofo jitsi-videobridge
+apt-get purge jigasi jitsi-meet jitsi-meet-web-config jitsi-meet-prosody jitsi-meet-turnserver jitsi-meet-web jicofo jitsi-videobridge2
 ```
 
 Sometimes the following packages will fail to uninstall properly:
@@ -131,8 +133,8 @@ When this happens, just run the uninstall command a second time and it should be
 The reason for the failure is that sometimes the uninstall script is faster than the process that stops the daemons. The second run of the uninstall command fixes this, as by then the jigasi or jitsi-videobridge daemons are already stopped.
 
 #### Systemd details
-To reload the systemd changes on a running system execute `systemctl daemon-reload` and `service jitsi-videobridge restart`.
-To check the tasks part execute `service jitsi-videobridge status` and you should see `Tasks: XX (limit: 65000)`.
+To reload the systemd changes on a running system execute `systemctl daemon-reload` and `service jitsi-videobridge2 restart`.
+To check the tasks part execute `service jitsi-videobridge2 status` and you should see `Tasks: XX (limit: 65000)`.
 To check the files and process part execute ```cat /proc/`cat /var/run/jitsi-videobridge/jitsi-videobridge.pid`/limits``` and you should see:
 ```
 Max processes             65000                65000                processes
