@@ -7,7 +7,6 @@ import { connect } from '../../../base/redux';
 import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
 
 import AudioMutedIndicator from './AudioMutedIndicator';
-import ModeratorIndicator from './ModeratorIndicator';
 import VideoMutedIndicator from './VideoMutedIndicator';
 
 declare var interfaceConfig: Object;
@@ -58,7 +57,6 @@ class StatusIndicators extends Component<Props> {
     render() {
         const {
             _currentLayout,
-            _showModeratorIndicator,
             showAudioMutedIndicator,
             showVideoMutedIndicator
         } = this.props;
@@ -79,7 +77,6 @@ class StatusIndicators extends Component<Props> {
             <div>
                 { showAudioMutedIndicator ? <AudioMutedIndicator tooltipPosition = { tooltipPosition } /> : null }
                 { showVideoMutedIndicator ? <VideoMutedIndicator tooltipPosition = { tooltipPosition } /> : null }
-                { _showModeratorIndicator ? <ModeratorIndicator tooltipPosition = { tooltipPosition } /> : null }
             </div>
         );
     }
