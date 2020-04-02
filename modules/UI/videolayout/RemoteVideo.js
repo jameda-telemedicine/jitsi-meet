@@ -46,8 +46,7 @@ function createContainer(spanId) {
         <div class = 'videocontainer__hoverOverlay'></div>
         <div class = 'displayNameContainer'></div>
         <div class = 'avatar-container'></div>
-        <div class ='presence-label-container'></div>
-        <span class = 'remotevideomenu'></span>`;
+        <div class ='presence-label-container'></div>`;
 
     const remoteVideosContainer
         = document.getElementById('filmstripRemoteVideosContainer');

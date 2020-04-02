@@ -79,9 +79,9 @@ var interfaceConfig = {
 
     SETTINGS_SECTIONS: [
         'devices',
-        'profile',
         'language'
 
+        // 'profile',
         // 'moderator',
         // 'calendar'
     ],
@@ -305,14 +305,6 @@ if (isMobileBrowser()) {
         'settings',
         'videoquality',
         'videobackgroundblur'
-    ];
-    interfaceConfig.SETTINGS_SECTIONS = [
-        'devices',
-        'profile',
-        'language'
-
-        // 'moderator',
-        // 'calendar'
     ];
 }
 
