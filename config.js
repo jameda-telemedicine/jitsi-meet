@@ -338,13 +338,16 @@ var config = {
         enabled: true,
 
         // Use XEP-0215 to fetch STUN and TURN servers.
-        // useStunTurn: true,
+        useStunTurn: true,
 
         // The STUN servers that will be used in the peer to peer connections
         stunServers: [
-
-            // { urls: 'stun:jitsi-meet.example.com:443' },
-            { urls: 'stun:meet-jit-si-turnrelay.jitsi.net:443' }
+            { urls: 'stun:turn.patientus.de:443' },
+            {
+                urls: 'turns:turn.patientus.de:443',
+                credential: 'ZhFL93-ru.PA4G26T',
+                username: 'patientus'
+            }
         ],
 
         // Sets the ICE transport policy for the p2p connection. At the time
@@ -528,5 +531,34 @@ var config = {
 
     // no configuration value should follow this line.
 };
+
+/**
+ * Checks if the user is cfg
+ * @returns {?boolean}
+ */
+function isUserCfg() {
+    console.log('########## Inside isUserCfg()');
+
+    return false;
+}
+
+if (isUserCfg()) {
+    // FIXME Add different cfg config for turns server
+
+    config.p2p.stunServers = [
+        {
+            url: 'turn:turn.gkvi.de',
+            urls: 'turn:turn.gkvi.de',
+            username: 'patientus',
+            credential: 'patientus123'
+        },
+        {
+            url: 'turns:turn.gkvi.de',
+            urls: 'turns:turn.gkvi.de',
+            username: 'patientus',
+            credential: 'patientus123'
+        }
+    ];
+}
 
 /* eslint-enable no-unused-vars, no-var */
