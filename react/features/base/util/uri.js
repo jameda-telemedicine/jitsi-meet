@@ -523,6 +523,20 @@ export function urlObjectToString(o: Object): ?string {
         }
     }
 
+    const { cfg } = o;
+
+    if (cfg !== null) {
+        let { search } = url;
+
+        if (search.indexOf('?cfg=') === -1 && search.indexOf('&cfg=') === -1) {
+            search.startsWith('?') || (search = `?${search}`);
+            search.length === 1 || (search += '&');
+            search += `cfg=${cfg}`;
+
+            url.search = search;
+        }
+    }
+
     // fragment/hash
 
     let { hash } = url;
