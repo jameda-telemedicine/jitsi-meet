@@ -21,7 +21,9 @@ import {
     IconRaisedHand,
     IconRec,
     IconShareDesktop,
-    IconShareVideo
+    IconShareVideo,
+    IconFileTransfer,
+    IconNotes
 } from '../../../base/icons';
 import {
     getLocalParticipant,
@@ -1257,6 +1259,16 @@ class Toolbox extends Component<Props, State> {
                     {
                         buttonsLeft.indexOf('closedcaptions') !== -1
                             && <ClosedCaptionButton />
+                    }
+                    {
+                        <ToolbarButton
+                            icon = { IconFileTransfer }
+                            tooltip = { t('toolbar.fileTransfer') } />
+                    }
+                    {
+                        <ToolbarButton
+                            icon = { IconNotes }
+                            tooltip = { t('toolbar.notes') } />
                     }
                 </div>
                 <div className = 'button-group-center'>

@@ -675,7 +675,9 @@
         "toggleCamera": "Toggle camera",
         "videomute": "Start / Stop camera",
         "startvideoblur": "Blur my background",
-        "stopvideoblur": "Disable background blur"
+        "stopvideoblur": "Disable background blur",
+        "fileTransfer": "File Transfer feature is coming soon.",
+        "notes": "Notes feature is coming soon."
     },
     "transcribing": {
         "ccButtonTooltip": "Start / Stop subtitles",
