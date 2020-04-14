@@ -60,7 +60,9 @@ var interfaceConfig = {
         'stats',
         'tileview',
         'videobackgroundblur',
-        'help'
+        'help',
+        'fileTransfer',
+        'notes'
 
         // 'chat',
         // 'fodeviceselection',

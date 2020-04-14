@@ -82,3 +82,5 @@ export { default as IconVideoQualityLD } from './LD.svg';
 export { default as IconVideoQualitySD } from './SD.svg';
 export { default as IconVolume } from './volume.svg';
 export { default as IconVolumeEmpty } from './volume-empty.svg';
+export { default as IconFileTransfer } from './file-transfer.svg';
+export { default as IconNotes } from './notes.svg';
