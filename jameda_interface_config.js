@@ -61,7 +61,7 @@ var interfaceConfig = {
         'tileview',
         'videobackgroundblur',
         'help',
-        'filetransfer',
+        'fileTransfer',
         'notes'
 
         // 'chat',

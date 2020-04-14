@@ -619,7 +619,9 @@
             "toggleCamera": "Toggle camera",
             "toggleFilmstrip": "Toggle filmstrip",
             "videomute": "Toggle mute video",
-            "videoblur": "Toggle video blur"
+            "videoblur": "Toggle video blur",
+            "fileTransfer": "File transfer",
+            "notes": "Notes"
         },
         "addPeople": "Add people to your call",
         "audioOnlyOff": "Disable low bandwidth mode",
