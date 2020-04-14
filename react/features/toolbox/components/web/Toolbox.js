@@ -21,7 +21,9 @@ import {
     IconRaisedHand,
     IconRec,
     IconShareDesktop,
-    IconShareVideo
+    IconShareVideo,
+    IconFileTransfer,
+    IconNotes
 } from '../../../base/icons';
 import {
     getLocalParticipant,
@@ -1184,6 +1186,12 @@ class Toolbox extends Component<Props, State> {
         if (this._shouldShowButton('closedcaptions')) {
             buttonsLeft.push('closedcaptions');
         }
+        if (this._shouldShowButton('fileTransfer')) {
+            buttonsLeft.push('fileTransfer');
+        }
+        if (this._shouldShowButton('notes')) {
+            buttonsLeft.push('notes');
+        }
         if (overflowHasItems) {
             buttonsRight.push('overflowmenu');
         }
@@ -1257,6 +1265,20 @@ class Toolbox extends Component<Props, State> {
                     {
                         buttonsLeft.indexOf('closedcaptions') !== -1
                             && <ClosedCaptionButton />
+                    }
+                    { buttonsLeft.indexOf('fileTransfer') !== -1
+                        && <ToolbarButton
+                            accessibilityLabel = { t('toolbar.accessibilityLabel.fileTransfer') }
+                            icon = { IconFileTransfer }
+                            onClick = { null }
+                            tooltip = { t('toolbar.fileTransfer') } />
+                    }
+                    { buttonsLeft.indexOf('notes') !== -1
+                        && <ToolbarButton
+                            accessibilityLabel = { t('toolbar.accessibilityLabel.notes') }
+                            icon = { IconNotes }
+                            onClick = { null }
+                            tooltip = { t('toolbar.notes') } />
                     }
                 </div>
                 <div className = 'button-group-center'>

@@ -615,7 +615,9 @@
             "tileView": "Kachelansicht ein-/ausschalten",
             "toggleCamera": "Kamera wechseln",
             "videomute": "„Video stummschalten“ ein-/ausschalten",
-            "videoblur": "Video-Unschärfe ein-/ausschalten"
+            "videoblur": "Video-Unschärfe ein-/ausschalten",
+            "fileTransfer": "Dateiübertragung",
+            "notes": "Notizen"
         },
         "addPeople": "Teilnehmer zur Konferenz hinzufügen",
         "audioOnlyOff": "Modus „Nur Audio“ deaktivieren",
@@ -671,7 +673,9 @@
         "toggleCamera": "Kamera wechseln",
         "videomute": "Kamera starten / stoppen",
         "startvideoblur": "Hintergrundunschärfe aktivieren",
-        "stopvideoblur": "Hintergrundunschärfe deaktivieren"
+        "stopvideoblur": "Hintergrundunschärfe deaktivieren",
+        "fileTransfer": "Die Dateiübertragungsfunktion ist in Kürze verfügbar.",
+        "notes": "Die Notes-Funktion ist in Kürze verfügbar."
     },
     "transcribing": {
         "ccButtonTooltip": "Untertitel ein-/ausschalten",
