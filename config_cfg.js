@@ -1,10 +1,16 @@
 /* eslint-disable no-unused-vars, no-var */
+
 var isCfgEnabled = parseURLParams(window.location, true, 'search').cfg || false;
 
+
+/**
+ * Checks for cfg user.
+ * @returns {?arrayList}
+ */
 function parseURLParams(
-    url,
-    dontParse = false,
-    source = 'hash') {
+        url,
+        dontParse = false,
+        source = 'hash') {
     const paramStr = source === 'search' ? url.search : url.hash;
     const params = {};
     const paramParts = (paramStr && paramStr.substr(1)
@@ -48,4 +54,5 @@ function parseURLParams(
 
     return params;
 }
+
 /* eslint-enable no-unused-vars, no-var */
