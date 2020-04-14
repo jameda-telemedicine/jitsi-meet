@@ -310,4 +310,36 @@ if (isMobileBrowser()) {
     ];
 }
 
+/**
+ * Checks browser if Firefox or Safari is used.
+ * @returns {?boolean}
+ */
+function isBrowserFirefoxOrSafari() {
+    if (navigator.userAgent.indexOf('Firefox') !== -1) {
+        return true;
+    } else if (navigator.userAgent.search('Safari') >= 0 && navigator.userAgent.search('Chrome') < 0) {
+        return true;
+    }
+
+    return false;
+}
+
+if (isBrowserFirefoxOrSafari()) {
+    interfaceConfig.TOOLBAR_BUTTONS = [
+        'microphone',
+        'camera',
+        'closedcaptions',
+        'fullscreen',
+        'hangup',
+        'profile',
+        'settings',
+        'videoquality',
+        'filmstrip',
+        'stats',
+        'tileview',
+        'videobackgroundblur',
+        'help'
+    ];
+}
+
 /* eslint-enable no-unused-vars, no-var, max-len */
