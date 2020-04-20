@@ -53,7 +53,6 @@ var interfaceConfig = {
         'desktop',
         'fullscreen',
         'hangup',
-        'profile',
         'settings',
         'videoquality',
         'filmstrip',
@@ -63,29 +62,11 @@ var interfaceConfig = {
         'help',
         'fileTransfer',
         'notes'
-
-        // 'chat',
-        // 'fodeviceselection',
-        // 'info',
-        // 'recording',
-        // 'livestreaming',
-        // 'etherpad',
-        // 'sharedvideo',
-        // 'raisehand',
-        // 'invite',
-        // 'feedback',
-        // 'shortcuts',
-        // 'download',
-        // 'mute-everyone'
     ],
 
     SETTINGS_SECTIONS: [
         'devices',
         'language'
-
-        // 'profile',
-        // 'moderator',
-        // 'calendar'
     ],
 
     // Determines how the video would fit the screen. 'both' would fit the whole
@@ -303,7 +284,6 @@ if (isMobileBrowser()) {
         'microphone',
         'camera',
         'hangup',
-        'profile',
         'settings',
         'videoquality',
         'videobackgroundblur'
@@ -331,7 +311,6 @@ if (isBrowserFirefoxOrSafari()) {
         'closedcaptions',
         'fullscreen',
         'hangup',
-        'profile',
         'settings',
         'videoquality',
         'filmstrip',
