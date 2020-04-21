@@ -7,13 +7,13 @@ const urlParams = parseURLParams(window.location, true, 'search');
  *
  * @type {{isCfgEnabled: boolean, peerBrowser: string}}
  */
-window.patientus = {
+window.jameda = {
     isCfgEnabled: false,
     peerBrowserName: ''
 };
 
-window.patientus.isCfgEnabled = urlParams.isCfgEnabled || false;
-window.patientus.peerBrowserName = urlParams.browserName || '';
+window.jameda.isCfgEnabled = urlParams.isCfgEnabled || false;
+window.jameda.peerBrowserName = urlParams.browserName || '';
 
 /**
  * Checks for cfg user.
