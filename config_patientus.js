@@ -1,7 +1,19 @@
 /* eslint-disable no-unused-vars, no-var */
 
-var isCfgEnabled = parseURLParams(window.location, true, 'search').cfg || false;
+const urlParams = parseURLParams(window.location, true, 'search');
 
+/**
+ * Set a global configuration object
+ *
+ * @type {{isCfgEnabled: boolean, peerBrowser: string}}
+ */
+window.patientus = {
+    isCfgEnabled: false,
+    peerBrowserName: ''
+};
+
+window.patientus.isCfgEnabled = urlParams.isCfgEnabled || false;
+window.patientus.peerBrowserName = urlParams.browserName || '';
 
 /**
  * Checks for cfg user.
