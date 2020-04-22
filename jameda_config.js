@@ -1,7 +1,16 @@
 /* eslint-disable no-unused-vars, no-var */
 
-var isCfgEnabled = parseURLParams(window.location, true, 'search').cfg || false;
+const urlParams = parseURLParams(window.location, true, 'search');
 
+/**
+ * Set a global configuration object
+ *
+ * @type {{isCfgEnabled: boolean, peerBrowser: string}}
+ */
+window.jameda = {
+    isCfgEnabled: urlParams.isCfgEnabled || false,
+    peerBrowserName: urlParams.browserName || ''
+};
 
 /**
  * Checks for cfg user.
