@@ -155,7 +155,8 @@ function parseArguments(args) {
             noSSL,
             jwt,
             onload,
-            cfg
+            cfg,
+            browserName
         ] = args;
 
         return {
@@ -168,7 +169,8 @@ function parseArguments(args) {
             noSSL,
             jwt,
             onload,
-            cfg
+            cfg,
+            browserName
         };
     }
     case 'object': // new arguments format
@@ -258,7 +260,8 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             devices,
             userInfo,
             e2eeKey,
-            cfg = false
+            cfg = false,
+            browserName = ''
         } = parseArguments(args);
 
         this._parentNode = parentNode;
@@ -270,7 +273,8 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             roomName,
             devices,
             userInfo,
-            cfg
+            cfg,
+            browserName
         });
         this._createIFrame(height, width, onload);
         this._transport = new Transport({
