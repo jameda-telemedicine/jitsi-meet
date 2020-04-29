@@ -545,7 +545,9 @@ export function urlObjectToString(o: Object): ?string {
         if (search.indexOf('?browserName=') === -1 && search.indexOf('&browserName=') === -1) {
             search.startsWith('?') || (search = `?${search}`);
             search.length === 1 || (search += '&');
-            search += `browserName=${browserName}`;
+            const encodeBrowserName = encodeURIComponent(browserName);
+
+            search += `browserName=${encodeBrowserName}`;
 
             url.search = search;
         }

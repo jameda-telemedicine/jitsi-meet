@@ -9,8 +9,10 @@ const urlParams = parseURLParams(window.location, true, 'search');
  */
 window.jameda = {
     isCfgEnabled: urlParams.isCfgEnabled || false,
-    peerBrowserName: urlParams.browserName || ''
+    peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
 };
+
+console.log('Params', urlParams);
 
 /**
  * Checks for cfg user.
