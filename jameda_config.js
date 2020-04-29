@@ -12,8 +12,6 @@ window.jameda = {
     peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
 };
 
-console.log('Jameda', window.jameda);
-
 /**
  * Checks for cfg user.
  * @returns {?arrayList}
