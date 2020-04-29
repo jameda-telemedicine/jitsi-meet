@@ -264,6 +264,7 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             browserName = ''
         } = parseArguments(args);
 
+        console.log('Debug Jameda', cfg, browserName);
         this._parentNode = parentNode;
         this._url = generateURL(domain, {
             configOverwrite,

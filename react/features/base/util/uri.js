@@ -537,6 +537,20 @@ export function urlObjectToString(o: Object): ?string {
         }
     }
 
+    const { browserName } = o;
+
+    if (browserName !== null) {
+        let { search } = url;
+
+        if (search.indexOf('?browserName=') === -1 && search.indexOf('&browserName=') === -1) {
+            search.startsWith('?') || (search = `?${search}`);
+            search.length === 1 || (search += '&');
+            search += `browserName=${browserName}`;
+
+            url.search = search;
+        }
+    }
+
     // fragment/hash
 
     let { hash } = url;
