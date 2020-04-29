@@ -7,12 +7,12 @@ const urlParams = parseURLParams(window.location, true, 'search');
  *
  * @type {{isCfgEnabled: boolean, peerBrowser: string}}
  */
-window.jameda = {
-    isCfgEnabled: urlParams.isCfgEnabled || false,
-    peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
-};
+// window.jameda = {
+//     isCfgEnabled: urlParams.isCfgEnabled || false,
+//     peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
+// };
 
-console.log('Params', urlParams);
+console.log('Jameda', window.jameda);
 
 /**
  * Checks for cfg user.
