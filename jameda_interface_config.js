@@ -292,19 +292,21 @@ if (isMobileBrowser()) {
 
 /**
  * Checks browser if Firefox or Safari is used.
- * @returns {?boolean}
+ * @returns {?string}
  */
 function isBrowserFirefoxOrSafari() {
+    let browser = '';
+
     if (navigator.userAgent.indexOf('Firefox') !== -1) {
-        return true;
+        browser = 'Firefox';
     } else if (navigator.userAgent.search('Safari') >= 0 && navigator.userAgent.search('Chrome') < 0) {
-        return true;
+        browser = 'Safari';
     }
 
-    return false;
+    return browser;
 }
 
-if (isBrowserFirefoxOrSafari()) {
+if (isBrowserFirefoxOrSafari() === 'Firefox') {
     interfaceConfig.TOOLBAR_BUTTONS = [
         'microphone',
         'camera',
@@ -317,7 +319,27 @@ if (isBrowserFirefoxOrSafari()) {
         'stats',
         'tileview',
         'videobackgroundblur',
-        'help'
+        'help',
+        'fileTransfer',
+        'notes'
+    ];
+}
+
+if (isBrowserFirefoxOrSafari() === 'Safari') {
+    interfaceConfig.TOOLBAR_BUTTONS = [
+        'microphone',
+        'camera',
+        'closedcaptions',
+        'fullscreen',
+        'hangup',
+        'settings',
+        'videoquality',
+        'filmstrip',
+        'tileview',
+        'videobackgroundblur',
+        'help',
+        'fileTransfer',
+        'notes'
     ];
 }
 
