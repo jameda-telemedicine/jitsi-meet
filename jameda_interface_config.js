@@ -58,7 +58,6 @@ var interfaceConfig = {
         'filmstrip',
         'stats',
         'tileview',
-        'videobackgroundblur',
         'help',
         'fileTransfer',
         'notes'
@@ -285,8 +284,7 @@ if (isMobileBrowser()) {
         'camera',
         'hangup',
         'settings',
-        'videoquality',
-        'videobackgroundblur'
+        'videoquality'
     ];
 }
 
@@ -318,7 +316,6 @@ if (isBrowserFirefoxOrSafari() === 'Firefox') {
         'filmstrip',
         'stats',
         'tileview',
-        'videobackgroundblur',
         'help',
         'fileTransfer',
         'notes'
@@ -336,7 +333,6 @@ if (isBrowserFirefoxOrSafari() === 'Safari') {
         'videoquality',
         'filmstrip',
         'tileview',
-        'videobackgroundblur',
         'help',
         'fileTransfer',
         'notes'
