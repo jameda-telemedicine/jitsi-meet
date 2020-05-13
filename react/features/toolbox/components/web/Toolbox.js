@@ -84,9 +84,11 @@ import OverflowMenuProfileItem from './OverflowMenuProfileItem';
 import MuteEveryoneButton from './MuteEveryoneButton';
 import ToolbarButton from './ToolbarButton';
 import VideoSettingsButton from './VideoSettingsButton';
+import VideoMuteButton from './../VideoMuteButton';
 import {
     ClosedCaptionButton
 } from '../../../subtitles';
+import Platform from './../../../base/react/Platform.web';
 
 /**
  * The type of the React {@code Component} props of {@link Toolbox}.
@@ -1143,9 +1145,13 @@ class Toolbox extends Component<Props, State> {
      */
     _renderVideoButton() {
         return this._shouldShowButton('camera')
-            ? <VideoSettingsButton
-                key = 'vsb'
-                visible = { true } />
+            ? Platform.OS === 'android' || Platform.OS === 'ios'
+                ? <VideoMuteButton
+                    key = 'vmb'
+                    visible = { true } />
+                : <VideoSettingsButton
+                    key = 'vsb'
+                    visible = { true } />
             : null;
     }
 
