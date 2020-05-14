@@ -1145,7 +1145,7 @@ class Toolbox extends Component<Props, State> {
      */
     _renderVideoButton() {
         return this._shouldShowButton('camera')
-            ? Platform.OS === 'android' || Platform.OS === 'ios'
+            ? Platform.OS === 'ios'
                 ? <VideoMuteButton
                     key = 'vmb'
                     visible = { true } />
