@@ -8,7 +8,7 @@ const urlParams = parseURLParams(window.location, true, 'search');
  * @type {{isCfgEnabled: boolean, peerBrowser: string}}
  */
 window.jameda = {
-    isCfgEnabled: urlParams.isCfgEnabled || false,
+    isCfgEnabled: urlParams.cfg || false,
     peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
 };
 
