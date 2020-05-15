@@ -308,6 +308,7 @@ if (isBrowserFirefoxOrSafari() === 'Firefox') {
         'microphone',
         'camera',
         'closedcaptions',
+        'desktop',
         'fullscreen',
         'hangup',
         'settings',
