@@ -1075,6 +1075,10 @@ export default {
         return room && room.getConnectionState();
     },
 
+    getActivePeerConnection() {
+        return room && room.getActivePeerConnection();
+    },
+
     /**
      * Obtains current P2P ICE connection state.
      * @return {string|null} ICE connection state or <tt>null</tt> if there's no
