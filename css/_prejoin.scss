@@ -38,6 +38,7 @@
         position: relative;
         text-align: center;
         width: 286px;
+        margin-bottom: 10px;
 
         &--primary {
             background: #0376DA;
@@ -118,6 +119,17 @@
         margin-top: 16px;
         width: 100%;
     }
+
+    // telemedicine adjustments
+    &-settings {
+        margin-bottom: 20px;
+        .jitsi-icon svg {
+            cursor: pointer;
+            fill: #fff;
+            width: 60px !important;
+            height: 60px !important;
+        }
+    }
 }
 
 @mixin name-placeholder {
@@ -179,6 +191,10 @@
         margin: 200px auto 0 auto;
     }
 
+    &-btn-display-none {
+        display: none;
+    }
+
     &-btn-container {
         display: flex;
         justify-content: center;
@@ -217,10 +233,10 @@
 
     &-status {
         align-items: center;
-        bottom: 0;
+        top: 0;
         color: #fff;
         display: flex;
-        font-size: 13px;
+        font-size: 20px;
         min-height: 24px;
         justify-content: center;
         position: absolute;
@@ -229,7 +245,7 @@
         z-index: 1;
 
         &--warning {
-            background: rgba(241, 173, 51, 0.5)
+            background: rgba(255, 34, 69, 0.5)
         }
         &--ok {
             background: rgba(49, 183, 106, 0.5);

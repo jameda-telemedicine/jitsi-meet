@@ -572,6 +572,22 @@ export function urlObjectToString(o: Object): ?string {
         }
     }
 
+    const { userType } = o;
+
+    if (userType !== null) {
+        let { search } = url;
+
+        if (search.indexOf('?userType=') === -1 && search.indexOf('&userType=') === -1) {
+            search.startsWith('?') || (search = `?${search}`);
+            search.length === 1 || (search += '&');
+            const encodeUserType = encodeURIComponent(userType);
+
+            search += `userType=${encodeUserType}`;
+
+            url.search = search;
+        }
+    }
+
     // fragment/hash
 
     let { hash } = url;

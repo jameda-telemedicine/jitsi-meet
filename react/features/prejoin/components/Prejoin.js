@@ -1,14 +1,14 @@
 // @flow
 
-import InlineDialog from '@atlaskit/inline-dialog';
 import React, { Component } from 'react';
 
 import { getRoomName } from '../../base/conference';
 import { translate } from '../../base/i18n';
-import { Icon, IconPhone, IconVolumeOff } from '../../base/icons';
 import { connect } from '../../base/redux';
 import { getDisplayName, updateSettings } from '../../base/settings';
 import { isGuest } from '../../invite';
+import { SETTINGS_TABS } from '../../settings';
+import { SettingsButton } from '../../settings/components/web';
 import { VideoSettingsButton, AudioSettingsButton } from '../../toolbox';
 import {
     joinConference as joinConferenceAction,
@@ -19,16 +19,13 @@ import {
 import {
     isJoinByPhoneButtonVisible,
     isDeviceStatusVisible,
-    isJoinByPhoneDialogVisible
+    isJoinByPhoneDialogVisible,
+    getDeviceStatusType
 } from '../functions';
 
 import ActionButton from './buttons/ActionButton';
-import JoinByPhoneDialog from './dialogs/JoinByPhoneDialog';
-import CopyMeetingUrl from './preview/CopyMeetingUrl';
 import DeviceStatus from './preview/DeviceStatus';
-import ParticipantName from './preview/ParticipantName';
 import Preview from './preview/Preview';
-
 
 type Props = {
 
@@ -91,6 +88,11 @@ type Props = {
      * Used for translation.
      */
     t: Function,
+
+    /**
+     * 'ok'|'warning'.
+     */
+    deviceStatusType: string
 };
 
 type State = {
@@ -123,6 +125,24 @@ class Prejoin extends Component<Props, State> {
         this._onDropdownClose = this._onDropdownClose.bind(this);
         this._onOptionsClick = this._onOptionsClick.bind(this);
         this._setName = this._setName.bind(this);
+        this._onReadyClick = this._onReadyClick.bind(this);
+        this._onCancelClick = this._onCancelClick.bind(this);
+        this._onJoinConference = this._onJoinConference.bind(this);
+        this._setName = this._setName.bind(this);
+
+        window.addEventListener('message', this._receiveMessage.bind(this), false);
+    }
+
+    /**
+     * Handler for the checkbox.
+     *
+     * @param {Object} event - The synthetic event.
+     * @returns {void}
+     */
+    _receiveMessage(event) {
+        if (event.data === 'tele-joinconference' || event.message === 'tele-joinconference') {
+            this.props.joinConference();
+        }
     }
 
     _onCheckboxChange: () => void;
@@ -165,6 +185,42 @@ class Prejoin extends Component<Props, State> {
             showJoinByPhoneButtons: !this.state.showJoinByPhoneButtons
         });
     }
+
+    /**
+     * Button for patient ready.
+     *
+     * @returns {void}
+     */
+    _onReadyClick() {
+        window.parent.postMessage('pre-join-close', '*');
+    }
+
+    _onReadyClick: () => void;
+
+    /**
+     * Button for doctor cancel.
+     *
+     * @returns {void}
+     */
+    _onCancelClick() {
+        window.parent.postMessage('pre-join-cancel', '*');
+    }
+
+    _onCancelClick: () => void;
+
+    /**
+     * Send Event for join conference.
+     *
+     * @returns {void}
+     */
+    _onJoinConference() {
+        window.parent.postMessage('pre-join-confernce', '*');
+        const { joinConference } = this.props;
+
+        joinConference();
+    }
+
+    _onJoinConference: () => void;
 
     _setName: () => void;
 
@@ -211,69 +267,59 @@ class Prejoin extends Component<Props, State> {
      */
     render() {
         const {
-            deviceStatusVisible,
-            hasJoinByPhoneButton,
-            isAnonymousUser,
-            joinConference,
-            joinConferenceWithoutAudio,
             name,
-            showDialog,
+            deviceStatusType,
             t
         } = this.props;
 
-        const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onOptionsClick, _setName, _showDialog } = this;
-        const { showJoinByPhoneButtons } = this.state;
+        const displayDr = window.jameda.userType === 'd' ? '' : 'prejoin-preview-btn-display-none';
+        const displayPa = window.jameda.userType === 'p' ? '' : 'prejoin-preview-btn-display-none';
+
+        const { _onCheckboxChange, _onOptionsClick, _onReadyClick, _onCancelClick, _onJoinConference } = this;
 
         return (
             <div className = 'prejoin-full-page'>
+
                 <Preview name = { name } />
                 <div className = 'prejoin-input-area-container'>
                     <div className = 'prejoin-input-area'>
                         <div className = 'prejoin-title'>
-                            {t('prejoin.joinMeeting')}
+                            {t('prejoin.title')}
                         </div>
 
-                        <CopyMeetingUrl />
-
-                        <ParticipantName
-                            isEditable = { isAnonymousUser }
-                            joinConference = { joinConference }
-                            setName = { _setName }
-                            value = { name } />
+                        <div className = 'prejoin-settings'>
+                            <SettingsButton
+                                defaultTab = { SETTINGS_TABS.DEVICES } />
+                        </div>
 
                         <div className = 'prejoin-preview-dropdown-container'>
-                            <InlineDialog
-                                content = { <div className = 'prejoin-preview-dropdown-btns'>
-                                    <div
-                                        className = 'prejoin-preview-dropdown-btn'
-                                        onClick = { joinConferenceWithoutAudio }>
-                                        <Icon
-                                            className = 'prejoin-preview-dropdown-icon'
-                                            size = { 24 }
-                                            src = { IconVolumeOff } />
-                                        { t('prejoin.joinWithoutAudio') }
-                                    </div>
-                                    {hasJoinByPhoneButton && <div
-                                        className = 'prejoin-preview-dropdown-btn'
-                                        onClick = { _showDialog }>
-                                        <Icon
-                                            className = 'prejoin-preview-dropdown-icon'
-                                            size = { 24 }
-                                            src = { IconPhone } />
-                                        { t('prejoin.joinAudioByPhone') }
-                                    </div>}
-                                </div> }
-                                isOpen = { showJoinByPhoneButtons }
-                                onClose = { _onDropdownClose }>
-                                <ActionButton
-                                    disabled = { !name }
-                                    hasOptions = { true }
-                                    onClick = { joinConference }
-                                    onOptionsClick = { _onOptionsClick }
-                                    type = 'primary'>
-                                    { t('prejoin.joinMeeting') }
-                                </ActionButton>
-                            </InlineDialog>
+                            <ActionButton
+                                className = { displayDr }
+                                disabled = { deviceStatusType !== 'ok' }
+                                hasOptions = { false }
+                                onClick = { _onJoinConference }
+                                onOptionsClick = { _onOptionsClick }
+                                type = 'primary'>
+                                { t('prejoin.joinMeeting') }
+                            </ActionButton>
+
+                            <ActionButton
+                                className = { displayDr }
+                                disabled = { false }
+                                hasOptions = { false }
+                                onClick = { _onCancelClick }
+                                type = 'secondary' >
+                                { t('prejoin.cancel') }
+                            </ActionButton>
+
+                            <ActionButton
+                                className = { displayPa }
+                                disabled = { deviceStatusType !== 'ok' }
+                                hasOptions = { false }
+                                onClick = { _onReadyClick }
+                                type = 'primary' >
+                                { t('prejoin.ready') }
+                            </ActionButton>
                         </div>
 
                         <div className = 'prejoin-preview-btn-container'>
@@ -291,12 +337,8 @@ class Prejoin extends Component<Props, State> {
                     </div>
                 </div>
 
-                { deviceStatusVisible && <DeviceStatus /> }
-                { showDialog && (
-                    <JoinByPhoneDialog
-                        joinConferenceWithoutAudio = { joinConferenceWithoutAudio }
-                        onClose = { _closeDialog } />
-                )}
+                <DeviceStatus />
+
             </div>
         );
     }
@@ -315,7 +357,8 @@ function mapStateToProps(state): Object {
         name: getDisplayName(state),
         roomName: getRoomName(state),
         showDialog: isJoinByPhoneDialogVisible(state),
-        hasJoinByPhoneButton: isJoinByPhoneButtonVisible(state)
+        hasJoinByPhoneButton: isJoinByPhoneButtonVisible(state),
+        deviceStatusType: getDeviceStatusType(state)
     };
 }
 
