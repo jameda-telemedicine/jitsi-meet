@@ -51,12 +51,7 @@ function Preview(props: Props) {
     }
 
     return (
-        <div className = 'prejoin-preview prejoin-preview--no-video'>
-            <Avatar
-                className = 'prejoin-preview-avatar'
-                displayName = { name }
-                size = { 200 } />
-        </div>
+        <div className = 'prejoin-preview prejoin-preview--no-video'></div>
     );
 }
 
