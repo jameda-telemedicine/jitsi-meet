@@ -2,13 +2,15 @@
 
 const urlParams = parseURLParams(window.location, true, 'search');
 
+console.log('urlParams', urlParams);
+
 /**
  * Set a global configuration object
  *
- * @type {{isCfgEnabled: boolean, peerBrowser: string}}
+ * @type {{cfg: string | null, peerBrowser: string}}
  */
 window.jameda = {
-    isCfgEnabled: urlParams.cfg === 'true' || false,
+    cfg: urlParams.cfg !== 'null' ? urlParams.cfg : null,
     peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
 };
 
