@@ -262,7 +262,7 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             devices,
             userInfo,
             e2eeKey,
-            cfg = false,
+            cfg = null,
             browserName = ''
         } = parseArguments(args);
 
