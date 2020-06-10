@@ -10,7 +10,7 @@ console.log('urlParams', urlParams);
  * @type {{cfg: string | null, peerBrowser: string}}
  */
 window.jameda = {
-    cfg: urlParams.cfg !== 'null' ? urlParams.cfg : null,
+    cfg: urlParams.cfg === 'null' ? null : urlParams.cfg,
     peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
 };
 
