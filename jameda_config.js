@@ -2,7 +2,6 @@
 
 const urlParams = parseURLParams(window.location, true, 'search');
 
-console.log('urlParams', urlParams);
 
 /**
  * Set a global configuration object
