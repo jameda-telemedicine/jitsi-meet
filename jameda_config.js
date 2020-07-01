@@ -6,10 +6,10 @@ const urlParams = parseURLParams(window.location, true, 'search');
 /**
  * Set a global configuration object
  *
- * @type {{cfg: string | null, peerBrowser: string}}
+ * @type {{inst: string | null, peerBrowser: string}}
  */
 window.jameda = {
-    cfg: urlParams.cfg === 'null' ? null : urlParams.cfg,
+    inst: urlParams.inst === 'null' ? null : urlParams.inst,
     peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
 };
 
