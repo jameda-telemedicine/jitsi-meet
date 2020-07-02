@@ -77,15 +77,14 @@ import DownloadButton from '../DownloadButton';
 import HangupButton from '../HangupButton';
 import HelpButton from '../HelpButton';
 
+import Platform from './../../../base/react/Platform.web';
+import VideoMuteButton from './../VideoMuteButton';
 import AudioSettingsButton from './AudioSettingsButton';
 import MuteEveryoneButton from './MuteEveryoneButton';
 import OverflowMenuButton from './OverflowMenuButton';
 import OverflowMenuProfileItem from './OverflowMenuProfileItem';
 import ToolbarButton from './ToolbarButton';
 import VideoSettingsButton from './VideoSettingsButton';
-import VideoMuteButton from './../VideoMuteButton';
-import Platform from './../../../base/react/Platform.web';
-
 
 /**
  * The type of the React {@code Component} props of {@link Toolbox}.
