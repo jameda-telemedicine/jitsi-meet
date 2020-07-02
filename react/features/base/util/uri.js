@@ -542,15 +542,15 @@ export function urlObjectToString(o: Object): ?string {
         }
     }
 
-    const { cfg } = o;
+    const { inst } = o;
 
-    if (cfg !== null) {
+    if (inst !== null) {
         let { search } = url;
 
-        if (search.indexOf('?cfg=') === -1 && search.indexOf('&cfg=') === -1) {
+        if (search.indexOf('?inst=') === -1 && search.indexOf('&inst=') === -1) {
             search.startsWith('?') || (search = `?${search}`);
             search.length === 1 || (search += '&');
-            search += `cfg=${cfg}`;
+            search += `inst=${inst}`;
 
             url.search = search;
         }
