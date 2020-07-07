@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars, no-var, max-len */
+const DEFAULT_IMG_HOST = 'https://security.patientus.de';
 
 var interfaceConfig = {
     // TO FIX: this needs to be handled from SASS variables. There are some
     // methods allowing to use variables both in css and js.
     DEFAULT_BACKGROUND: '#474747',
+    DEFAULT_LOGO_URL: `${DEFAULT_IMG_HOST}/assets/img/general/patientus_logo.png`,
 
     /**
      * Whether or not the blurred video background for large video should be
@@ -16,8 +18,8 @@ var interfaceConfig = {
     TOOLBAR_ALWAYS_VISIBLE: false,
     DEFAULT_REMOTE_DISPLAY_NAME: '',
     DEFAULT_LOCAL_DISPLAY_NAME: 'My profile',
-    SHOW_JITSI_WATERMARK: false,
-    JITSI_WATERMARK_LINK: 'https://jitsi.org',
+    SHOW_JITSI_WATERMARK: true,
+    JITSI_WATERMARK_LINK: '',
 
     // if watermark is disabled by default, it can be shown only for guests
     SHOW_WATERMARK_FOR_GUESTS: false,
@@ -212,10 +214,10 @@ var interfaceConfig = {
     DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
 
     /**
-    * Decides whether the chrome extension banner should be rendered on the landing page and during the meeting.
-    * If this is set to false, the banner will not be rendered at all. If set to true, the check for extension(s)
-    * being already installed is done before rendering.
-    */
+     * Decides whether the chrome extension banner should be rendered on the landing page and during the meeting.
+     * If this is set to false, the banner will not be rendered at all. If set to true, the check for extension(s)
+     * being already installed is done before rendering.
+     */
     SHOW_CHROME_EXTENSION_BANNER: false,
 
     /**
@@ -271,7 +273,7 @@ var interfaceConfig = {
     /**
      INDICATOR_FONT_SIZES
      PHONE_NUMBER_REGEX
-    */
+     */
 
     // Allow all above example options to include a trailing comma and
     // prevent fear when commenting out the last value.
