@@ -556,6 +556,20 @@ export function urlObjectToString(o: Object): ?string {
         }
     }
 
+    const { instLogo } = o;
+
+    if (instLogo !== null) {
+        let { search } = url;
+
+        if (search.indexOf('?instLogo=') === -1 && search.indexOf('&instLogo=') === -1) {
+            search.startsWith('?') || (search = `?${search}`);
+            search.length === 1 || (search += '&');
+            search += `instLogo=${instLogo}`;
+
+            url.search = search;
+        }
+    }
+
     const { browserName } = o;
 
     if (browserName !== null) {
