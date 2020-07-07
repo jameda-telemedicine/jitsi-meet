@@ -268,7 +268,7 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             userInfo,
             e2eeKey,
             inst = null,
-            instLogo = null,
+            brandLogoPath = null,
             browserName = ''
         } = parseArguments(args);
 
@@ -282,7 +282,7 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             devices,
             userInfo,
             inst,
-            instLogo,
+            brandLogoPath,
             browserName
         });
         this._createIFrame(height, width, onload);

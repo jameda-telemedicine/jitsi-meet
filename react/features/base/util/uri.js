@@ -556,15 +556,15 @@ export function urlObjectToString(o: Object): ?string {
         }
     }
 
-    const { instLogo } = o;
+    const { brandLogoPath } = o;
 
-    if (instLogo !== null) {
+    if (brandLogoPath !== null) {
         let { search } = url;
 
-        if (search.indexOf('?instLogo=') === -1 && search.indexOf('&instLogo=') === -1) {
+        if (search.indexOf('?brandLogoPath=') === -1 && search.indexOf('&brandLogoPath=') === -1) {
             search.startsWith('?') || (search = `?${search}`);
             search.length === 1 || (search += '&');
-            search += `instLogo=${instLogo}`;
+            search += `brandLogoPath=${brandLogoPath}`;
 
             url.search = search;
         }

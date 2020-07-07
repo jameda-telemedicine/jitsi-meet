@@ -360,4 +360,8 @@ if (isBrowserFirefoxOrSafari() === 'Safari') {
     ];
 }
 
+if (Boolean(window.jameda) && Boolean(window.jameda.brandLogoPath)) {
+    interfaceConfig.DEFAULT_LOGO_URL = `${DEFAULT_IMG_HOST}${window.jameda.brandLogoPath}`;
+}
+
 /* eslint-enable no-unused-vars, no-var, max-len */

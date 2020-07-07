@@ -10,7 +10,7 @@ const urlParams = parseURLParams(window.location, true, 'search');
  */
 window.jameda = {
     inst: urlParams.inst === 'null' ? null : urlParams.inst,
-    instLogo: urlParams.instLogo === 'null' ? null : urlParams.instLogo,
+    brandLogoPath: urlParams.brandLogoPath === 'null' ? null : urlParams.brandLogoPath,
     peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
 };
 
