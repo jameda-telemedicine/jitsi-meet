@@ -161,7 +161,7 @@ function parseArguments(args) {
             jwt,
             onload,
             inst,
-            instLogo,
+            brandLogoPath,
             browserName
         ] = args;
 
@@ -176,7 +176,7 @@ function parseArguments(args) {
             jwt,
             onload,
             inst,
-            instLogo,
+            brandLogoPath,
             browserName
         };
     }

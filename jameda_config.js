@@ -6,7 +6,7 @@ const urlParams = parseURLParams(window.location, true, 'search');
 /**
  * Set a global configuration object
  *
- * @type {{inst: string | null, instLogo: string | null, peerBrowser: string}}
+ * @type {{inst: string | null, brandLogoPath: string | null, peerBrowser: string}}
  */
 window.jameda = {
     inst: urlParams.inst === 'null' ? null : urlParams.inst,
