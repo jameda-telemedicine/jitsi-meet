@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars, no-var */
 
-const urlParams = parseURLParams(window.location, true, 'search');
-
+const searchUrlParams = parseURLParams(window.location, true, 'search');
+const hashUrlParams = parseURLParams(window.location, false, 'hash');
 
 /**
  * Set a global configuration object
@@ -10,10 +10,10 @@ const urlParams = parseURLParams(window.location, true, 'search');
  */
 window.jameda = {
     inst: {
-        name: urlParams.inst === 'null' ? null : getInstitutionNameFromUrlParams(urlParams.inst.name),
-        brandLogoPath: urlParams.inst === 'null' ? null : getBrandLogoPathFromUrlParams(urlParams.inst)
+        name: hashUrlParams['inst.name'] ? hashUrlParams['inst.name'] : null,
+        brandLogoPath: hashUrlParams['inst.brandLogoPath'] ? hashUrlParams['inst.brandLogoPath'] : null
     },
-    peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
+    peerBrowserName: decodeURIComponent(searchUrlParams.browserName) || ''
 };
 
 /**
@@ -66,24 +66,6 @@ function parseURLParams(
     });
 
     return params;
-}
-
-/**
- * Get a logo path.
- *
- * @type {{name: string | null, brandLogoPath: string | null} }
- */
-function getBrandLogoPathFromUrlParams(inst) {
-    return inst.brandLogoPath === 'null' ? null : inst.brandLogoPath;
-}
-
-/**
- * Get a institution name.
- *
- * @type {{name: string | null, brandLogoPath: string | null} }
- */
-function getInstitutionNameFromUrlParams(inst) {
-    return inst.name === 'null' ? null : inst.name;
 }
 
 /* eslint-enable no-unused-vars, no-var */
