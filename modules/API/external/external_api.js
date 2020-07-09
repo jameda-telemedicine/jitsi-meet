@@ -161,7 +161,6 @@ function parseArguments(args) {
             jwt,
             onload,
             inst,
-            brandLogoPath,
             browserName
         ] = args;
 
@@ -176,7 +175,6 @@ function parseArguments(args) {
             jwt,
             onload,
             inst,
-            brandLogoPath,
             browserName
         };
     }
@@ -268,7 +266,6 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             userInfo,
             e2eeKey,
             inst = null,
-            brandLogoPath = null,
             browserName = ''
         } = parseArguments(args);
 
@@ -282,7 +279,6 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             devices,
             userInfo,
             inst,
-            brandLogoPath,
             browserName
         });
         this._createIFrame(height, width, onload);
