@@ -1253,7 +1253,8 @@ class Toolbox extends Component<Props, State> {
 
         return (
             <div className = 'toolbox-content'>
-                <div className = 'button-group-left'>
+                {/* FIXME 'button-group-left-space' to be removed */}
+                <div className = 'button-group-left button-group-left-space'>
                     { buttonsLeft.indexOf('desktop') !== -1
                         && this._renderDesktopSharingButton() }
                     { buttonsLeft.indexOf('raisehand') !== -1
