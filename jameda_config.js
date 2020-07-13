@@ -1,17 +1,19 @@
 /* eslint-disable no-unused-vars, no-var */
 
-const urlParams = parseURLParams(window.location, true, 'search');
-
+const searchUrlParams = parseURLParams(window.location, true, 'search');
+const hashUrlParams = parseURLParams(window.location, false, 'hash');
 
 /**
  * Set a global configuration object
  *
- * @type {{inst: string | null, brandLogoPath: string | null, peerBrowser: string}}
+ * @type {{inst: {name: string | null, brandLogoPath: string | null }, peerBrowser: string}}
  */
 window.jameda = {
-    inst: urlParams.inst === 'null' ? null : urlParams.inst,
-    brandLogoPath: urlParams.brandLogoPath === 'null' ? null : urlParams.brandLogoPath,
-    peerBrowserName: decodeURIComponent(urlParams.browserName) || ''
+    inst: {
+        name: hashUrlParams['inst.name'] ? hashUrlParams['inst.name'] : null,
+        brandLogoPath: hashUrlParams['inst.brandLogoPath'] ? hashUrlParams['inst.brandLogoPath'] : null
+    },
+    peerBrowserName: decodeURIComponent(searchUrlParams.browserName) || ''
 };
 
 /**

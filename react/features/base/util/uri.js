@@ -542,34 +542,6 @@ export function urlObjectToString(o: Object): ?string {
         }
     }
 
-    const { inst } = o;
-
-    if (inst !== null) {
-        let { search } = url;
-
-        if (search.indexOf('?inst=') === -1 && search.indexOf('&inst=') === -1) {
-            search.startsWith('?') || (search = `?${search}`);
-            search.length === 1 || (search += '&');
-            search += `inst=${inst}`;
-
-            url.search = search;
-        }
-    }
-
-    const { brandLogoPath } = o;
-
-    if (brandLogoPath !== null) {
-        let { search } = url;
-
-        if (search.indexOf('?brandLogoPath=') === -1 && search.indexOf('&brandLogoPath=') === -1) {
-            search.startsWith('?') || (search = `?${search}`);
-            search.length === 1 || (search += '&');
-            search += `brandLogoPath=${brandLogoPath}`;
-
-            url.search = search;
-        }
-    }
-
     const { browserName } = o;
 
     if (browserName !== null) {
@@ -590,7 +562,7 @@ export function urlObjectToString(o: Object): ?string {
 
     let { hash } = url;
 
-    for (const urlPrefix of [ 'config', 'interfaceConfig', 'devices', 'userInfo' ]) {
+    for (const urlPrefix of [ 'config', 'interfaceConfig', 'devices', 'userInfo', 'inst' ]) {
         const urlParamsArray
             = _objectToURLParamsArray(
                 o[`${urlPrefix}Overwrite`]
