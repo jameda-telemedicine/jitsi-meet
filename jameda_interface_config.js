@@ -59,8 +59,10 @@ var interfaceConfig = {
         'filmstrip',
         'tileview',
         'help',
-        'fileTransfer',
         'notes'
+
+        // FIXME to be implemented
+        // 'fileTransfer'
     ],
 
     SETTINGS_SECTIONS: [
@@ -338,8 +340,10 @@ if (isBrowserFirefoxOrSafari() === 'Firefox') {
         'filmstrip',
         'tileview',
         'help',
-        'fileTransfer',
         'notes'
+
+        // FIXME to be implemented
+        // 'fileTransfer'
     ];
 }
 
@@ -355,8 +359,10 @@ if (isBrowserFirefoxOrSafari() === 'Safari') {
         'filmstrip',
         'tileview',
         'help',
-        'fileTransfer',
         'notes'
+
+        // FIXME to be implemented
+        // 'fileTransfer'
     ];
 }
 
