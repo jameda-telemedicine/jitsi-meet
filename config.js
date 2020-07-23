@@ -37,6 +37,8 @@ var config = {
     clientNode: 'http://jitsi.org/jitsimeet',
 
     // The real JID of focus participant - can be overridden here
+    // Do not change username - FIXME: Make focus username configurable
+    // https://github.com/jitsi/jitsi-meet/issues/7376
     // focusUserJid: 'focus@auth.jitsi-meet.example.com',
 
 
@@ -44,6 +46,10 @@ var config = {
     //
 
     testing: {
+        // Disables the End to End Encryption feature. Useful for debugging
+        // issues related to insertable streams.
+        // disableE2EE: false,
+
         // P2P test mode disables automatic switching to P2P when there are 2
         // participants in the conference.
         p2pTestMode: false
@@ -107,6 +113,11 @@ var config = {
     // participants and to enable it back a reload is needed.
     // startSilent: false
 
+    // Sets the preferred target bitrate for the Opus audio codec by setting its
+    // 'maxaveragebitrate' parameter. Currently not available in p2p mode.
+    // Valid values are in the range 6000 to 510000
+    // opusMaxAvgBitrate: 20000,
+
     // Video
 
     // Sets the preferred resolution (height) for local video. Defaults to 720.
@@ -153,22 +164,6 @@ var config = {
     // disableH264: false,
 
     // Desktop sharing
-
-    // The ID of the jidesha extension for Chrome.
-    desktopSharingChromeExtId: null,
-
-    // Whether desktop sharing should be disabled on Chrome.
-    // desktopSharingChromeDisabled: false,
-
-    // The media sources to use when using screen sharing with the Chrome
-    // extension.
-    desktopSharingChromeSources: [ 'screen', 'window', 'tab' ],
-
-    // Required version of Chrome extension
-    desktopSharingChromeMinExtVersion: '0.1',
-
-    // Whether desktop sharing should be disabled on Firefox.
-    // desktopSharingFirefoxDisabled: false,
 
     // Optional desktop sharing frame rate options. Default value: min:5, max:5.
     // desktopSharingFrameRate: {
@@ -319,10 +314,10 @@ var config = {
     // and microsoftApiApplicationClientID
     // enableCalendarIntegration: false,
 
-    // When 'true', it shows an intermediate page before joining, where the user can  configure its devices.
+    // When 'true', it shows an intermediate page before joining, where the user can configure their devices.
     // prejoinPageEnabled: false,
 
-    // If true, shows the unsafe roon name warning label when a room name is
+    // If true, shows the unsafe room name warning label when a room name is
     // deemed unsafe (due to the simplicity in the name) and a password is not
     // set or the lobby is not enabled.
     // enableInsecureRoomNameWarning: false,
@@ -344,10 +339,10 @@ var config = {
     // callStatsID: '',
     // callStatsSecret: '',
 
-    // enables sending participants display name to callstats
+    // Enables sending participants' display names to callstats
     // enableDisplayNameInStats: false,
 
-    // enables sending participants email if available to callstats and other analytics
+    // Enables sending participants' emails (if available) to callstats and other analytics
     // enableEmailInStats: false,
 
     // Privacy
@@ -377,7 +372,7 @@ var config = {
         // The STUN servers that will be used in the peer to peer connections
         stunServers: [
 
-            // { urls: 'stun:jitsi-meet.example.com:4446' },
+            // { urls: 'stun:jitsi-meet.example.com:3478' },
             { urls: 'stun:meet-jit-si-turnrelay.jitsi.net:443' }
         ]
 
@@ -412,6 +407,15 @@ var config = {
 
         // The Amplitude APP Key:
         // amplitudeAPPKey: '<APP_KEY>'
+
+        // Configuration for the rtcstats server:
+        // In order to enable rtcstats one needs to provide a endpoint url.
+        // rtcstatsEndpoint: wss://rtcstats-server-pilot.jitsi.net/,
+
+        // The interval at which rtcstats will poll getStats, defaults to 1000ms.
+        // If the value is set to 0 getStats won't be polled and the rtcstats client
+        // will only send data related to RTCPeerConnection events.
+        // rtcstatsPolIInterval: 1000
 
         // Array of script URLs to load as lib-jitsi-meet "analytics handlers".
         // scriptURLs: [
@@ -520,7 +524,7 @@ var config = {
     /**
      External API url used to receive branding specific information.
      If there is no url set or there are missing fields, the defaults are applied.
-     None of the fieds are mandatory and the response must have the shape:
+     None of the fields are mandatory and the response must have the shape:
      {
          // The hex value for the colour used as background
          backgroundColor: '#fff',
@@ -533,6 +537,11 @@ var config = {
      }
     */
     // brandingDataUrl: '',
+
+    // The URL of the moderated rooms microservice, if available. If it
+    // is present, a link to the service will be rendered on the welcome page,
+    // otherwise the app doesn't render it.
+    // moderatedRoomServiceUrl: 'https://moderated.jitsi-meet.example.com',
 
     // List of undocumented settings used in jitsi-meet
     /**
