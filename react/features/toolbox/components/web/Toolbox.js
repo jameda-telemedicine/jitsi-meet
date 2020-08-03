@@ -43,6 +43,7 @@ import {
     LocalRecordingButton,
     LocalRecordingInfoDialog
 } from '../../../local-recording';
+import { openNotesDialog } from '../../../notes';
 import {
     LiveStreamButton,
     RecordButton
@@ -238,6 +239,7 @@ class Toolbox extends Component<Props, State> {
         this._onShortcutToggleScreenshare = this._onShortcutToggleScreenshare.bind(this);
         this._onShortcutToggleVideoQuality = this._onShortcutToggleVideoQuality.bind(this);
         this._onToolbarOpenFeedback = this._onToolbarOpenFeedback.bind(this);
+        this._onToolbarOpenNotes = this._onToolbarOpenNotes.bind(this);
         this._onToolbarOpenInvite = this._onToolbarOpenInvite.bind(this);
         this._onToolbarOpenKeyboardShortcuts = this._onToolbarOpenKeyboardShortcuts.bind(this);
         this._onToolbarOpenSpeakerStats = this._onToolbarOpenSpeakerStats.bind(this);
@@ -378,6 +380,17 @@ class Toolbox extends Component<Props, State> {
         const { _conference } = this.props;
 
         this.props.dispatch(openFeedbackDialog(_conference));
+    }
+
+    /**
+     * Callback invoked to display {@code NotesDialog}.
+     *
+     * @private
+     * @returns {void}
+     */
+    _doOpenNotes() {
+        console.log('openNotesDialog');
+        this.props.dispatch(openNotesDialog());
     }
 
     /**
@@ -690,6 +703,18 @@ class Toolbox extends Component<Props, State> {
         sendAnalytics(createToolbarEvent('feedback'));
 
         this._doOpenFeedback();
+    }
+
+    _onToolbarOpenNotes: () => void;
+
+    /**
+     * TODO: Please add description.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onToolbarOpenNotes() {
+        this._doOpenNotes();
     }
 
     _onToolbarOpenInvite: () => void;
@@ -1290,11 +1315,11 @@ class Toolbox extends Component<Props, State> {
                             onClick = { null }
                             tooltip = { t('toolbar.fileTransfer') } />
                     }
-                    { buttonsLeft.indexOf('notes') !== -1
+                    { true
                         && <ToolbarButton
                             accessibilityLabel = { t('toolbar.accessibilityLabel.notes') }
                             icon = { IconNotes }
-                            onClick = { null }
+                            onClick = { this._onToolbarOpenNotes }
                             tooltip = { t('toolbar.notes') } />
                     }
                 </div>
@@ -1347,6 +1372,7 @@ class Toolbox extends Component<Props, State> {
      * @returns {boolean} True if the button should be displayed.
      */
     _shouldShowButton(buttonName) {
+        console.log(this.props._visibleButtons);
         return this.props._visibleButtons.has(buttonName);
     }
 }
