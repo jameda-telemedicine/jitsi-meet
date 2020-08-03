@@ -1,5 +1,6 @@
 // @flow
 
+import { parseURLParams } from './parseURLParams';
 import { normalizeNFKC } from './strings';
 
 /**
@@ -96,6 +97,24 @@ function _fixURIStringScheme(uri: string) {
     }
 
     return uri;
+}
+
+/**
+ * Converts a path to a backend-safe format, by splitting the path '/' processing each part.
+ * Properly lowercased and url encoded.
+ *
+ * @param {string?} path - The path to convert.
+ * @returns {string?}
+ */
+export function getBackendSafePath(path: ?string): ?string {
+    if (!path) {
+        return path;
+    }
+
+    return path
+        .split('/')
+        .map(getBackendSafeRoomName)
+        .join('/');
 }
 
 /**
@@ -523,11 +542,27 @@ export function urlObjectToString(o: Object): ?string {
         }
     }
 
+    const { browserName } = o;
+
+    if (browserName !== null) {
+        let { search } = url;
+
+        if (search.indexOf('?browserName=') === -1 && search.indexOf('&browserName=') === -1) {
+            search.startsWith('?') || (search = `?${search}`);
+            search.length === 1 || (search += '&');
+            const encodeBrowserName = encodeURIComponent(browserName);
+
+            search += `browserName=${encodeBrowserName}`;
+
+            url.search = search;
+        }
+    }
+
     // fragment/hash
 
     let { hash } = url;
 
-    for (const urlPrefix of [ 'config', 'interfaceConfig', 'devices', 'userInfo', 'jamedaConf' ]) {
+    for (const urlPrefix of [ 'config', 'interfaceConfig', 'devices', 'userInfo', 'inst', 'jamedaConf' ]) {
         const urlParamsArray
             = _objectToURLParamsArray(
                 o[`${urlPrefix}Overwrite`]
@@ -550,4 +585,35 @@ export function urlObjectToString(o: Object): ?string {
     url.hash = hash;
 
     return url.toString() || undefined;
+}
+
+/**
+ * Adds hash params to URL.
+ *
+ * @param {URL} url - The URL.
+ * @param {Object} hashParamsToAdd - A map with the parameters to be set.
+ * @returns {URL} - The new URL.
+ */
+export function addHashParamsToURL(url: URL, hashParamsToAdd: Object = {}) {
+    const params = parseURLParams(url);
+    const urlParamsArray = _objectToURLParamsArray({
+        ...params,
+        ...hashParamsToAdd
+    });
+
+    if (urlParamsArray.length) {
+        url.hash = `#${urlParamsArray.join('&')}`;
+    }
+
+    return url;
+}
+
+/**
+ * Returns the decoded URI.
+ *
+ * @param {string} uri - The URI to decode.
+ * @returns {string}
+ */
+export function getDecodedURI(uri: string) {
+    return decodeURI(uri.replace(/^https?:\/\//i, ''));
 }

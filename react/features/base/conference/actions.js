@@ -6,12 +6,10 @@ import {
     createStartMutedConfigurationEvent,
     sendAnalytics
 } from '../../analytics';
-import { getName } from '../../app';
+import { getName } from '../../app/functions';
 import { endpointMessageReceived } from '../../subtitles';
-
 import { JITSI_CONNECTION_CONFERENCE_KEY } from '../connection';
 import { JitsiConferenceEvents } from '../lib-jitsi-meet';
-import { setAudioMuted, setVideoMuted } from '../media';
 import {
     dominantSpeakerChanged,
     getLocalParticipant,
@@ -25,6 +23,7 @@ import {
 } from '../participants';
 import { getLocalTracks, trackAdded, trackRemoved } from '../tracks';
 import {
+    getBackendSafePath,
     getBackendSafeRoomName,
     getJitsiMeetGlobalNS
 } from '../util';
@@ -48,7 +47,7 @@ import {
     SET_MAX_RECEIVER_VIDEO_QUALITY,
     SET_PASSWORD,
     SET_PASSWORD_FAILED,
-    SET_PREFERRED_RECEIVER_VIDEO_QUALITY,
+    SET_PREFERRED_VIDEO_QUALITY,
     SET_ROOM,
     SET_PENDING_SUBJECT_CHANGE,
     SET_START_MUTED_POLICY
@@ -137,8 +136,8 @@ function _addConferenceListeners(conference, dispatch) {
             // TODO Maybe the app needs to learn about Jicofo's intent and
             // transfer that intent to lib-jitsi-meet instead of lib-jitsi-meet
             // acting on Jicofo's intent without the app's knowledge.
-            dispatch(setAudioMuted(audioMuted));
-            dispatch(setVideoMuted(videoMuted));
+            // dispatch(setAudioMuted(audioMuted));
+            // dispatch(setVideoMuted(videoMuted));
         });
 
     // Dispatches into features/base/tracks follow:
@@ -249,6 +248,7 @@ export function authStatusChanged(authEnabled: boolean, authLogin: string) {
  * @param {JitsiConference} conference - The JitsiConference that has failed.
  * @param {string} error - The error describing/detailing the cause of the
  * failure.
+ * @param {any} params - Rest of the params that we receive together with the event.
  * @returns {{
  *     type: CONFERENCE_FAILED,
  *     conference: JitsiConference,
@@ -256,7 +256,7 @@ export function authStatusChanged(authEnabled: boolean, authLogin: string) {
  * }}
  * @public
  */
-export function conferenceFailed(conference: Object, error: string) {
+export function conferenceFailed(conference: Object, error: string, ...params: any) {
     return {
         type: CONFERENCE_FAILED,
         conference,
@@ -265,6 +265,7 @@ export function conferenceFailed(conference: Object, error: string) {
         // jitsi-meet needs it).
         error: {
             name: error,
+            params,
             recoverable: undefined
         }
     };
@@ -418,7 +419,9 @@ export function createConference() {
         }
 
         const config = state['features/base/config'];
+        const { tenant } = state['features/base/jwt'];
         const { email, name: nick } = getLocalParticipant(state);
+
         const conference
             = connection.initJitsiConference(
 
@@ -426,7 +429,8 @@ export function createConference() {
                     ...config,
                     applicationName: getName(),
                     getWiFiStatsMethod: getJitsiMeetGlobalNS().getWiFiStats,
-                    confID: `${locationURL.host}${locationURL.pathname}`,
+                    confID: `${locationURL.host}${getBackendSafePath(locationURL.pathname)}`,
+                    siteID: tenant,
                     statisticsDisplayName: config.enableDisplayNameInStats ? nick : undefined,
                     statisticsId: config.enableEmailInStats ? email : undefined
                 });
@@ -647,28 +651,23 @@ export function setPassword(
         case conference.join: {
             let state = getState()['features/base/conference'];
 
-            // Make sure that the action will set a password for a conference
-            // that the application wants joined.
-            if (state.passwordRequired === conference) {
-                dispatch({
-                    type: SET_PASSWORD,
-                    conference,
-                    method,
-                    password
-                });
+            dispatch({
+                type: SET_PASSWORD,
+                conference,
+                method,
+                password
+            });
 
-                // Join the conference with the newly-set password.
+            // Join the conference with the newly-set password.
 
-                // Make sure that the action did set the password.
-                state = getState()['features/base/conference'];
-                if (state.password === password
-                        && !state.passwordRequired
+            // Make sure that the action did set the password.
+            state = getState()['features/base/conference'];
+            if (state.password === password
 
-                        // Make sure that the application still wants the
-                        // conference joined.
-                        && !state.conference) {
-                    method.call(conference, password);
-                }
+                    // Make sure that the application still wants the
+                    // conference joined.
+                    && !state.conference) {
+                method.call(conference, password);
             }
             break;
         }
@@ -699,21 +698,20 @@ export function setPassword(
 }
 
 /**
- * Sets the max frame height the user prefers to receive from remote participant
- * videos.
+ * Sets the max frame height the user prefers to send and receive from the
+ * remote participants.
  *
- * @param {number} preferredReceiverVideoQuality - The max video resolution to
+ * @param {number} preferredVideoQuality - The max video resolution to send and
  * receive.
  * @returns {{
- *     type: SET_PREFERRED_RECEIVER_VIDEO_QUALITY,
- *     preferredReceiverVideoQuality: number
+ *     type: SET_PREFERRED_VIDEO_QUALITY,
+ *     preferredVideoQuality: number
  * }}
  */
-export function setPreferredReceiverVideoQuality(
-        preferredReceiverVideoQuality: number) {
+export function setPreferredVideoQuality(preferredVideoQuality: number) {
     return {
-        type: SET_PREFERRED_RECEIVER_VIDEO_QUALITY,
-        preferredReceiverVideoQuality
+        type: SET_PREFERRED_VIDEO_QUALITY,
+        preferredVideoQuality
     };
 }
 
@@ -764,12 +762,12 @@ export function setStartMutedPolicy(
  * @param {string} subject - The new subject.
  * @returns {void}
  */
-export function setSubject(subject: string = '') {
+export function setSubject(subject: string) {
     return (dispatch: Dispatch<any>, getState: Function) => {
         const { conference } = getState()['features/base/conference'];
 
         if (conference) {
-            conference.setSubject(subject);
+            conference.setSubject(subject || '');
         } else {
             dispatch({
                 type: SET_PENDING_SUBJECT_CHANGE,

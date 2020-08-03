@@ -3,17 +3,15 @@
 import debounce from 'lodash/debounce';
 
 import {
-    VIDEO_QUALITY_LEVELS,
-    setMaxReceiverVideoQuality
-} from '../base/conference';
-import {
     getPinnedParticipant,
     pinParticipant
 } from '../base/participants';
 import { StateListenerRegistry, equals } from '../base/redux';
+import { isFollowMeActive } from '../follow-me';
 import { selectParticipant } from '../large-video';
-import { shouldDisplayTileView } from './functions';
+
 import { setParticipantsWithScreenShare } from './actions';
+import { shouldDisplayTileView } from './functions';
 
 declare var APP: Object;
 declare var interfaceConfig: Object;
@@ -30,9 +28,6 @@ StateListenerRegistry.register(
         dispatch(selectParticipant());
 
         if (!displayTileView) {
-            dispatch(
-                setMaxReceiverVideoQuality(VIDEO_QUALITY_LEVELS.HIGH));
-
             if (_getAutoPinSetting()) {
                 _updateAutoPinnedParticipant(store);
             }
@@ -48,12 +43,11 @@ StateListenerRegistry.register(
 StateListenerRegistry.register(
     /* selector */ state => state['features/base/tracks'],
     /* listener */ debounce((tracks, store) => {
-        if (!_getAutoPinSetting()) {
+        if (!_getAutoPinSetting() || isFollowMeActive(store)) {
             return;
         }
 
-        const oldScreenSharesOrder
-            = store.getState()['features/video-layout'].screenShares || [];
+        const oldScreenSharesOrder = store.getState()['features/video-layout'].screenShares || [];
         const knownSharingParticipantIds = tracks.reduce((acc, track) => {
             if (track.mediaType === 'video' && track.videoType === 'desktop') {
                 const skipTrack = _getAutoPinSetting() === 'remote-only' && track.local;
