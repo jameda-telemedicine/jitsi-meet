@@ -1,15 +1,22 @@
 // @flow
 
+import Button from '@atlaskit/button';
 import { FieldTextAreaStateless } from '@atlaskit/field-text-area';
+import _ from 'lodash';
 import React, { Component } from 'react';
 import type { Dispatch } from 'redux';
 
 import { Dialog } from '../../base/dialog';
 import { translate } from '../../base/i18n';
 import { connect } from '../../base/redux';
+import { copyText } from '../../base/util';
 import { cancelNotes } from '../actions';
 
+import NotesDialogHeader from './NotesDialogHeader';
+
 declare var APP: Object;
+
+const COPY_TO_CLIPBOARD_BUTTON_ID = 'notes-copy-to-clipboard-button';
 
 /**
  * The type of the React {@code Component} props of {@link NotesDialog}.
@@ -82,6 +89,7 @@ class NotesDialog extends Component<Props, State> {
         // Bind event handlers so they are only bound once for every instance.
         this._onCancel = this._onCancel.bind(this);
         this._onMessageChange = this._onMessageChange.bind(this);
+        this._onCopyToClipboard = this._onCopyToClipboard.bind(this);
     }
 
     /**
@@ -107,6 +115,29 @@ class NotesDialog extends Component<Props, State> {
     }
 
     /**
+     * TODO: Please add description.
+     *
+     * @inheritdoc
+     */
+    _renderCopyToClipboardButton() {
+
+        const {
+            t /* The following fixes a flow error: */ = _.identity
+        } = this.props;
+
+        return (
+            <Button
+                appearance = 'primary'
+                id = { COPY_TO_CLIPBOARD_BUTTON_ID }
+                key = 'notes-copy-btn'
+                onClick = { this._onCopyToClipboard }
+                type = 'button'>
+                { t('notes.copyToClipboardButton') }
+            </Button>
+        );
+    }
+
+    /**
      * Implements React's {@link Component#render()}.
      *
      * @inheritdoc
@@ -118,21 +149,26 @@ class NotesDialog extends Component<Props, State> {
 
         return (
             <Dialog
-                okKey = 'dialog.Submit'
+                customHeader = { NotesDialogHeader }
+                hideCancelButton = { true }
                 onCancel = { this._onCancel }
-                onSubmit = { this._onSubmit }
+                submitDisabled = { true }
                 titleKey = 'notes.textArea'>
                 <div className = 'notes-dialog'>
+                    <p className = 'description'>
+                        { t('notes.description') }
+                    </p>
                     <div className = 'details'>
                         <FieldTextAreaStateless
                             autoFocus = { true }
                             className = 'input-control'
                             id = 'notesTextArea'
-                            label = { t('notes.detailsLabel') }
                             onChange = { this._onMessageChange }
+                            placeholder = { t('notes.textAreaPlaceholder') }
                             shouldFitContainer = { true }
                             value = { message } />
                     </div>
+                    { this._renderCopyToClipboardButton() }
                 </div>
             </Dialog>
         );
@@ -152,8 +188,23 @@ class NotesDialog extends Component<Props, State> {
         const { message } = this.state;
 
         this.props.dispatch(cancelNotes(message));
+        console.log('_onCancel');
 
         return true;
+    }
+
+    _onCopyToClipboard: () => void;
+
+    /**
+     * TODO: Please add description.
+     *
+     * @returns {void}
+     */
+    _onCopyToClipboard() {
+        const { message } = this.state;
+
+        copyText(message);
+        this._onCancel();
     }
 
     _onMessageChange: (Object) => void;

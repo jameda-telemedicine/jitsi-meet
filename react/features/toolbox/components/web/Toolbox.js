@@ -389,7 +389,6 @@ class Toolbox extends Component<Props, State> {
      * @returns {void}
      */
     _doOpenNotes() {
-        console.log('openNotesDialog');
         this.props.dispatch(openNotesDialog());
     }
 
@@ -1372,7 +1371,6 @@ class Toolbox extends Component<Props, State> {
      * @returns {boolean} True if the button should be displayed.
      */
     _shouldShowButton(buttonName) {
-        console.log(this.props._visibleButtons);
         return this.props._visibleButtons.has(buttonName);
     }
 }
