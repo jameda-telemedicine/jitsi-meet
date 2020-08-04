@@ -1,0 +1,24 @@
+.notes-dialog {
+    .details {
+      padding-bottom: 8px;
+
+        textarea {
+            min-height: 100px;
+        }
+    }
+
+    .input-control {
+        background-color: $feedbackInputBg;
+        color: $feedbackInputTextColor;
+
+        &::-webkit-input-placeholder {
+            color: $feedbackInputPlaceholderColor;
+        }
+        &::-moz-placeholder {  /* Firefox 19+ */
+            color: $feedbackInputPlaceholderColor;
+        }
+        &:-ms-input-placeholder {
+            color: $feedbackInputPlaceholderColor;
+        }
+    }
+}

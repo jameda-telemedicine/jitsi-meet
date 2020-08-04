@@ -445,6 +445,13 @@
     "lockRoomPassword": "Passwort",
     "lockRoomPasswordUppercase": "Passwort",
     "me": "ich",
+    "notes": {
+        "copyToClipboardButton": "Kopieren",
+        "description": "Machen Sie sich während der Videosprechstunde Notizen. So haben Sie auch nach dem Gespräch alle Informationen dokumentiert. Laden Sie diese vor der Verabschiedung als Datei herunter oder kopieren Sie den Text in den Zwischenspeicher zur Vervollständigung Ihrer Unterlagen. Aus Gründen des Datenschutzes werden die Notizen beim Beenden der Videosprechstunde gelöscht.",
+        "downloadButton": "Herunterladen.txt",
+        "headerTitle": "Notizen",
+        "textAreaPlaceholder": "Hier können Sie Ihre Notizen schreiben..."
+    },
     "notify": {
         "connectedOneMember": "{{name}} nimmt am Meeting teil",
         "connectedThreePlusMembers": "{{name}} und {{count}} andere Personen nehmen am Meeting teil",
