@@ -1,5 +1,5 @@
 /**
- * TODO: Please add description.
+ * The type of the action which signals notes was closed without submitting.
  *
  * {
  *     type: CANCEL_NOTES,
@@ -9,7 +9,7 @@
 export const CANCEL_NOTES = 'CANCEL_NOTES';
 
 /**
- * TODO: Please add description.
+ * The type of the action which signals notes has been copied.
  *
  * {
  *     type: COPY_TO_CLIPBOARD_NOTES,
@@ -19,7 +19,7 @@ export const CANCEL_NOTES = 'CANCEL_NOTES';
 export const COPY_TO_CLIPBOARD_NOTES = 'COPY_TO_CLIPBOARD_NOTES';
 
 /**
- * TODO: Please add description.
+ * The type of the action which signals notes has been fetched.
  *
  * {
  *     type: FETCH_NOTES

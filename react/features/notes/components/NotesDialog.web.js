@@ -101,7 +101,7 @@ class NotesDialog extends Component<Props, State> {
     }
 
     /**
-     * TODO: Please add description.
+     * Renders the copy to clipboard button.
      *
      * @inheritdoc
      */
@@ -182,7 +182,7 @@ class NotesDialog extends Component<Props, State> {
     _onCopyToClipboard: () => void;
 
     /**
-     * TODO: Please add description.
+     * Copies the entered notes message to the clipboard.
      *
      * @returns {void}
      */

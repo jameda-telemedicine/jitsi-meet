@@ -1314,7 +1314,7 @@ class Toolbox extends Component<Props, State> {
                             onClick = { null }
                             tooltip = { t('toolbar.fileTransfer') } />
                     }
-                    { true
+                    { buttonsLeft.indexOf('notes') !== -1
                         && <ToolbarButton
                             accessibilityLabel = { t('toolbar.accessibilityLabel.notes') }
                             icon = { IconNotes }
