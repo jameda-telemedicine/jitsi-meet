@@ -18,7 +18,6 @@ ReducerRegistry.register(
     (state = DEFAULT_STATE, action) => {
         switch (action.type) {
 
-        // case FETCH_NOTES:
         case CANCEL_NOTES:
         case COPY_TO_CLIPBOARD_NOTES: {
             return {

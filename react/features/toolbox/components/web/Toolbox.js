@@ -707,7 +707,7 @@ class Toolbox extends Component<Props, State> {
     _onToolbarOpenNotes: () => void;
 
     /**
-     * TODO: Please add description.
+     * Dispatches an action for toggling display of notes.
      *
      * @private
      * @returns {void}

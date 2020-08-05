@@ -19,14 +19,14 @@ type Props = {
 };
 
 /**
- * Custom header of the {@code SecurityDialog}.
+ * Custom header of the {@code NotesDialog}.
  *
  * @returns {React$Element<any>}
  */
 function NotesDialogHeader({ onClose, t }: Props) {
     return (
         <div
-            className = 'invite-more-dialog header'>
+            className = 'notes-dialog header'>
             { t('notes.headerTitle') }
             <Icon
                 onClick = { onClose }

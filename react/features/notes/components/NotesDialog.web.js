@@ -14,8 +14,6 @@ import { cancelNotes, copyToClipboardNotes } from '../actions';
 
 import NotesDialogHeader from './NotesDialogHeader';
 
-declare var APP: Object;
-
 const COPY_TO_CLIPBOARD_BUTTON_ID = 'notes-copy-to-clipboard-button';
 
 /**
@@ -53,13 +51,12 @@ type State = {
     /**
      * The currently entered notes message.
      */
-    message: string,
+    message: string
 };
 
 /**
- * A React {@code Component} for displaying a dialog to rate the current
- * conference quality, write a message describing the experience, and submit
- * the notes.
+ * A React {@code Component} for displaying a dialog to write a notes describing the experience,
+ * and fetch the notes as a file.
  *
  * @extends Component
  */
@@ -90,17 +87,6 @@ class NotesDialog extends Component<Props, State> {
         this._onCancel = this._onCancel.bind(this);
         this._onMessageChange = this._onMessageChange.bind(this);
         this._onCopyToClipboard = this._onCopyToClipboard.bind(this);
-    }
-
-    /**
-     * Emits an analytics event to notify notes has been opened.
-     *
-     * @inheritdoc
-     */
-    componentDidMount() {
-        if (typeof APP !== 'undefined') {
-            // APP.API.notifyFeedbackPromptDisplayed();
-        }
     }
 
     /**
@@ -219,25 +205,6 @@ class NotesDialog extends Component<Props, State> {
      */
     _onMessageChange(event) {
         this.setState({ message: event.target.value });
-    }
-
-    _onSubmit: () => void;
-
-    /**
-     * Dispatches the entered notes for submission. The submitted score will
-     * have one added as the rest of the app does not expect 0 indexing.
-     *
-     * @private
-     * @returns {boolean} Returns true to close the dialog.
-     */
-    _onSubmit() {
-        // const { conference, dispatch } = this.props;
-        // const { message } = this.state;
-
-
-        // dispatch(submitNotes(message, conference));
-
-        return true;
     }
 }
 
