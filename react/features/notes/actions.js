@@ -2,19 +2,40 @@
 
 import { openDialog } from '../base/dialog';
 
-import { CANCEL_NOTES } from './actionTypes';
+import { CANCEL_NOTES, COPY_TO_CLIPBOARD_NOTES } from './actionTypes';
 import { NotesDialog } from './components';
 
 /**
- * Caches the passed in feedback in the redux store.
+ * Caches the passed in notes in the redux store.
  *
+ * @param {string} message - A description entered by the participant that
+ * wrote message to save.
  * @returns {{
- *     type: CANCEL_FEEDBACK
+ *     type: CANCEL_NOTES,
+ *     message: string
  * }}
  */
-export function cancelNotes() {
+export function cancelNotes(message: string) {
     return {
-        type: CANCEL_NOTES
+        type: CANCEL_NOTES,
+        message
+    };
+}
+
+/**
+ * Caches the passed in notes in the redux store.
+ *
+ * @param {string} message - A description entered by the participant that
+ * wrote message to save.
+ * @returns {{
+ *     type: COPY_TO_CLIPBOARD_NOTES,
+ *     message: string
+ * }}
+ */
+export function copyToClipboardNotes(message: string) {
+    return {
+        type: COPY_TO_CLIPBOARD_NOTES,
+        message
     };
 }
 

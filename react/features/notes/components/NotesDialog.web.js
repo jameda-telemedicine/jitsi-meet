@@ -10,7 +10,7 @@ import { Dialog } from '../../base/dialog';
 import { translate } from '../../base/i18n';
 import { connect } from '../../base/redux';
 import { copyText } from '../../base/util';
-import { cancelNotes } from '../actions';
+import { cancelNotes, copyToClipboardNotes } from '../actions';
 
 import NotesDialogHeader from './NotesDialogHeader';
 
@@ -204,7 +204,7 @@ class NotesDialog extends Component<Props, State> {
         const { message } = this.state;
 
         copyText(message);
-        this._onCancel();
+        this.props.dispatch(copyToClipboardNotes(message));
     }
 
     _onMessageChange: (Object) => void;
