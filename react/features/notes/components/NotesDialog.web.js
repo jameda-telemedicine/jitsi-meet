@@ -1,6 +1,6 @@
 // @flow
 
-import Button from '@atlaskit/button';
+import Button, { ButtonGroup } from '@atlaskit/button';
 import { FieldTextAreaStateless } from '@atlaskit/field-text-area';
 import _ from 'lodash';
 import React, { Component } from 'react';
@@ -85,8 +85,9 @@ class NotesDialog extends Component<Props, State> {
 
         // Bind event handlers so they are only bound once for every instance.
         this._onCancel = this._onCancel.bind(this);
-        this._onMessageChange = this._onMessageChange.bind(this);
         this._onCopyToClipboard = this._onCopyToClipboard.bind(this);
+        this._onDownloadFile = this._onDownloadFile.bind(this);
+        this._onMessageChange = this._onMessageChange.bind(this);
     }
 
     /**
@@ -124,6 +125,29 @@ class NotesDialog extends Component<Props, State> {
     }
 
     /**
+     * Renders the download file button.
+     *
+     * @inheritdoc
+     */
+    _renderDownloadFileButton() {
+
+        const {
+            t /* The following fixes a flow error: */ = _.identity
+        } = this.props;
+
+        return (
+            <Button
+                appearance = 'primary'
+                id = { COPY_TO_CLIPBOARD_BUTTON_ID }
+                key = 'notes-download-file-btn'
+                onClick = { this._onCopyToClipboard }
+                type = 'button'>
+                { t('notes.downloadFileButton') }
+            </Button>
+        );
+    }
+
+    /**
      * Implements React's {@link Component#render()}.
      *
      * @inheritdoc
@@ -132,6 +156,10 @@ class NotesDialog extends Component<Props, State> {
     render() {
         const { message } = this.state;
         const { t } = this.props;
+        const buttons = [
+            this._renderCopyToClipboardButton(),
+            this._renderDownloadFileButton()
+        ];
 
         return (
             <Dialog
@@ -154,7 +182,9 @@ class NotesDialog extends Component<Props, State> {
                             shouldFitContainer = { true }
                             value = { message } />
                     </div>
-                    { this._renderCopyToClipboardButton() }
+                    <ButtonGroup>
+                        { buttons }
+                    </ButtonGroup>
                 </div>
             </Dialog>
         );
@@ -191,6 +221,19 @@ class NotesDialog extends Component<Props, State> {
 
         copyText(message);
         this.props.dispatch(copyToClipboardNotes(message));
+    }
+
+    _onDownloadFile: () => void;
+
+    /**
+     * Download file with the entered notes message.
+     *
+     * @returns {void}
+     */
+    _onDownloadFile() {
+        const { message } = this.state;
+
+        console.log('message', message);
     }
 
     _onMessageChange: (Object) => void;
