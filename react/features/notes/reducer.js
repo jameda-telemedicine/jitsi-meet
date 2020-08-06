@@ -2,7 +2,6 @@ import { ReducerRegistry } from '../base/redux';
 
 import {
     CANCEL_NOTES,
-    FETCH_NOTES,
     COPY_TO_CLIPBOARD_NOTES
 } from './actionTypes';
 
