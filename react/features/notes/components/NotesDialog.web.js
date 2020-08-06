@@ -10,6 +10,7 @@ import { Dialog } from '../../base/dialog';
 import { translate } from '../../base/i18n';
 import { connect } from '../../base/redux';
 import { copyText } from '../../base/util';
+import { downloadBlob } from '../../local-recording/recording';
 import { cancelNotes, copyToClipboardNotes } from '../actions';
 
 import NotesDialogHeader from './NotesDialogHeader';
@@ -140,9 +141,9 @@ class NotesDialog extends Component<Props, State> {
                 appearance = 'primary'
                 id = { COPY_TO_CLIPBOARD_BUTTON_ID }
                 key = 'notes-download-file-btn'
-                onClick = { this._onCopyToClipboard }
+                onClick = { this._onDownloadFile }
                 type = 'button'>
-                { t('notes.downloadFileButton') }
+                { t('notes.downloadButton') }
             </Button>
         );
     }
@@ -232,8 +233,12 @@ class NotesDialog extends Component<Props, State> {
      */
     _onDownloadFile() {
         const { message } = this.state;
+        const blob = new Blob([ message ], { type: 'text/plain;charset=utf-8' });
+        const {
+            t /* The following fixes a flow error: */ = _.identity
+        } = this.props;
 
-        console.log('message', message);
+        downloadBlob(blob, `${t('notes.downloadFilename')}.txt`);
     }
 
     _onMessageChange: (Object) => void;
