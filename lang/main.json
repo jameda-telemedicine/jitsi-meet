@@ -776,7 +776,7 @@
         "startvideoblur": "Blur my background",
         "stopvideoblur": "Disable background blur",
         "fileTransfer": "File Transfer feature is coming soon.",
-        "notes": "Notes feature is coming soon."
+        "notes": "Notes"
     },
     "transcribing": {
         "ccButtonTooltip": "Start / Stop subtitles",
