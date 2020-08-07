@@ -16,6 +16,7 @@ import { cancelNotes, copyToClipboardNotes } from '../actions';
 import NotesDialogHeader from './NotesDialogHeader';
 
 const COPY_TO_CLIPBOARD_BUTTON_ID = 'notes-copy-to-clipboard-button';
+const DOWNLOAD_FILE_BUTTON_ID = 'notes-download-file-button';
 
 /**
  * The type of the React {@code Component} props of {@link NotesDialog}.
@@ -139,7 +140,7 @@ class NotesDialog extends Component<Props, State> {
         return (
             <Button
                 appearance = 'primary'
-                id = { COPY_TO_CLIPBOARD_BUTTON_ID }
+                id = { DOWNLOAD_FILE_BUTTON_ID }
                 key = 'notes-download-file-btn'
                 onClick = { this._onDownloadFile }
                 type = 'button'>
