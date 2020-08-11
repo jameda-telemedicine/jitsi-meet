@@ -1,5 +1,5 @@
 /**
- * The type of the action which signals notes was closed without submitting.
+ * The type of the action which signals notes was closed.
  *
  * {
  *     type: CANCEL_NOTES,

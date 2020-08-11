@@ -30,7 +30,7 @@ type Props = {
     _message: string,
 
     /**
-     * Invoked to signal notes submission or canceling.
+     * Invoked to signal notes copying or canceling.
      */
     dispatch: Dispatch<any>,
 
@@ -195,9 +195,7 @@ class NotesDialog extends Component<Props, State> {
     _onCancel: () => boolean;
 
     /**
-     * Dispatches an action notifying notes was not submitted. The submitted
-     * score will have one added as the rest of the app does not expect 0
-     * indexing.
+     * Dispatches an action notifying notes was closed.
      *
      * @private
      * @returns {boolean} Returns true to close the dialog.
@@ -206,7 +204,6 @@ class NotesDialog extends Component<Props, State> {
         const { message } = this.state;
 
         this.props.dispatch(cancelNotes(message));
-        console.log('_onCancel');
 
         return true;
     }
