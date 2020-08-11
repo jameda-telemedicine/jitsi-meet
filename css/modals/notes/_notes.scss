@@ -1,0 +1,40 @@
+.notes-dialog {
+    .details {
+      padding-bottom: 8px;
+
+        textarea {
+            min-height: 100px;
+        }
+    }
+
+    .input-control {
+        background-color: $feedbackInputBg;
+        color: $feedbackInputTextColor;
+
+        &::-webkit-input-placeholder {
+            color: $feedbackInputPlaceholderColor;
+        }
+        &::-moz-placeholder {  /* Firefox 19+ */
+            color: $feedbackInputPlaceholderColor;
+        }
+        &:-ms-input-placeholder {
+            color: $feedbackInputPlaceholderColor;
+        }
+    }
+
+    &.header {
+        display: flex;
+        justify-content: space-between;
+        margin: 16px 16px 24px;
+        width: calc(100% - 32px);
+        color: #fff;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 32px;
+
+        & > div > svg {
+            cursor: pointer;
+            fill: #A4B8D1;
+        }
+    }
+}

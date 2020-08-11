@@ -459,6 +459,14 @@
     "lockRoomPassword": "password",
     "lockRoomPasswordUppercase": "Password",
     "me": "me",
+    "notes": {
+        "copyToClipboardButton": "Copy",
+        "description": "Take notes during the video consultation. This way you have documented all information even after the interview. Download this as a file before you say goodbye or copy the text into the clipboard to complete your documents. For reasons of data protection, the notes are deleted when the video consultation hour is ended.",
+        "downloadButton": "Download.txt",
+        "downloadFilename": "Notes",
+        "headerTitle": "Notes",
+        "textAreaPlaceholder": "Type your notes here..."
+    },
     "notify": {
         "connectedOneMember": "{{name}} joined the meeting",
         "connectedThreePlusMembers": "{{name}} and {{count}} others joined the meeting",
@@ -768,7 +776,7 @@
         "startvideoblur": "Blur my background",
         "stopvideoblur": "Disable background blur",
         "fileTransfer": "File Transfer feature is coming soon.",
-        "notes": "Notes feature is coming soon."
+        "notes": "Notes"
     },
     "transcribing": {
         "ccButtonTooltip": "Start / Stop subtitles",
