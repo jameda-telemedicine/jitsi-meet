@@ -166,6 +166,7 @@ class NotesDialog extends Component<Props, State> {
         return (
             <Dialog
                 customHeader = { NotesDialogHeader }
+                disableEnter = { true }
                 hideCancelButton = { true }
                 onCancel = { this._onCancel }
                 submitDisabled = { true }
