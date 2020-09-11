@@ -2,8 +2,10 @@
 
 import React, { Component } from 'react';
 
+import { isVpaasMeeting } from '../../../../billing-counter/functions';
 import { translate } from '../../../i18n';
 import { connect } from '../../../redux';
+
 
 declare var interfaceConfig: Object;
 
@@ -37,6 +39,11 @@ type Props = {
     _isGuest: boolean,
 
     /**
+     * Whether or not the current meeting is a vpaas one.
+     */
+    _isVpaas: boolean,
+
+    /**
      * Flag used to signal that the logo can be displayed.
      * It becomes true after the user customization options are fetched.
      */
@@ -46,6 +53,11 @@ type Props = {
      * Returns true if welcome page is visible at the moment.
      */
     _welcomePageIsVisible: boolean,
+
+    /**
+     * The default value for the Jitsi logo URL.
+     */
+    defaultJitsiLogoURL: ?string,
 
     /**
      * Invoked to obtain translated strings.
@@ -177,6 +189,33 @@ class Watermarks extends Component<Props, State> {
     }
 
     /**
+     * Returns the background image style.
+     *
+     * @private
+     * @returns {string}
+     */
+    _getBackgroundImageStyle() {
+        const {
+            _customLogoUrl,
+            _isVpaas,
+            defaultJitsiLogoURL
+        } = this.props;
+        let style = 'none';
+
+        if (_isVpaas) {
+            if (_customLogoUrl) {
+                style = `url(${_customLogoUrl})`;
+            }
+        } else {
+            style = `url(${_customLogoUrl
+                || defaultJitsiLogoURL
+                || interfaceConfig.DEFAULT_LOGO_URL})`;
+        }
+
+        return style;
+    }
+
+    /**
      * Renders a brand watermark if it is enabled.
      *
      * @private
@@ -216,17 +255,22 @@ class Watermarks extends Component<Props, State> {
      */
     _renderJitsiWatermark() {
         let reactElement = null;
-        const {
-            _customLogoUrl,
-            _customLogoLink
-        } = this.props;
 
         if (this._canDisplayJitsiWatermark()) {
-            const link = _customLogoLink || this.state.jitsiWatermarkLink;
+            const backgroundImage = this._getBackgroundImageStyle();
+            const link = this.props._customLogoLink || this.state.jitsiWatermarkLink;
+            const additionalStyles = {};
+
+            if (backgroundImage === 'none') {
+                additionalStyles.height = 0;
+                additionalStyles.width = 0;
+            }
+
             const style = {
-                backgroundImage: `url(${_customLogoUrl || interfaceConfig.DEFAULT_LOGO_URL})`,
+                backgroundImage,
                 maxWidth: 140,
-                maxHeight: 70
+                maxHeight: 70,
+                ...additionalStyles
             };
 
             reactElement = (<div
@@ -293,6 +337,7 @@ function _mapStateToProps(state) {
         _customLogoLink: logoClickUrl,
         _customLogoUrl: logoImageUrl,
         _isGuest: isGuest,
+        _isVpaas: isVpaasMeeting(state),
         _readyToDisplayJitsiWatermark: customizationReady,
         _welcomePageIsVisible: !room
     };
