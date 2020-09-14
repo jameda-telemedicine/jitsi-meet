@@ -784,8 +784,8 @@
         "videomute": "Kamera starten / stoppen",
         "startvideoblur": "Hintergrundunschärfe aktivieren",
         "stopvideoblur": "Hintergrundunschärfe deaktivieren",
-        "fileTransfer": "Die Dateiübertragungsfunktion ist in Kürze verfügbar.",
-        "notes": "Die Notes-Funktion ist in Kürze verfügbar."
+        "fileTransfer": "Dateiübertragunsfunktion",
+        "notes": "Notizen-Funktion"
     },
     "transcribing": {
         "ccButtonTooltip": "Untertitel ein-/ausschalten",
