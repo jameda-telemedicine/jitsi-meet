@@ -82,8 +82,8 @@ export default class ToolboxItem extends AbstractToolboxItem<Props> {
         };
 
         const elementType = showLabel ? 'li' : 'div';
-        const useTooltip = Platform.OS === 'ios' && browser.isSafari()
-            ? false : this.tooltip && this.tooltip.length > 0;
+        const hasTooltip = this.tooltip && this.tooltip.length > 0;
+        const useTooltip = Platform.OS === 'ios' && browser.isSafari() ? false : hasTooltip;
         let children = (
             <Fragment>
                 { this._renderIcon() }
