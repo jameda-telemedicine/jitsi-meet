@@ -4,9 +4,13 @@ import Tooltip from '@atlaskit/tooltip';
 import React, { Fragment } from 'react';
 
 import { Icon } from '../../icons';
+import JitsiMeetJS from '../../lib-jitsi-meet';
 
+import Platform from './../../../base/react/Platform.web';
 import AbstractToolboxItem from './AbstractToolboxItem';
 import type { Props } from './AbstractToolboxItem';
+
+const { browser } = JitsiMeetJS.util;
 
 /**
  * Web implementation of {@code AbstractToolboxItem}.
@@ -78,7 +82,8 @@ export default class ToolboxItem extends AbstractToolboxItem<Props> {
         };
 
         const elementType = showLabel ? 'li' : 'div';
-        const useTooltip = this.tooltip && this.tooltip.length > 0;
+        const hasTooltip = this.tooltip && this.tooltip.length > 0;
+        const useTooltip = Platform.OS === 'ios' && browser.isSafari() ? false : hasTooltip;
         let children = (
             <Fragment>
                 { this._renderIcon() }
