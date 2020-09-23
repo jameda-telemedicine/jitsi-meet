@@ -6,14 +6,15 @@ const hashUrlParams = parseURLParams(window.location, false, 'hash');
 /**
  * Set a global configuration object
  *
- * @type {{inst: {name: string | null, brandLogoPath: string | null }, peerBrowser: string}}
+ * @type {{inst: {name: string | null, brandLogoPath: string | null }, peerBrowser: string, enableGatherStats: boolean}}
  */
 window.jameda = {
     inst: {
         name: hashUrlParams['inst.name'] ? hashUrlParams['inst.name'] : null,
         brandLogoPath: hashUrlParams['inst.brandLogoPath'] ? hashUrlParams['inst.brandLogoPath'] : null
     },
-    peerBrowserName: decodeURIComponent(searchUrlParams.browserName) || ''
+    peerBrowserName: decodeURIComponent(searchUrlParams.browserName) || '',
+    enableGatherStats: isGatherStatsEnabled(window.location.pathname)
 };
 
 /**
@@ -66,6 +67,25 @@ function parseURLParams(
     });
 
     return params;
+}
+
+/**
+ * Checks if gathering stats should be enabled based on conference number.
+ *
+ * @type {{pathname: string}}
+ * @returns {?boolean}
+ */
+function isGatherStatsEnabled(pathname) {
+    const pathArray = pathname.split('/');
+    const conferencePath = pathArray.reduce((prev, next) => {
+        if (next.startsWith('conference')) {
+            return next.replace('conference', '');
+        }
+
+        return prev;
+    }, '');
+
+    return parseInt(conferencePath, 10) % 10 === 0;
 }
 
 /* eslint-enable no-unused-vars, no-var */
