@@ -15,8 +15,7 @@ export default [
     'abTesting',
     'analytics.disabled',
     'audioLevelsInterval',
-    'autoRecord',
-    'autoRecordToken',
+    'apiLogLevels',
     'avgRtpStatsN',
 
     /**
@@ -152,6 +151,7 @@ export default [
     'testing',
     'useStunTurn',
     'useTurnUdp',
+    'videoQuality.persist',
     'webrtcIceTcpDisable',
     'webrtcIceUdpDisable'
 ].concat(extraConfigWhitelist);
