@@ -2219,7 +2219,7 @@ export default {
 
         // call hangup
         APP.UI.addListener(UIEvents.HANGUP, () => {
-            this.hangup(false);
+            this.hangup(true);
         });
 
         // logout
@@ -2228,7 +2228,7 @@ export default {
                 if (url) {
                     UIUtil.redirect(url);
                 } else {
-                    this.hangup(false);
+                    this.hangup(true);
                 }
             });
         });
