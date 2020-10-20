@@ -3,9 +3,11 @@
 const UI = {};
 
 import EventEmitter from 'events';
+import Logger from 'jitsi-meet-logger';
 
 import { isMobileBrowser } from '../../react/features/base/environment/utils';
 import { getLocalParticipant } from '../../react/features/base/participants';
+import { setDocumentUrl } from '../../react/features/etherpad';
 import { setFilmstripVisible } from '../../react/features/filmstrip';
 import { joinLeaveNotificationsDisabled, setNotificationsEnabled } from '../../react/features/notifications';
 import {
@@ -15,10 +17,13 @@ import {
 } from '../../react/features/toolbox/actions.web';
 import UIEvents from '../../service/UI/UIEvents';
 
+import EtherpadManager from './etherpad/Etherpad';
 import SharedVideoManager from './shared_video/SharedVideo';
 import messageHandler from './util/MessageHandler';
 import UIUtil from './util/UIUtil';
 import VideoLayout from './videolayout/VideoLayout';
+
+const logger = Logger.getLogger(__filename);
 
 UI.messageHandler = messageHandler;
 
@@ -170,6 +175,23 @@ UI.unbindEvents = () => {
  */
 UI.addLocalVideoStream = track => {
     VideoLayout.changeLocalVideo(track);
+};
+
+/**
+ * Setup and show Etherpad.
+ * @param {string} name etherpad id
+ */
+UI.initEtherpad = name => {
+    if (etherpadManager || !config.etherpad_base || !name) {
+        return;
+    }
+    logger.log('Etherpad is enabled');
+
+    etherpadManager = new EtherpadManager(eventEmitter);
+
+    const url = new URL(name, config.etherpad_base);
+
+    APP.store.dispatch(setDocumentUrl(url.toString()));
 };
 
 /**
