@@ -13,7 +13,7 @@ import 'olm';
 import './react/features/base/jitsi-local-storage/setup';
 import conference from './conference';
 import API from './modules/API';
-import UI from './modules/UI/UI';
+import UI from './modules/UI/UI-jameda';
 import keyboardshortcut from './modules/keyboardshortcut/keyboardshortcut';
 import remoteControl from './modules/remotecontrol/RemoteControl';
 import translation from './modules/translation/translation';
