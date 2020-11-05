@@ -27,6 +27,7 @@ import {
     IconFileTransfer,
     IconNotes
 } from '../../../base/icons';
+import JitsiMeetJS from '../../../base/lib-jitsi-meet';
 import {
     getLocalParticipant,
     getParticipants,
@@ -1457,7 +1458,7 @@ class Toolbox extends Component<Props, State> {
  */
 function _mapStateToProps(state) {
     const { conference, locked } = state['features/base/conference'];
-    let { desktopSharingEnabled } = state['features/base/conference'];
+    let desktopSharingEnabled = JitsiMeetJS.isDesktopSharingEnabled();
     const {
         callStatsID,
         enableFeaturesBasedOnToken
