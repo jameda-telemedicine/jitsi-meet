@@ -134,10 +134,6 @@ export default class RemoteVideo extends SmallVideo {
      * @private
      */
     _generatePopupContent() {
-        if (interfaceConfig.filmStripOnly) {
-            return;
-        }
-
         const remoteVideoMenuContainer
             = this.container.querySelector('.remotevideomenu');
 
