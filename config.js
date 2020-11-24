@@ -92,6 +92,11 @@ var config = {
     // input and will suggest another valid device if one is present.
     enableNoAudioDetection: true,
 
+    // Enabling this will show a "Save Logs" link in the GSM popover that can be
+    // used to collect debug information (XMPP IQs, SDP offer/answer cycles)
+    // about the call.
+    // enableSaveLogs: false,
+
     // Enabling this will run the lib-jitsi-meet noise detection module which will
     // notify the user if there is noise, other than voice, coming from the current
     // selected microphone. The purpose it to let the user know that the input could
@@ -390,6 +395,9 @@ var config = {
     // Whether to automatically copy invitation URL after creating a room.
     // Document should be focused for this option to work
     // enableAutomaticUrlCopy: false,
+
+    // Base URL for a Gravatar-compatible service. Defaults to libravatar.
+    // gravatarBaseURL: 'https://seccdn.libravatar.org/avatar/';
 
     // Stats
     //
