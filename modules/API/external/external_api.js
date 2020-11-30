@@ -7,7 +7,6 @@ import {
     Transport
 } from '../../transport';
 
-import electronPopupsConfig from './electronPopupsConfig.json';
 import {
     getAvailableDevices,
     getCurrentDevices,
@@ -1077,17 +1076,5 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
      */
     stopRecording(mode) {
         this.executeCommand('startRecording', mode);
-    }
-
-    /**
-     * Returns the configuration for electron for the windows that are open
-     * from Jitsi Meet.
-     *
-     * @returns {Promise<Object>}
-     *
-     * NOTE: For internal use only.
-     */
-    _getElectronPopupsConfig() {
-        return Promise.resolve(electronPopupsConfig);
     }
 }
