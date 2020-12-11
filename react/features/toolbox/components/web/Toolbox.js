@@ -281,7 +281,7 @@ class Toolbox extends Component<Props, State> {
             this._shouldShowButton('videoquality') && {
                 character: 'A',
                 exec: this._onShortcutToggleVideoQuality,
-                helpDescription: 'keyboardShortcuts.videoQuality'
+                helpDescription: 'toolbar.callQuality'
             },
             this._shouldShowButton('chat') && {
                 character: 'C',
