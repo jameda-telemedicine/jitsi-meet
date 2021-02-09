@@ -1,10 +1,10 @@
 // @flow
 
-import Tooltip from '@atlaskit/tooltip';
 import React, { Fragment } from 'react';
 
 import { Icon } from '../../icons';
 import JitsiMeetJS from '../../lib-jitsi-meet';
+import { Tooltip } from '../../tooltip';
 
 import Platform from './../../../base/react/Platform.web';
 import AbstractToolboxItem from './AbstractToolboxItem';
