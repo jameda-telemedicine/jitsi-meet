@@ -1,7 +1,7 @@
 // @flow
 
 import { hasAvailableDevices } from '../base/devices';
-import { TOOLBOX_ALWAYS_VISIBLE, getFeatureFlag, TOOLBOX_ENABLED } from '../base/flags';
+import { TOOLBOX_ALWAYS_VISIBLE, getFeatureFlag } from '../base/flags';
 import { toState } from '../base/redux';
 import { isLocalVideoTrackDesktop } from '../base/tracks';
 
@@ -16,10 +16,9 @@ export function isToolboxVisible(stateful: Object | Function) {
     const state = toState(stateful);
     const { alwaysVisible, enabled, visible } = state['features/toolbox'];
     const { length: participantCount } = state['features/base/participants'];
-    const alwaysVisibleFlag = getFeatureFlag(state, TOOLBOX_ALWAYS_VISIBLE, false);
-    const enabledFlag = getFeatureFlag(state, TOOLBOX_ENABLED, true);
+    const flag = getFeatureFlag(state, TOOLBOX_ALWAYS_VISIBLE, false);
 
-    return enabledFlag && enabled && (alwaysVisible || visible || participantCount === 1 || alwaysVisibleFlag);
+    return enabled && (alwaysVisible || visible || participantCount === 1 || flag);
 }
 
 /**

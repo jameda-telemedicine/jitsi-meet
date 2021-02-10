@@ -7,7 +7,7 @@ import { StateListenerRegistry, equals } from '../base/redux';
 import { isFollowMeActive } from '../follow-me';
 import { selectParticipant } from '../large-video/actions';
 
-import { setRemoteParticipantsWithScreenShare } from './actions';
+import { setParticipantsWithScreenShare } from './actions';
 
 declare var APP: Object;
 declare var interfaceConfig: Object;
@@ -37,7 +37,7 @@ StateListenerRegistry.register(
             return;
         }
 
-        const oldScreenSharesOrder = store.getState()['features/video-layout'].remoteScreenShares || [];
+        const oldScreenSharesOrder = store.getState()['features/video-layout'].screenShares || [];
         const knownSharingParticipantIds = tracks.reduce((acc, track) => {
             if (track.mediaType === 'video' && track.videoType === 'desktop') {
                 const skipTrack = _getAutoPinSetting() === 'remote-only' && track.local;
@@ -66,7 +66,7 @@ StateListenerRegistry.register(
 
         if (!equals(oldScreenSharesOrder, newScreenSharesOrder)) {
             store.dispatch(
-                setRemoteParticipantsWithScreenShare(newScreenSharesOrder));
+                setParticipantsWithScreenShare(newScreenSharesOrder));
 
             _updateAutoPinnedParticipant(store);
         }
@@ -96,14 +96,14 @@ function _getAutoPinSetting() {
  */
 function _updateAutoPinnedParticipant({ dispatch, getState }) {
     const state = getState();
-    const remoteScreenShares = state['features/video-layout'].remoteScreenShares;
+    const screenShares = state['features/video-layout'].screenShares;
 
-    if (!remoteScreenShares) {
+    if (!screenShares) {
         return;
     }
 
     const latestScreenshareParticipantId
-        = remoteScreenShares[remoteScreenShares.length - 1];
+        = screenShares[screenShares.length - 1];
 
     const pinned = getPinnedParticipant(getState);
 

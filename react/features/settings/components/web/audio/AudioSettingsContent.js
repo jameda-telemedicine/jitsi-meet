@@ -4,15 +4,12 @@ import React, { Component } from 'react';
 
 import { translate } from '../../../../base/i18n';
 import { IconMicrophoneEmpty, IconVolumeEmpty } from '../../../../base/icons';
-import JitsiMeetJS from '../../../../base/lib-jitsi-meet';
 import { equals } from '../../../../base/redux';
 import { createLocalAudioTracks } from '../../../functions';
 
 import AudioSettingsHeader from './AudioSettingsHeader';
 import MicrophoneEntry from './MicrophoneEntry';
 import SpeakerEntry from './SpeakerEntry';
-
-const browser = JitsiMeetJS.util.browser;
 
 export type Props = {
 
@@ -172,14 +169,6 @@ class AudioSettingsContent extends Component<Props, State> {
      * @returns {void}
      */
     async _setTracks() {
-        if (browser.isSafari()) {
-
-            // It appears that at the time of this writing, creating audio tracks blocks the browser's main thread for
-            // long time on safari. Wasn't able to confirm which part of track creation does the blocking exactly, but
-            // not creating the tracks seems to help and makes the UI much more responsive.
-            return;
-        }
-
         this._disposeTracks(this.state.audioTracks);
 
         const audioTracks = await createLocalAudioTracks(
@@ -255,11 +244,9 @@ class AudioSettingsContent extends Component<Props, State> {
                     {this.state.audioTracks.map((data, i) =>
                         this._renderMicrophoneEntry(data, i),
                     )}
-                    { outputDevices.length > 0 && (
-                        <AudioSettingsHeader
-                            IconComponent = { IconVolumeEmpty }
-                            text = { t('settings.speakers') } />)
-                    }
+                    <AudioSettingsHeader
+                        IconComponent = { IconVolumeEmpty }
+                        text = { t('settings.speakers') } />
                     {outputDevices.map((data, i) =>
                         this._renderSpeakerEntry(data, i),
                     )}

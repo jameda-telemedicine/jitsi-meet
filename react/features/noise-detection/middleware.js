@@ -37,18 +37,17 @@ MiddlewareRegistry.register(store => next => action => {
                 }
             });
         conference.on(
-            JitsiConferenceEvents.NOISY_MIC, async () => {
-                const notification = await dispatch(showNotification({
+            JitsiConferenceEvents.NOISY_MIC, () => {
+                const notification = showNotification({
                     titleKey: 'toolbar.noisyAudioInputTitle',
                     descriptionKey: 'toolbar.noisyAudioInputDesc'
-                }));
+                });
 
+                dispatch(notification);
                 dispatch(playSound(NOISY_AUDIO_INPUT_SOUND_ID));
 
-                if (notification) {
-                    // we store the last notification id so we can hide it if the mic is muted
-                    dispatch(setNoisyAudioInputNotificationUid(notification.uid));
-                }
+                // we store the last notification id so we can hide it if the mic is muted
+                dispatch(setNoisyAudioInputNotificationUid(notification.uid));
             });
         break;
     }

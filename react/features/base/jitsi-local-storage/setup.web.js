@@ -2,7 +2,6 @@
 
 import { jitsiLocalStorage } from '@jitsi/js-utils/jitsi-local-storage';
 
-import { browser } from '../lib-jitsi-meet';
 import { parseURLParams } from '../util/parseURLParams';
 
 import logger from './logger';
@@ -24,7 +23,7 @@ function onFakeLocalStorageChanged() {
  * @returns {void}
  */
 function setupJitsiLocalStorage() {
-    if (jitsiLocalStorage.isLocalStorageDisabled() || browser.isSafari()) {
+    if (jitsiLocalStorage.isLocalStorageDisabled()) {
         const urlParams = parseURLParams(window.location);
 
         try {

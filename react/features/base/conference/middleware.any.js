@@ -7,7 +7,6 @@ import {
     createPinnedEvent,
     sendAnalytics
 } from '../../analytics';
-import { reloadNow } from '../../app/actions';
 import { openDisplayNamePrompt } from '../../display-name';
 import { showErrorNotification } from '../../notifications';
 import { CONNECTION_ESTABLISHED, CONNECTION_FAILED, connectionDisconnected } from '../connection';
@@ -118,7 +117,6 @@ MiddlewareRegistry.register(store => next => action => {
 function _conferenceFailed({ dispatch, getState }, next, action) {
     const result = next(action);
     const { conference, error } = action;
-    const { enableForcedReload } = getState()['features/base/config'];
 
     // Handle specific failure reasons.
     switch (error.name) {
@@ -130,16 +128,9 @@ function _conferenceFailed({ dispatch, getState }, next, action) {
             titleKey: 'dialog.sessTerminated'
         }));
 
-        break;
-    }
-    case JitsiConferenceErrors.CONFERENCE_RESTARTED: {
-        if (enableForcedReload) {
-            dispatch(showErrorNotification({
-                description: 'Restart initiated because of a bridge failure',
-                titleKey: 'dialog.sessionRestarted'
-            }));
+        if (typeof APP !== 'undefined') {
+            APP.UI.hideStats();
         }
-
         break;
     }
     case JitsiConferenceErrors.CONNECTION_ERROR: {
@@ -159,26 +150,26 @@ function _conferenceFailed({ dispatch, getState }, next, action) {
         break;
     }
 
-    if (typeof APP === 'undefined') {
-        !error.recoverable
+    // FIXME: Workaround for the web version. Currently, the creation of the
+    // conference is handled by /conference.js and appropriate failure handlers
+    // are set there.
+    if (typeof APP !== 'undefined') {
+        if (typeof beforeUnloadHandler !== 'undefined') {
+            window.removeEventListener('beforeunload', beforeUnloadHandler);
+            beforeUnloadHandler = undefined;
+        }
+
+        return result;
+    }
+
+    // XXX After next(action), it is clear whether the error is recoverable.
+    !error.recoverable
         && conference
         && conference.leave().catch(reason => {
             // Even though we don't care too much about the failure, it may be
             // good to know that it happen, so log it (on the info level).
             logger.info('JitsiConference.leave() rejected with:', reason);
         });
-    } else if (typeof beforeUnloadHandler !== 'undefined') {
-        // FIXME: Workaround for the web version. Currently, the creation of the
-        // conference is handled by /conference.js and appropriate failure handlers
-        // are set there.
-        window.removeEventListener('beforeunload', beforeUnloadHandler);
-        beforeUnloadHandler = undefined;
-    }
-
-    if (enableForcedReload && error?.name === JitsiConferenceErrors.CONFERENCE_RESTARTED) {
-        dispatch(conferenceWillLeave(conference));
-        dispatch(reloadNow());
-    }
 
     return result;
 }

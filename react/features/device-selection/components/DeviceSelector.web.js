@@ -1,9 +1,7 @@
 /* @flow */
 
-import DropdownMenu, {
-    DropdownItem,
-    DropdownItemGroup
-} from '@atlaskit/dropdown-menu';
+import AKDropdownMenu from '@atlaskit/dropdown-menu';
+import ChevronDownIcon from '@atlaskit/icon/glyph/chevron-down';
 import React, { Component } from 'react';
 
 import { translate } from '../../base/i18n/functions';
@@ -71,7 +69,6 @@ class DeviceSelector extends Component<Props> {
         super(props);
 
         this._onSelect = this._onSelect.bind(this);
-        this._createDropdownItem = this._createDropdownItem.bind(this);
     }
 
     /**
@@ -90,8 +87,8 @@ class DeviceSelector extends Component<Props> {
         }
 
         const items = this.props.devices.map(this._createDropdownItem);
-        const defaultSelected = this.props.devices.find(item =>
-            item.deviceId === this.props.selectedDeviceId
+        const defaultSelected = items.find(item =>
+            item.value === this.props.selectedDeviceId
         );
 
         return this._createDropdown({
@@ -114,14 +111,17 @@ class DeviceSelector extends Component<Props> {
     _createDropdownTrigger(triggerText) {
         return (
             <div className = 'device-selector-trigger'>
+                <span
+                    className = { `device-selector-icon ${this.props.icon}` } />
                 <span className = 'device-selector-trigger-text'>
                     { triggerText }
                 </span>
+                <ChevronDownIcon
+                    label = 'expand'
+                    size = 'large' />
             </div>
         );
     }
-
-    _createDropdownItem: (Object) => void;
 
     /**
      * Creates an object in the format expected by AKDropdownMenu for an option.
@@ -132,19 +132,10 @@ class DeviceSelector extends Component<Props> {
      * format recognized as a valid AKDropdownMenu item.
      */
     _createDropdownItem(device) {
-        return (
-            <DropdownItem
-                key = { device.deviceId }
-                // eslint-disable-next-line react/jsx-no-bind
-                onClick = {
-                    e => {
-                        e.stopPropagation();
-                        this._onSelect(device.deviceId);
-                    }
-                }>
-                { device.label || device.deviceId }
-            </DropdownItem>
-        );
+        return {
+            content: device.label,
+            value: device.deviceId
+        };
     }
 
     /**
@@ -165,11 +156,11 @@ class DeviceSelector extends Component<Props> {
      */
     _createDropdown(options) {
         const triggerText
-            = (options.defaultSelected && (options.defaultSelected.label || options.defaultSelected.deviceId))
+            = (options.defaultSelected && options.defaultSelected.content)
                 || options.placeholder;
         const trigger = this._createDropdownTrigger(triggerText);
 
-        if (options.isDisabled || !options.items.length) {
+        if (options.isDisabled) {
             return (
                 <div className = 'device-selector-trigger-disabled'>
                     { trigger }
@@ -178,19 +169,12 @@ class DeviceSelector extends Component<Props> {
         }
 
         return (
-            <div className = 'dropdown-menu'>
-                <DropdownMenu
-                    shouldFitContainer = { true }
-                    trigger = { triggerText }
-                    triggerButtonProps = {{
-                        shouldFitContainer: true
-                    }}
-                    triggerType = 'button'>
-                    <DropdownItemGroup>
-                        { options.items }
-                    </DropdownItemGroup>
-                </DropdownMenu>
-            </div>
+            <AKDropdownMenu
+                items = { [ { items: options.items || [] } ] }
+                onItemActivated = { this._onSelect }
+                shouldFitContainer = { true }>
+                { trigger }
+            </AKDropdownMenu>
         );
     }
 
@@ -199,13 +183,15 @@ class DeviceSelector extends Component<Props> {
     /**
      * Invokes the passed in callback to notify of selection changes.
      *
-     * @param {Object} newDeviceId - Selected device id from DropdownMenu option.
+     * @param {Object} selection - Event from choosing a AKDropdownMenu option.
      * @private
      * @returns {void}
      */
-    _onSelect(newDeviceId) {
+    _onSelect(selection) {
+        const newDeviceId = selection.item.value;
+
         if (this.props.selectedDeviceId !== newDeviceId) {
-            this.props.onSelect(newDeviceId);
+            this.props.onSelect(selection.item.value);
         }
     }
 
