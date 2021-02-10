@@ -4,15 +4,12 @@ import React, { Component } from 'react';
 
 import { Icon, IconMenuThumb } from '../../../base/icons';
 import { MEDIA_TYPE } from '../../../base/media';
-import { getLocalParticipant, getParticipantById, PARTICIPANT_ROLE } from '../../../base/participants';
+import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
 import { Popover } from '../../../base/popover';
 import { connect } from '../../../base/redux';
 import { isRemoteTrackMuted } from '../../../base/tracks';
-import { requestRemoteControl, stopController } from '../../../remote-control';
-import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
 
 import MuteEveryoneElseButton from './MuteEveryoneElseButton';
-import { REMOTE_CONTROL_MENU_STATES } from './RemoteControlButton';
 
 import {
     GrantModeratorButton,
@@ -54,33 +51,21 @@ type Props = {
     _isModerator: boolean,
 
     /**
-     * The position relative to the trigger the remote menu should display
-     * from. Valid values are those supported by AtlasKit
-     * {@code InlineDialog}.
-     */
-    _menuPosition: string,
-
-    /**
-     * Whether to display the Popover as a drawer.
-     */
-    _overflowDrawer: boolean,
-
-    /**
-     * The current state of the participant's remote control session.
-     */
-    _remoteControlState: number,
-
-
-    /**
-     * The redux dispatch function.
-     */
-    dispatch: Function,
-
-    /**
      * A value between 0 and 1 indicating the volume of the participant's
      * audio element.
      */
-    initialVolumeValue: ?number,
+    initialVolumeValue: number,
+
+    /**
+     * Callback to invoke when the popover has been displayed.
+     */
+    onMenuDisplay: Function,
+
+    /**
+     * Callback to invoke choosing to start a remote control session with
+     * the participant.
+     */
+    onRemoteControlToggle: Function,
 
     /**
      * Callback to invoke when changing the level of the participant's
@@ -89,9 +74,21 @@ type Props = {
     onVolumeChange: Function,
 
     /**
+     * The position relative to the trigger the remote menu should display
+     * from. Valid values are those supported by AtlasKit
+     * {@code InlineDialog}.
+     */
+    menuPosition: string,
+
+    /**
      * The ID for the participant on which the remote video menu will act.
      */
     participantID: string,
+
+    /**
+     * The current state of the participant's remote control session.
+     */
+    remoteControlState: number
 };
 
 /**
@@ -112,6 +109,19 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
     _rootElement = null;
 
     /**
+     * Initializes a new {#@code RemoteVideoMenuTriggerButton} instance.
+     *
+     * @param {Object} props - The read-only properties with which the new
+     * instance is to be initialized.
+     */
+    constructor(props: Object) {
+        super(props);
+
+        // Bind event handler so it is only bound once for every instance.
+        this._onShowRemoteMenu = this._onShowRemoteMenu.bind(this);
+    }
+
+    /**
      * Implements React's {@link Component#render()}.
      *
      * @inheritdoc
@@ -127,8 +137,8 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
         return (
             <Popover
                 content = { content }
-                overflowDrawer = { this.props._overflowDrawer }
-                position = { this.props._menuPosition }>
+                onPopoverOpen = { this._onShowRemoteMenu }
+                position = { this.props.menuPosition }>
                 <span
                     className = 'popover-trigger remote-video-menu-trigger'>
                     <Icon
@@ -138,6 +148,18 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
                 </span>
             </Popover>
         );
+    }
+
+    _onShowRemoteMenu: () => void;
+
+    /**
+     * Opens the {@code RemoteVideoMenu}.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onShowRemoteMenu() {
+        this.props.onMenuDisplay();
     }
 
     /**
@@ -153,10 +175,10 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
             _disableRemoteMute,
             _isAudioMuted,
             _isModerator,
-            dispatch,
             initialVolumeValue,
+            onRemoteControlToggle,
             onVolumeChange,
-            _remoteControlState,
+            remoteControlState,
             participantID
         } = this.props;
 
@@ -192,21 +214,13 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
             }
         }
 
-        if (_remoteControlState) {
-            let onRemoteControlToggle = null;
-
-            if (_remoteControlState === REMOTE_CONTROL_MENU_STATES.STARTED) {
-                onRemoteControlToggle = () => dispatch(stopController(true));
-            } else if (_remoteControlState === REMOTE_CONTROL_MENU_STATES.NOT_STARTED) {
-                onRemoteControlToggle = () => dispatch(requestRemoteControl(participantID));
-            }
-
+        if (remoteControlState) {
             buttons.push(
                 <RemoteControlButton
                     key = 'remote-control'
                     onClick = { onRemoteControlToggle }
                     participantID = { participantID }
-                    remoteControlState = { _remoteControlState } />
+                    remoteControlState = { remoteControlState } />
             );
         }
 
@@ -216,7 +230,7 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
                 participantID = { participantID } />
         );
 
-        if (onVolumeChange && initialVolumeValue && !isNaN(initialVolumeValue)) {
+        if (onVolumeChange) {
             buttons.push(
                 <VolumeSlider
                     initialValue = { initialVolumeValue }
@@ -243,7 +257,9 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
  * @param {Object} state - The Redux state.
  * @param {Object} ownProps - The own props of the component.
  * @private
- * @returns {Props}
+ * @returns {{
+ *     _isModerator: boolean
+ * }}
  */
 function _mapStateToProps(state, ownProps) {
     const { participantID } = ownProps;
@@ -251,48 +267,12 @@ function _mapStateToProps(state, ownProps) {
     const localParticipant = getLocalParticipant(state);
     const { remoteVideoMenu = {}, disableRemoteMute } = state['features/base/config'];
     const { disableKick } = remoteVideoMenu;
-    let _remoteControlState = null;
-    const participant = getParticipantById(state, participantID);
-    const _isRemoteControlSessionActive = participant?.remoteControlSessionStatus ?? false;
-    const _supportsRemoteControl = participant?.supportsRemoteControl ?? false;
-    const { active, controller } = state['features/remote-control'];
-    const { requestedParticipant, controlled } = controller;
-    const activeParticipant = requestedParticipant || controlled;
-    const { overflowDrawer } = state['features/toolbox'];
-
-    if (_supportsRemoteControl
-            && ((!active && !_isRemoteControlSessionActive) || activeParticipant === participantID)) {
-        if (requestedParticipant === participantID) {
-            _remoteControlState = REMOTE_CONTROL_MENU_STATES.REQUESTING;
-        } else if (controlled) {
-            _remoteControlState = REMOTE_CONTROL_MENU_STATES.STARTED;
-        } else {
-            _remoteControlState = REMOTE_CONTROL_MENU_STATES.NOT_STARTED;
-        }
-    }
-
-    const currentLayout = getCurrentLayout(state);
-    let _menuPosition;
-
-    switch (currentLayout) {
-    case LAYOUTS.TILE_VIEW:
-        _menuPosition = 'left-start';
-        break;
-    case LAYOUTS.VERTICAL_FILMSTRIP_VIEW:
-        _menuPosition = 'left-end';
-        break;
-    default:
-        _menuPosition = 'auto';
-    }
 
     return {
         _isAudioMuted: isRemoteTrackMuted(tracks, MEDIA_TYPE.AUDIO, participantID) || false,
         _isModerator: Boolean(localParticipant?.role === PARTICIPANT_ROLE.MODERATOR),
         _disableKick: Boolean(disableKick),
-        _disableRemoteMute: Boolean(disableRemoteMute),
-        _remoteControlState,
-        _menuPosition,
-        _overflowDrawer: overflowDrawer
+        _disableRemoteMute: Boolean(disableRemoteMute)
     };
 }
 

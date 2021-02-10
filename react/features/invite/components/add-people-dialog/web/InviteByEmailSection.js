@@ -1,5 +1,6 @@
 // @flow
 
+import Tooltip from '@atlaskit/tooltip';
 import React, { useState } from 'react';
 
 import { translate } from '../../../../base/i18n';
@@ -12,7 +13,6 @@ import {
     IconOutlook,
     IconYahoo
 } from '../../../../base/icons';
-import { Tooltip } from '../../../../base/tooltip';
 import { copyText, openURLInBrowser } from '../../../../base/util';
 
 type Props = {

@@ -23,8 +23,7 @@ import {
     TRACK_NO_DATA_FROM_SOURCE,
     TRACK_REMOVED,
     TRACK_UPDATED,
-    TRACK_WILL_CREATE,
-    TRACK_UPDATE_LAST_VIDEO_MEDIA_EVENT
+    TRACK_WILL_CREATE
 } from './actionTypes';
 import {
     createLocalTracksF,
@@ -703,24 +702,5 @@ export function setNoSrcDataNotificationUid(uid) {
     return {
         type: SET_NO_SRC_DATA_NOTIFICATION_UID,
         uid
-    };
-}
-
-/**
- * Updates the last media event received for a video track.
- *
- * @param {JitsiRemoteTrack} track - JitsiTrack instance.
- * @param {string} name - The current media event name for the video.
- * @returns {{
- *     type: TRACK_UPDATE_LAST_VIDEO_MEDIA_EVENT,
- *     track: Track,
- *     name: string
- * }}
- */
-export function updateLastTrackVideoMediaEvent(track, name) {
-    return {
-        type: TRACK_UPDATE_LAST_VIDEO_MEDIA_EVENT,
-        track,
-        name
     };
 }

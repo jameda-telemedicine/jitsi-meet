@@ -213,8 +213,4 @@
     return _bridgeWrapper.bridge;
 }
 
-- (ExternalAPI *)getExternalAPI {
-    return [_bridgeWrapper.bridge moduleForClass:ExternalAPI.class];
-}
-
 @end

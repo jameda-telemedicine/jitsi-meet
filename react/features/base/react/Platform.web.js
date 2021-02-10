@@ -1,11 +1,11 @@
 /* @flow */
 
-const { userAgent, maxTouchPoints, platform } = navigator;
+const { userAgent } = navigator;
 let OS;
 
 if (userAgent.match(/Android/i)) {
     OS = 'android';
-} else if (userAgent.match(/iP(ad|hone|od)/i) || (maxTouchPoints && maxTouchPoints > 2 && /MacIntel/.test(platform))) {
+} else if (userAgent.match(/iP(ad|hone|od)/i)) {
     OS = 'ios';
 } else if (userAgent.match(/Mac(intosh| OS X)/i)) {
     OS = 'macos';

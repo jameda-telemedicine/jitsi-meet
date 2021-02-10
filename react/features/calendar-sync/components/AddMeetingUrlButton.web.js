@@ -1,5 +1,6 @@
 // @flow
 
+import Tooltip from '@atlaskit/tooltip';
 import React, { Component } from 'react';
 import type { Dispatch } from 'redux';
 
@@ -10,7 +11,6 @@ import {
 import { translate } from '../../base/i18n';
 import { Icon, IconAdd } from '../../base/icons';
 import { connect } from '../../base/redux';
-import { Tooltip } from '../../base/tooltip';
 import { updateCalendarEvent } from '../actions';
 
 /**

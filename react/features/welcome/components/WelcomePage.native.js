@@ -167,17 +167,10 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     _onFieldFocusChange(focused) {
-        if (focused) {
-            // Stop placeholder animation.
-            this._clearTimeouts();
-            this.setState({
-                _fieldFocused: true,
-                roomPlaceholder: ''
+        focused
+            && this.setState({
+                _fieldFocused: true
             });
-        } else {
-            // Restart room placeholder animation.
-            this._updateRoomname();
-        }
 
         Animated.timing(
             this.state.hintBoxAnimation,

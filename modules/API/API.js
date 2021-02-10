@@ -14,8 +14,7 @@ import {
 } from '../../react/features/base/conference';
 import { parseJWTFromURLParams } from '../../react/features/base/jwt';
 import JitsiMeetJS, { JitsiRecordingConstants } from '../../react/features/base/lib-jitsi-meet';
-import { pinParticipant, getParticipantById } from '../../react/features/base/participants';
-import { setPrivateMessageRecipient } from '../../react/features/chat/actions';
+import { pinParticipant } from '../../react/features/base/participants';
 import {
     processExternalDeviceRequest
 } from '../../react/features/device-selection/functions';
@@ -331,24 +330,6 @@ function initCommands() {
             } else {
                 logger.error('No recording or streaming session found');
             }
-        },
-        'initiate-private-chat': participantId => {
-            const state = APP.store.getState();
-            const participant = getParticipantById(state, participantId);
-
-            if (participant) {
-                const { isOpen: isChatOpen } = state['features/chat'];
-
-                if (!isChatOpen) {
-                    APP.UI.toggleChat();
-                }
-                APP.store.dispatch(setPrivateMessageRecipient(participant));
-            } else {
-                logger.error('No participant found for the given participantId');
-            }
-        },
-        'cancel-private-chat': () => {
-            APP.store.dispatch(setPrivateMessageRecipient());
         }
     };
     transport.on('event', ({ data, name }) => {
@@ -432,15 +413,6 @@ function initCommands() {
         case 'is-sharing-screen':
             callback(Boolean(APP.conference.isSharingScreen));
             break;
-        case 'get-content-sharing-participants': {
-            const tracks = getState()['features/base/tracks'];
-            const sharingParticipantIds = tracks.filter(tr => tr.videoType === 'desktop').map(t => t.participantId);
-
-            callback({
-                sharingParticipantIds
-            });
-            break;
-        }
         default:
             return false;
         }
@@ -557,21 +529,6 @@ class API {
     }
 
     /**
-     * Notify external application (if API is enabled) that the chat state has been updated.
-     *
-     * @param {number} unreadCount - The unread messages counter.
-     * @param {boolean} isOpen - True if the chat panel is open.
-     * @returns {void}
-     */
-    notifyChatUpdated(unreadCount: number, isOpen: boolean) {
-        this._sendEvent({
-            name: 'chat-updated',
-            unreadCount,
-            isOpen
-        });
-    }
-
-    /**
      * Notify external application (if API is enabled) that message was sent.
      *
      * @param {string} message - Message body.
@@ -607,8 +564,8 @@ class API {
      * @returns {void}
      */
     notifyReceivedChatMessage(
-            { body, id, nick, privateMessage, ts }: {
-                body: *, id: string, nick: string, privateMessage: boolean, ts: *
+            { body, id, nick, ts }: {
+                body: *, id: string, nick: string, ts: *
             } = {}) {
         if (APP.conference.isLocalId(id)) {
             return;
@@ -619,7 +576,6 @@ class API {
             from: id,
             message: body,
             nick,
-            privateMessage,
             stamp: ts
         });
     }
@@ -696,19 +652,6 @@ class API {
     notifyEndpointTextMessageReceived(data: Object) {
         this._sendEvent({
             name: 'endpoint-text-message-received',
-            data
-        });
-    }
-
-    /**
-     * Notify external application (if API is enabled) that the list of sharing participants changed.
-     *
-     * @param {Object} data - The event data.
-     * @returns {void}
-     */
-    notifySharingParticipantsChanged(data: Object) {
-        this._sendEvent({
-            name: 'content-sharing-participants-changed',
             data
         });
     }
@@ -1076,21 +1019,6 @@ class API {
         this._sendEvent({
             name: 'local-storage-changed',
             localStorageContent
-        });
-    }
-
-    /**
-     * Notify external application (if API is enabled) that user updated their hand raised.
-     *
-     * @param {string} id - User id.
-     * @param {boolean} handRaised - Whether user has raised hand.
-     * @returns {void}
-     */
-    notifyRaiseHandUpdated(id: string, handRaised: boolean) {
-        this._sendEvent({
-            name: 'raise-hand-updated',
-            handRaised,
-            id
         });
     }
 

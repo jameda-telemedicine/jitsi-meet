@@ -94,10 +94,6 @@ function connect(id, password, roomName) {
     //  in future). It's included for the time being for Jitsi Meet and lib-jitsi-meet versions interoperability.
     connectionConfig.serviceUrl = connectionConfig.bosh = serviceUrl;
 
-    if (connectionConfig.websocketKeepAliveUrl) {
-        connectionConfig.websocketKeepAliveUrl += `?room=${roomName}`;
-    }
-
     const connection = new JitsiMeetJS.JitsiConnection(null, jwt, connectionConfig);
 
     if (config.iAmRecorder) {

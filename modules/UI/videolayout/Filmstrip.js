@@ -37,6 +37,7 @@ const Filmstrip = {
      */
     resizeThumbnailsForTileView(width, height, forceUpdate = false) {
         const thumbs = this._getThumbs(!forceUpdate);
+        const avatarSize = height / 2;
 
         if (thumbs.localThumb) {
             thumbs.localThumb.css({
@@ -57,6 +58,11 @@ const Filmstrip = {
                 width: `${width}px`
             });
         }
+
+        $('.avatar-container').css({
+            height: `${avatarSize}px`,
+            width: `${avatarSize}px`
+        });
     },
 
     /**
@@ -71,6 +77,7 @@ const Filmstrip = {
 
         if (thumbs.localThumb) {
             const { height, width } = local;
+            const avatarSize = height / 2;
 
             thumbs.localThumb.css({
                 height: `${height}px`,
@@ -78,16 +85,25 @@ const Filmstrip = {
                 'min-width': `${width}px`,
                 width: `${width}px`
             });
+            $('#localVideoContainer > .avatar-container').css({
+                height: `${avatarSize}px`,
+                width: `${avatarSize}px`
+            });
         }
 
         if (thumbs.remoteThumbs) {
             const { height, width } = remote;
+            const avatarSize = height / 2;
 
             thumbs.remoteThumbs.css({
                 height: `${height}px`,
                 'min-height': `${height}px`,
                 'min-width': `${width}px`,
                 width: `${width}px`
+            });
+            $('#filmstripRemoteVideosContainer > span > .avatar-container').css({
+                height: `${avatarSize}px`,
+                width: `${avatarSize}px`
             });
         }
     },
@@ -110,6 +126,10 @@ const Filmstrip = {
                 'min-width': '',
                 'min-height': ''
             });
+            $('#localVideoContainer > .avatar-container').css({
+                height: '50%',
+                width: `${heightToWidthPercent / 2}%`
+            });
         }
 
         if (thumbs.remoteThumbs) {
@@ -121,6 +141,10 @@ const Filmstrip = {
                 height: '',
                 'min-width': '',
                 'min-height': ''
+            });
+            $('#filmstripRemoteVideosContainer > span > .avatar-container').css({
+                height: '50%',
+                width: `${heightToWidthPercent / 2}%`
             });
         }
     },

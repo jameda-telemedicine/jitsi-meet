@@ -140,7 +140,7 @@ export default class MicrophoneEntry extends Component<Props, State> {
      *
      * @inheritdoc
      */
-    componentWillUnmount() {
+    compmonentWillUnmount() {
         this._stopListening(this.props.jitsiTrack);
     }
 
@@ -150,7 +150,7 @@ export default class MicrophoneEntry extends Component<Props, State> {
      * @inheritdoc
      */
     render() {
-        const { children, hasError, isSelected, jitsiTrack } = this.props;
+        const { children, hasError, isSelected } = this.props;
 
         return (
             <div
@@ -161,11 +161,10 @@ export default class MicrophoneEntry extends Component<Props, State> {
                     isSelected = { isSelected }>
                     {children}
                 </AudioSettingsEntry>
-                { Boolean(jitsiTrack) && <Meter
+                <Meter
                     className = 'audio-preview-meter-mic'
                     isDisabled = { hasError }
                     level = { this.state.level } />
-                }
             </div>
         );
     }

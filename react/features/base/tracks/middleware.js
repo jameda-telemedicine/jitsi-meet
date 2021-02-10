@@ -35,8 +35,6 @@ import {
     setTrackMuted
 } from './functions';
 
-import './subscriber';
-
 declare var APP: Object;
 
 /**
