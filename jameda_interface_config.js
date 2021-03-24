@@ -340,10 +340,12 @@ if (isBrowserFirefoxOrSafari() === 'Firefox') {
         'filmstrip',
         'tileview',
         'help',
-        'notes'
+        'notes',
 
-        // FIXME to be implemented
-        // 'fileTransfer'
+        // FIXME: fileTransfer is enabled for testing purpose
+        // and will be deployed until staging only.
+        // TODO: Will be reverted after testing
+        'fileTransfer'
     ];
 }
 
@@ -359,10 +361,12 @@ if (isBrowserFirefoxOrSafari() === 'Safari') {
         'filmstrip',
         'tileview',
         'help',
-        'notes'
+        'notes',
 
-        // FIXME to be implemented
-        // 'fileTransfer'
+        // FIXME: fileTransfer is enabled for testing purpose
+        // and will be deployed until staging only.
+        // TODO: Will be reverted after testing
+        'fileTransfer'
     ];
 }
 
