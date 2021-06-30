@@ -20,8 +20,9 @@ import { StyleType } from '../../../base/styles';
 import { getTrackByMediaTypeAndParticipant } from '../../../base/tracks';
 import { ConnectionIndicator } from '../../../connection-indicator';
 import { DisplayNameLabel } from '../../../display-name';
-import { RemoteVideoMenu } from '../../../remote-video-menu';
 import { toggleToolboxVisible } from '../../../toolbox/actions.native';
+import { RemoteVideoMenu } from '../../../video-menu';
+import ConnectionStatusComponent from '../../../video-menu/components/native/ConnectionStatusComponent';
 
 import AudioMutedIndicator from './AudioMutedIndicator';
 import DominantSpeakerIndicator from './DominantSpeakerIndicator';
@@ -233,9 +234,15 @@ function _mapDispatchToProps(dispatch: Function, ownProps): Object {
         _onShowRemoteVideoMenu() {
             const { participant } = ownProps;
 
-            dispatch(openDialog(RemoteVideoMenu, {
-                participant
-            }));
+            if (participant.local) {
+                dispatch(openDialog(ConnectionStatusComponent, {
+                    participantID: participant.id
+                }));
+            } else {
+                dispatch(openDialog(RemoteVideoMenu, {
+                    participant
+                }));
+            }
         }
     };
 }

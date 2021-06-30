@@ -9,13 +9,18 @@ import {
     createToolbarEvent,
     sendAnalytics
 } from '../../../analytics';
+import { getToolbarButtons } from '../../../base/config';
 import { translate } from '../../../base/i18n';
 import { Icon, IconMenuDown, IconMenuUp } from '../../../base/icons';
+import { getLocalParticipant } from '../../../base/participants';
 import { connect } from '../../../base/redux';
-import { dockToolbox } from '../../../toolbox/actions.web';
-import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
+import { showToolbox, dockToolbox } from '../../../toolbox/actions.web';
+import { isButtonEnabled, isToolboxVisible } from '../../../toolbox/functions.web';
+import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
 import { setFilmstripHovered, setFilmstripVisible } from '../../actions';
 import { shouldRemoteVideosBeVisible } from '../../functions';
+
+import Thumbnail from './Thumbnail';
 
 declare var APP: Object;
 declare var interfaceConfig: Object;
@@ -62,6 +67,16 @@ type Props = {
     _hovered: boolean,
 
     /**
+     * Whether the filmstrip button is enabled.
+     */
+    _isFilmstripButtonEnabled: boolean,
+
+    /**
+     * The participants in the call.
+     */
+    _participants: Array<Object>,
+
+    /**
      * The number of rows in tile view.
      */
     _rows: number,
@@ -75,6 +90,11 @@ type Props = {
      * Whether or not the filmstrip videos should currently be displayed.
      */
     _visible: boolean,
+
+    /**
+     * Whether or not the toolbox is displayed.
+     */
+    _isToolboxVisible: Boolean,
 
     /**
      * The redux {@code dispatch} function.
@@ -127,6 +147,7 @@ class Filmstrip extends Component <Props> {
         this._onMouseOver = this._onMouseOver.bind(this);
         this._onShortcutToggleFilmstrip = this._onShortcutToggleFilmstrip.bind(this);
         this._onToolbarToggleFilmstrip = this._onToolbarToggleFilmstrip.bind(this);
+        this._onTabIn = this._onTabIn.bind(this);
     }
 
     /**
@@ -159,18 +180,15 @@ class Filmstrip extends Component <Props> {
      * @returns {ReactElement}
      */
     render() {
-        // Note: Appending of {@code RemoteVideo} views is handled through
-        // VideoLayout. The views do not get blown away on render() because
-        // ReactDOMComponent is only aware of the given JSX and not new appended
-        // DOM. As such, when updateDOMProperties gets called, only attributes
-        // will get updated without replacing the DOM. If the known DOM gets
-        // modified, then the views will get blown away.
-
         const filmstripStyle = { };
         const filmstripRemoteVideosContainerStyle = {};
         let remoteVideoContainerClassName = 'remote-videos-container';
+        const { _currentLayout, _participants } = this.props;
+        const remoteParticipants = _participants.filter(p => !p.local);
+        const localParticipant = getLocalParticipant(_participants);
+        const tileViewActive = _currentLayout === LAYOUTS.TILE_VIEW;
 
-        switch (this.props._currentLayout) {
+        switch (_currentLayout) {
         case LAYOUTS.VERTICAL_FILMSTRIP_VIEW:
             // Adding 18px for the 2px margins, 2px borders on the left and right and 5px padding on the left and right.
             // Also adding 7px for the scrollbar.
@@ -197,7 +215,7 @@ class Filmstrip extends Component <Props> {
 
         let toolbar = null;
 
-        if (!this.props._hideToolbar) {
+        if (!this.props._hideToolbar && this.props._isFilmstripButtonEnabled) {
             toolbar = this._renderToggleButton();
         }
 
@@ -214,7 +232,13 @@ class Filmstrip extends Component <Props> {
                         id = 'filmstripLocalVideo'
                         onMouseOut = { this._onMouseOut }
                         onMouseOver = { this._onMouseOver }>
-                        <div id = 'filmstripLocalVideoThumbnail' />
+                        <div id = 'filmstripLocalVideoThumbnail'>
+                            {
+                                !tileViewActive && <Thumbnail
+                                    key = 'local'
+                                    participantID = { localParticipant.id } />
+                            }
+                        </div>
                     </div>
                     <div
                         className = { remoteVideosWrapperClassName }
@@ -230,12 +254,39 @@ class Filmstrip extends Component <Props> {
                             onMouseOut = { this._onMouseOut }
                             onMouseOver = { this._onMouseOver }
                             style = { filmstripRemoteVideosContainerStyle }>
-                            <div id = 'localVideoTileViewContainer' />
+                            {
+                                remoteParticipants.map(
+                                    p => (
+                                        <Thumbnail
+                                            key = { `remote_${p.id}` }
+                                            participantID = { p.id } />
+                                    ))
+                            }
+                            <div id = 'localVideoTileViewContainer'>
+                                {
+                                    tileViewActive && <Thumbnail
+                                        key = 'local'
+                                        participantID = { localParticipant.id } />
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         );
+    }
+
+    _onTabIn: () => void;
+
+    /**
+     * Toggle the toolbar visibility when tabbing into it.
+     *
+     * @returns {void}
+     */
+    _onTabIn() {
+        if (!this.props._isToolboxVisible && this.props._visible) {
+            this.props.dispatch(showToolbox());
+        }
     }
 
     /**
@@ -336,12 +387,18 @@ class Filmstrip extends Component <Props> {
         const { t } = this.props;
 
         return (
-            <div className = 'filmstrip__toolbar'>
+            <div
+                className = 'filmstrip__toolbar'>
                 <button
+                    aria-expanded = { this.props._visible }
                     aria-label = { t('toolbar.accessibilityLabel.toggleFilmstrip') }
                     id = 'toggleFilmstripButton'
-                    onClick = { this._onToolbarToggleFilmstrip }>
-                    <Icon src = { icon } />
+                    onClick = { this._onToolbarToggleFilmstrip }
+                    onFocus = { this._onTabIn }
+                    tabIndex = { 0 }>
+                    <Icon
+                        aria-label = { t('toolbar.accessibilityLabel.toggleFilmstrip') }
+                        src = { icon } />
                 </button>
             </div>
         );
@@ -357,9 +414,10 @@ class Filmstrip extends Component <Props> {
  */
 function _mapStateToProps(state) {
     const { iAmSipGateway } = state['features/base/config'];
+    const toolbarButtons = getToolbarButtons(state);
     const { hovered, visible } = state['features/filmstrip'];
     const reduceHeight
-        = state['features/toolbox'].visible && interfaceConfig.TOOLBAR_BUTTONS.length;
+        = state['features/toolbox'].visible && toolbarButtons.length;
     const remoteVideosVisible = shouldRemoteVideosBeVisible(state);
     const { isOpen: shiftRight } = state['features/chat'];
     const className = `${remoteVideosVisible ? '' : 'hide-videos'} ${
@@ -376,9 +434,12 @@ function _mapStateToProps(state) {
         _hideScrollbar: Boolean(iAmSipGateway),
         _hideToolbar: Boolean(iAmSipGateway),
         _hovered: hovered,
+        _isFilmstripButtonEnabled: isButtonEnabled('filmstrip', state),
+        _participants: state['features/base/participants'],
         _rows: gridDimensions.rows,
         _videosClassName: videosClassName,
-        _visible: visible
+        _visible: visible,
+        _isToolboxVisible: isToolboxVisible(state)
     };
 }
 

@@ -5,14 +5,22 @@ import React, { Component } from 'react';
 
 import { createToolbarEvent, sendAnalytics } from '../../../analytics';
 import { translate } from '../../../base/i18n';
-import { IconMenuThumb } from '../../../base/icons';
+import { IconHorizontalPoints } from '../../../base/icons';
+import { connect } from '../../../base/redux';
 
+import Drawer from './Drawer';
+import DrawerPortal from './DrawerPortal';
 import ToolbarButton from './ToolbarButton';
 
 /**
  * The type of the React {@code Component} props of {@link OverflowMenuButton}.
  */
 type Props = {
+
+    /**
+     * ID of the menu that is controlled by this button.
+     */
+    ariaControls: String,
 
     /**
      * A child React Element to display within {@code InlineDialog}.
@@ -25,9 +33,14 @@ type Props = {
     isOpen: boolean,
 
     /**
-     * Calback to change the visibility of the overflow menu.
+     * Callback to change the visibility of the overflow menu.
      */
     onVisibilityChange: Function,
+
+    /**
+     * Whether to display the OverflowMenu as a drawer.
+     */
+    overflowDrawer: boolean,
 
     /**
      * Invoked to obtain translated strings.
@@ -54,6 +67,23 @@ class OverflowMenuButton extends Component<Props> {
         this._onCloseDialog = this._onCloseDialog.bind(this);
         this._onToggleDialogVisibility
             = this._onToggleDialogVisibility.bind(this);
+        this._onEscClick = this._onEscClick.bind(this);
+    }
+
+    _onEscClick: (KeyboardEvent) => void;
+
+    /**
+     * Click handler for the more actions entries.
+     *
+     * @param {KeyboardEvent} event - Esc key click to close the popup.
+     * @returns {void}
+     */
+    _onEscClick(event) {
+        if (event.key === 'Escape' && this.props.isOpen) {
+            event.preventDefault();
+            event.stopPropagation();
+            this._onCloseDialog();
+        }
     }
 
     /**

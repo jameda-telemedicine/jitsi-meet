@@ -8,6 +8,8 @@ import React, { Component } from 'react';
 import { translate } from '../../../i18n/functions';
 import type { DialogProps } from '../../constants';
 
+import ModalHeader from './ModalHeader';
+
 /**
  * The ID to be used for the cancel button if enabled.
  * @type {string}
@@ -50,6 +52,16 @@ type Props = {
      */
     hideCancelButton: boolean,
 
+    /**
+     * If true, the close icon button will not be displayed.
+     */
+    hideCloseIconButton: boolean,
+
+    /**
+     * If true, no footer will be displayed.
+     */
+    disableFooter?: boolean,
+
     i18n: Object,
 
     /**
@@ -64,7 +76,7 @@ type Props = {
     submitDisabled: boolean,
 
     /**
-     * Function to be used to retreive translated i18n labels.
+     * Function to be used to retrieve translated i18n labels.
      */
     t: Function,
 
@@ -82,6 +94,10 @@ type Props = {
  * Web dialog that uses atlaskit modal-dialog to display dialogs.
  */
 class StatelessDialog extends Component<Props> {
+    static defaultProps = {
+        hideCloseIconButton: false
+    };
+
     /**
      * The functional component to be used for rendering the modal footer.
      */
@@ -101,7 +117,7 @@ class StatelessDialog extends Component<Props> {
         // Bind event handlers so they are only bound once for every instance.
         this._onCancel = this._onCancel.bind(this);
         this._onDialogDismissed = this._onDialogDismissed.bind(this);
-        this._onKeyDown = this._onKeyDown.bind(this);
+        this._onKeyPress = this._onKeyPress.bind(this);
         this._onSubmit = this._onSubmit.bind(this);
         this._renderFooter = this._renderFooter.bind(this);
         this._setDialogElement = this._setDialogElement.bind(this);
@@ -117,6 +133,7 @@ class StatelessDialog extends Component<Props> {
         const {
             customHeader,
             children,
+            hideCloseIconButton,
             t /* The following fixes a flow error: */ = _.identity,
             titleString,
             titleKey,
@@ -127,17 +144,21 @@ class StatelessDialog extends Component<Props> {
             <Modal
                 autoFocus = { true }
                 components = {{
-                    Header: customHeader
+                    Header: customHeader ? customHeader : props => (
+                        <ModalHeader
+                            { ...props }
+                            heading = { titleString || t(titleKey) }
+                            hideCloseIconButton = { hideCloseIconButton } />
+                    )
                 }}
                 footer = { this._renderFooter }
-                heading = { customHeader ? undefined : titleString || t(titleKey) }
                 i18n = { this.props.i18n }
                 onClose = { this._onDialogDismissed }
                 onDialogDismissed = { this._onDialogDismissed }
                 shouldCloseOnEscapePress = { true }
                 width = { width || 'medium' }>
                 <div
-                    onKeyDown = { this._onKeyDown }
+                    onKeyPress = { this._onKeyPress }
                     ref = { this._setDialogElement }>
                     <form
                         className = 'modal-dialog-form'
@@ -167,6 +188,10 @@ class StatelessDialog extends Component<Props> {
             this._renderOKButton(),
             this._renderCancelButton()
         ].filter(Boolean);
+
+        if (this.props.disableFooter) {
+            return null;
+        }
 
         return (
             <ModalFooter showKeyline = { propsFromModalFooter.showKeyline } >
@@ -301,7 +326,7 @@ class StatelessDialog extends Component<Props> {
         this._dialogElement = element;
     }
 
-    _onKeyDown: (Object) => void;
+    _onKeyPress: (Object) => void;
 
     /**
      * Handles 'Enter' key in the dialog to submit/hide dialog depending on
@@ -311,7 +336,7 @@ class StatelessDialog extends Component<Props> {
      * @private
      * @returns {void}
      */
-    _onKeyDown(event) {
+    _onKeyPress(event) {
         // If the event coming to the dialog has been subject to preventDefault
         // we don't handle it here.
         if (event.defaultPrevented) {

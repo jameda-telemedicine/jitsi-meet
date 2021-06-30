@@ -3,6 +3,8 @@
 import throttle from 'lodash/throttle';
 import type { Dispatch } from 'redux';
 
+import { NOTIFICATIONS_ENABLED, getFeatureFlag } from '../base/flags';
+
 import {
     CLEAR_NOTIFICATIONS,
     HIDE_NOTIFICATION,
@@ -31,10 +33,10 @@ export function clearNotifications() {
  * removed.
  * @returns {{
  *     type: HIDE_NOTIFICATION,
- *     uid: number
+ *     uid: string
  * }}
  */
-export function hideNotification(uid: number) {
+export function hideNotification(uid: string) {
     return {
         type: HIDE_NOTIFICATION,
         uid
@@ -88,7 +90,7 @@ export function showNotification(props: Object = {}, timeout: ?number) {
         type: SHOW_NOTIFICATION,
         props,
         timeout,
-        uid: window.Date.now()
+        uid: props.uid || window.Date.now().toString()
     };
 }
 

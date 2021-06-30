@@ -114,7 +114,7 @@ class VideoMuteButton extends AbstractVideoMuteButton<Props, *> {
     }
 
     /**
-     * Indicates if video is currently muted ot nor.
+     * Indicates if video is currently muted or not.
      *
      * @override
      * @protected

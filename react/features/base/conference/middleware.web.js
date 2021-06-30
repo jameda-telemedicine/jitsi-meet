@@ -8,11 +8,11 @@ import './middleware.any';
 
 declare var APP: Object;
 
-MiddlewareRegistry.register((/* store */) => next => action => {
+MiddlewareRegistry.register(() => next => action => {
     switch (action.type) {
     case TOGGLE_SCREENSHARING: {
         if (typeof APP === 'object') {
-            APP.UI.emitEvent(UIEvents.TOGGLE_SCREENSHARING);
+            APP.UI.emitEvent(UIEvents.TOGGLE_SCREENSHARING, action.audioOnly);
         }
 
         break;

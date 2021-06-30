@@ -49,7 +49,12 @@ type Props = {
     /**
      * Invoked to obtain translated strings.
      */
-    t: Function
+    t: Function,
+
+    /**
+     * The id of the dropdown element
+     */
+    id: string
 };
 
 /**
@@ -69,6 +74,7 @@ class DeviceSelector extends Component<Props> {
         super(props);
 
         this._onSelect = this._onSelect.bind(this);
+        this._createDropdownItem = this._createDropdownItem.bind(this);
     }
 
     /**
@@ -78,6 +84,10 @@ class DeviceSelector extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
+        if (this.props.hasPermission === undefined) {
+            return null;
+        }
+
         if (!this.props.hasPermission) {
             return this._renderNoPermission();
         }
@@ -122,6 +132,8 @@ class DeviceSelector extends Component<Props> {
             </div>
         );
     }
+
+    _createDropdownItem: (Object) => void;
 
     /**
      * Creates an object in the format expected by AKDropdownMenu for an option.

@@ -15,7 +15,7 @@ export function areThereNotifications() {
 }
 
 /**
- * Tells wether join/leave notifications are enabled in interface_config.
+ * Tells whether join/leave notifications are enabled in interface_config.
  *
  * @returns {boolean}
  */

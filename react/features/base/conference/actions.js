@@ -8,8 +8,10 @@ import {
 } from '../../analytics';
 import { getName } from '../../app/functions';
 import { endpointMessageReceived } from '../../subtitles';
+import { getReplaceParticipant } from '../config/functions';
 import { JITSI_CONNECTION_CONFERENCE_KEY } from '../connection';
 import { JitsiConferenceEvents } from '../lib-jitsi-meet';
+import { MEDIA_TYPE, setAudioMuted, setVideoMuted } from '../media';
 import {
     dominantSpeakerChanged,
     getLocalParticipant,
@@ -21,7 +23,7 @@ import {
     participantRoleChanged,
     participantUpdated
 } from '../participants';
-import { getLocalTracks, trackAdded, trackRemoved } from '../tracks';
+import { getLocalTracks, replaceLocalTrack, trackAdded, trackRemoved } from '../tracks';
 import {
     getBackendSafePath,
     getBackendSafeRoomName,
@@ -35,6 +37,7 @@ import {
     CONFERENCE_LEFT,
     CONFERENCE_SUBJECT_CHANGED,
     CONFERENCE_TIMESTAMP_CHANGED,
+    CONFERENCE_UNIQUE_ID_SET,
     CONFERENCE_WILL_JOIN,
     CONFERENCE_WILL_LEAVE,
     DATA_CHANNEL_OPENED,
@@ -70,10 +73,11 @@ declare var APP: Object;
  *
  * @param {JitsiConference} conference - The JitsiConference instance.
  * @param {Dispatch} dispatch - The Redux dispatch function.
+ * @param {Object} state - The Redux state.
  * @private
  * @returns {void}
  */
-function _addConferenceListeners(conference, dispatch) {
+function _addConferenceListeners(conference, dispatch, state) {
     // A simple logger for conference errors received through
     // the listener. These errors are not handled now, but logged.
     conference.on(JitsiConferenceEvents.CONFERENCE_ERROR,
@@ -116,13 +120,12 @@ function _addConferenceListeners(conference, dispatch) {
     conference.on(
         JitsiConferenceEvents.STARTED_MUTED,
         () => {
-            const audioMuted = Boolean(conference.startAudioMuted);
-            const videoMuted = Boolean(conference.startVideoMuted);
+            const audioMuted = Boolean(conference.isStartAudioMuted());
+            const videoMuted = Boolean(conference.isStartVideoMuted());
+            const localTracks = getLocalTracks(state['features/base/tracks']);
 
-            sendAnalytics(createStartMutedConfigurationEvent(
-                'remote', audioMuted, videoMuted));
-            logger.log(`Start muted: ${audioMuted ? 'audio, ' : ''}${
-                videoMuted ? 'video' : ''}`);
+            sendAnalytics(createStartMutedConfigurationEvent('remote', audioMuted, videoMuted));
+            logger.log(`Start muted: ${audioMuted ? 'audio, ' : ''}${videoMuted ? 'video' : ''}`);
 
             // XXX Jicofo tells lib-jitsi-meet to start with audio and/or video
             // muted i.e. Jicofo expresses an intent. Lib-jitsi-meet has turned
@@ -134,6 +137,14 @@ function _addConferenceListeners(conference, dispatch) {
             // acting on Jicofo's intent without the app's knowledge.
             // dispatch(setAudioMuted(audioMuted));
             // dispatch(setVideoMuted(videoMuted));
+
+            // Remove the tracks from peerconnection as well.
+            for (const track of localTracks) {
+                if ((audioMuted && track.jitsiTrack.getType() === MEDIA_TYPE.AUDIO)
+                    || (videoMuted && track.jitsiTrack.getType() === MEDIA_TYPE.VIDEO)) {
+                    dispatch(replaceLocalTrack(track.jitsiTrack, null, conference));
+                }
+            }
         });
 
     // Dispatches into features/base/tracks follow:
@@ -147,9 +158,9 @@ function _addConferenceListeners(conference, dispatch) {
 
     conference.on(
         JitsiConferenceEvents.TRACK_MUTE_CHANGED,
-        (_, participantThatMutedUs) => {
+        (track, participantThatMutedUs) => {
             if (participantThatMutedUs) {
-                dispatch(participantMutedUs(participantThatMutedUs));
+                dispatch(participantMutedUs(participantThatMutedUs, track));
             }
         });
 
@@ -327,6 +338,22 @@ export function conferenceTimestampChanged(conferenceTimestamp: number) {
 }
 
 /**
+* Signals that the unique identifier for conference has been set.
+*
+* @param {JitsiConference} conference - The JitsiConference instance, where the uuid has been set.
+* @returns {{
+*   type: CONFERENCE_UNIQUE_ID_SET,
+*   conference: JitsiConference,
+* }}
+*/
+export function conferenceUniqueIdSet(conference: Object) {
+    return {
+        type: CONFERENCE_UNIQUE_ID_SET,
+        conference
+    };
+}
+
+/**
  * Adds any existing local tracks to a specific conference before the conference
  * is joined. Then signals the intention of the application to have the local
  * participant join the specified conference.
@@ -430,11 +457,13 @@ export function createConference() {
 
         dispatch(_conferenceWillJoin(conference));
 
-        _addConferenceListeners(conference, dispatch);
+        _addConferenceListeners(conference, dispatch, state);
 
         sendLocalParticipant(state, conference);
 
-        conference.join(password);
+        const replaceParticipant = getReplaceParticipant(state);
+
+        conference.join(password, replaceParticipant);
     };
 }
 
@@ -451,8 +480,10 @@ export function checkIfCanJoin() {
         const { authRequired, password }
             = getState()['features/base/conference'];
 
+        const replaceParticipant = getReplaceParticipant(APP.store.getState());
+
         authRequired && dispatch(_conferenceWillJoin(authRequired));
-        authRequired && authRequired.join(password);
+        authRequired && authRequired.join(password, replaceParticipant);
     };
 }
 
