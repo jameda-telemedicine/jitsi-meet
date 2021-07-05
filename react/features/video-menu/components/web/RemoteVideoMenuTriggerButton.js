@@ -115,11 +115,6 @@ type Props = {
      * Invoked to obtain translated strings.
      */
     t: Function
-
-    /**
-     * The current state of the participant's remote control session.
-     */
-    remoteControlState: number
 };
 
 /**

@@ -8,8 +8,8 @@ import { isLocalParticipantModerator } from '../../../../base/participants';
 import { connect } from '../../../../base/redux';
 import { E2EESection } from '../../../../e2ee/components';
 import { LobbySection } from '../../../../lobby';
+import Header from '../Header';
 
-import Header from './Header';
 import PasswordSection from './PasswordSection';
 
 type Props = {

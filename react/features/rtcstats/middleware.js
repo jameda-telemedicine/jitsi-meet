@@ -1,7 +1,7 @@
 // @flow
 
 import { getAmplitudeIdentity } from '../analytics';
-import { CONFERENCE_JOINED, getRoomName } from '../base/conference';
+import { CONFERENCE_UNIQUE_ID_SET, getRoomName } from '../base/conference';
 import { LIB_WILL_INIT } from '../base/lib-jitsi-meet';
 import { getLocalParticipant } from '../base/participants';
 import { MiddlewareRegistry } from '../base/redux';
@@ -49,7 +49,7 @@ MiddlewareRegistry.register(store => next => action => {
         }
         break;
     }
-    case CONFERENCE_JOINED: {
+    case CONFERENCE_UNIQUE_ID_SET: {
         if (isRtcstatsEnabled(state) && RTCStats.isInitialized()) {
             // Once the conference started connect to the rtcstats server and send data.
             try {
@@ -73,7 +73,8 @@ MiddlewareRegistry.register(store => next => action => {
                     ...getAmplitudeIdentity(),
                     ...config,
                     confName: getRoomName(state),
-                    displayName: localParticipant?.name
+                    displayName: localParticipant?.name,
+                    meetingUniqueId
                 });
             } catch (error) {
                 // If the connection failed do not impact jitsi-meet just silently fail.

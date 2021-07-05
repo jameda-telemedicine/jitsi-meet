@@ -26,10 +26,7 @@ import {
     IconRaisedHand,
     IconRec,
     IconShareAudio,
-    IconShareDesktop,
-    IconShareVideo,
-    IconFileTransfer,
-    IconNotes
+    IconShareDesktop
 } from '../../../base/icons';
 import JitsiMeetJS from '../../../base/lib-jitsi-meet';
 import {
@@ -52,7 +49,6 @@ import {
     open as openParticipantsPane
 } from '../../../participants-pane/actions';
 import { getParticipantsPaneOpen } from '../../../participants-pane/functions';
-import { openNotesDialog } from '../../../notes';
 import {
     LiveStreamButton,
     RecordButton
@@ -95,8 +91,6 @@ import HelpButton from '../HelpButton';
 import MuteEveryoneButton from '../MuteEveryoneButton';
 import MuteEveryonesVideoButton from '../MuteEveryonesVideoButton';
 
-import Platform from './../../../base/react/Platform.web';
-import VideoMuteButton from './../VideoMuteButton';
 import AudioSettingsButton from './AudioSettingsButton';
 import OverflowMenuButton from './OverflowMenuButton';
 import OverflowMenuProfileItem from './OverflowMenuProfileItem';
@@ -283,7 +277,6 @@ class Toolbox extends Component<Props> {
         this._onShortcutToggleScreenshare = this._onShortcutToggleScreenshare.bind(this);
         this._onShortcutToggleVideoQuality = this._onShortcutToggleVideoQuality.bind(this);
         this._onToolbarOpenFeedback = this._onToolbarOpenFeedback.bind(this);
-        this._onToolbarOpenNotes = this._onToolbarOpenNotes.bind(this);
         this._onToolbarToggleParticipantsPane = this._onToolbarToggleParticipantsPane.bind(this);
         this._onToolbarOpenKeyboardShortcuts = this._onToolbarOpenKeyboardShortcuts.bind(this);
         this._onToolbarOpenSpeakerStats = this._onToolbarOpenSpeakerStats.bind(this);
@@ -311,7 +304,7 @@ class Toolbox extends Component<Props> {
             this.props._shouldShowButton('videoquality') && {
                 character: 'A',
                 exec: this._onShortcutToggleVideoQuality,
-                helpDescription: 'keyboardShortcuts.videoQuality'
+                helpDescription: 'toolbar.callQuality'
             },
             this.props._shouldShowButton('chat') && {
                 character: 'C',
@@ -443,16 +436,6 @@ class Toolbox extends Component<Props> {
         const { _conference } = this.props;
 
         this.props.dispatch(openFeedbackDialog(_conference));
-    }
-
-    /**
-     * Callback invoked to display {@code NotesDialog}.
-     *
-     * @private
-     * @returns {void}
-     */
-    _doOpenNotes() {
-        this.props.dispatch(openNotesDialog());
     }
 
     /**
@@ -781,18 +764,6 @@ class Toolbox extends Component<Props> {
         this._doOpenFeedback();
     }
 
-    _onToolbarOpenNotes: () => void;
-
-    /**
-     * Dispatches an action for toggling display of notes.
-     *
-     * @private
-     * @returns {void}
-     */
-    _onToolbarOpenNotes() {
-        this._doOpenNotes();
-    }
-
     _onToolbarToggleParticipantsPane: () => void;
 
     /**
@@ -1091,7 +1062,8 @@ class Toolbox extends Component<Props> {
             && <ClosedCaptionButton
                 key = 'closed-captions'
                 showLabel = { true } />,
-            <RecordButton
+            this.props._shouldShowButton('recording')
+                && <RecordButton
                     key = 'record'
                     showLabel = { true } />,
             this.props._shouldShowButton('localrecording')
@@ -1101,15 +1073,16 @@ class Toolbox extends Component<Props> {
                     key = 'localrecording'
                     onClick = { this._onToolbarOpenLocalRecordingInfoDialog }
                     text = { t('localRecording.dialogTitle') } />,
-            <MuteEveryoneButton
+            this.props._shouldShowButton('mute-everyone')
+                && <MuteEveryoneButton
                     key = 'mute-everyone'
-                    showLabel = { true }
-                    visible = { this._shouldShowButton('mute-everyone') } />,
+                    showLabel = { true } />,
             this.props._shouldShowButton('mute-video-everyone')
                 && <MuteEveryonesVideoButton
                     key = 'mute-video-everyone'
                     showLabel = { true } />,
-            <LiveStreamButton
+            this.props._shouldShowButton('livestreaming')
+                && <LiveStreamButton
                     key = 'livestreaming'
                     showLabel = { true } />
         ];
@@ -1169,9 +1142,9 @@ class Toolbox extends Component<Props> {
                 className = 'overflow-menu-hr'
                 key = 'hr3' />,
 
-            <SettingsButton
+            this.props._shouldShowButton('settings')
+                && <SettingsButton
                     key = 'settings'
-                    visible = { this._shouldShowButton('settings') }
                     showLabel = { true } />,
             this.props._shouldShowButton('shortcuts')
                 && !_isMobile
@@ -1345,13 +1318,9 @@ class Toolbox extends Component<Props> {
      */
     _renderVideoButton() {
         return this.props._shouldShowButton('camera')
-            ? Platform.OS === 'android' || Platform.OS === 'ios'
-                ? <VideoMuteButton
-                    key = 'vmb'
-                    visible = { true } />
-                : <VideoSettingsButton
-                    key = 'vsb'
-                    visible = { true } />
+            ? <VideoSettingsButton
+                key = 'vsb'
+                visible = { true } />
             : null;
     }
 
@@ -1394,6 +1363,7 @@ class Toolbox extends Component<Props> {
                         { showOverflowMenuButton && <OverflowMenuButton
                             ariaControls = 'overflow-menu'
                             isOpen = { _overflowMenuVisible }
+                            key = 'overflow-menu'
                             onVisibilityChange = { this._onSetOverflowVisible }>
                             <ul
                                 aria-label = { t(toolbarAccLabel) }
@@ -1406,6 +1376,7 @@ class Toolbox extends Component<Props> {
                         </OverflowMenuButton>}
                         <HangupButton
                             customClass = 'hangup-button'
+                            key = 'hangup-button'
                             visible = { this.props._shouldShowButton('hangup') } />
                     </div>
                 </div>
