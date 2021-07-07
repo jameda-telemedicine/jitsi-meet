@@ -85,22 +85,10 @@ type Props = {
     initialVolumeValue: ?number,
 
     /**
-     * Callback to invoke when the popover has been displayed.
-     */
-    onMenuDisplay: Function,
-
-    /**
      * Callback to invoke when changing the level of the participant's
      * audio element.
      */
     onVolumeChange: Function,
-
-    /**
-     * The position relative to the trigger the remote menu should display
-     * from. Valid values are those supported by AtlasKit
-     * {@code InlineDialog}.
-     */
-    menuPosition: string,
 
     /**
      * The ID for the participant on which the remote video menu will act.
@@ -126,19 +114,6 @@ type Props = {
  */
 class RemoteVideoMenuTriggerButton extends Component<Props> {
     /**
-     * Initializes a new {#@code RemoteVideoMenuTriggerButton} instance.
-     *
-     * @param {Object} props - The read-only properties with which the new
-     * instance is to be initialized.
-     */
-    constructor(props: Object) {
-        super(props);
-
-        // Bind event handler so it is only bound once for every instance.
-        this._onShowRemoteMenu = this._onShowRemoteMenu.bind(this);
-    }
-
-    /**
      * Implements React's {@link Component#render()}.
      *
      * @inheritdoc
@@ -156,7 +131,6 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
         return (
             <Popover
                 content = { content }
-                onPopoverOpen = { this._onShowRemoteMenu }
                 overflowDrawer = { this.props._overflowDrawer }
                 position = { this.props._menuPosition }>
                 <span className = 'popover-trigger remote-video-menu-trigger'>
@@ -170,18 +144,6 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
                 </span>
             </Popover>
         );
-    }
-
-    _onShowRemoteMenu: () => void;
-
-    /**
-     * Opens the {@code RemoteVideoMenu}.
-     *
-     * @private
-     * @returns {void}
-     */
-    _onShowRemoteMenu() {
-        this.props.onMenuDisplay();
     }
 
     /**
@@ -298,9 +260,7 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
  * @param {Object} state - The Redux state.
  * @param {Object} ownProps - The own props of the component.
  * @private
- * @returns {{
- *     _isModerator: boolean
- * }}
+ * @returns {Props}
  */
 function _mapStateToProps(state, ownProps) {
     const { participantID } = ownProps;
