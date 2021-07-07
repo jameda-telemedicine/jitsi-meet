@@ -127,7 +127,6 @@ import {
     isPrejoinPageVisible,
     makePrecallTest
 } from './react/features/prejoin';
-import { disableReceiver, stopReceiver } from './react/features/remote-control';
 import { setScreenAudioShareState, isScreenAudioShared } from './react/features/screen-share/';
 import { toggleScreenshotCaptureEffect } from './react/features/screenshot-capture';
 import { AudioMixerEffect } from './react/features/stream-effects/audio-mixer/AudioMixerEffect';
@@ -2164,7 +2163,6 @@ export default {
                             formattedDisplayName
                                 || interfaceConfig.DEFAULT_REMOTE_DISPLAY_NAME)
                 });
-                APP.UI.changeDisplayName(id, formattedDisplayName);
             }
         );
         room.on(
@@ -2557,30 +2555,6 @@ export default {
         }
 
         APP.store.dispatch(conferenceJoined(room));
-
-        const displayName
-            = APP.store.getState()['features/base/settings'].displayName;
-
-        APP.UI.changeDisplayName('localVideoContainer', displayName);
-    },
-
-    /**
-    * Adds any room listener.
-    * @param {string} eventName one of the JitsiConferenceEvents
-    * @param {Function} listener the function to be called when the event
-    * occurs
-    */
-    addConferenceListener(eventName, listener) {
-        room.on(eventName, listener);
-    },
-
-    /**
-    * Removes any room listener.
-    * @param {string} eventName one of the JitsiConferenceEvents
-    * @param {Function} listener the listener to be removed.
-    */
-    removeConferenceListener(eventName, listener) {
-        room.off(eventName, listener);
     },
 
     /**
@@ -3057,33 +3031,6 @@ export default {
         APP.store.dispatch(updateSettings({
             displayName: formattedNickname
         }));
-
-        if (room) {
-            APP.UI.changeDisplayName(id, formattedNickname);
-        }
-    },
-
-    /**
-     * Returns the desktop sharing source id or undefined if the desktop sharing
-     * is not active at the moment.
-     *
-     * @returns {string|undefined} - The source id. If the track is not desktop
-     * track or the source id is not available, undefined will be returned.
-     */
-    getDesktopSharingSourceId() {
-        return this.localVideo.sourceId;
-    },
-
-    /**
-     * Returns the desktop sharing source type or undefined if the desktop
-     * sharing is not active at the moment.
-     *
-     * @returns {'screen'|'window'|undefined} - The source type. If the track is
-     * not desktop track or the source type is not available, undefined will be
-     * returned.
-     */
-    getDesktopSharingSourceType() {
-        return this.localVideo.sourceType;
     },
 
     /**

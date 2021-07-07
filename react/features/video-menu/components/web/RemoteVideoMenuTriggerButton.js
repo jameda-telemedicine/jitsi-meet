@@ -4,11 +4,12 @@ import React, { Component } from 'react';
 
 import { translate } from '../../../base/i18n';
 import { Icon, IconMenuThumb } from '../../../base/icons';
+import { MEDIA_TYPE } from '../../../base/media';
 import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
 import { Popover } from '../../../base/popover';
 import { connect } from '../../../base/redux';
+import { isRemoteTrackMuted } from '../../../base/tracks';
 import { requestRemoteControl, stopController } from '../../../remote-control';
-import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
 
 import MuteEveryoneElseButton from './MuteEveryoneElseButton';
 import MuteEveryoneElsesVideoButton from './MuteEveryoneElsesVideoButton';
@@ -67,6 +68,12 @@ type Props = {
     _overflowDrawer: boolean,
 
     /**
+     * The current state of the participant's remote control session.
+     */
+    _remoteControlState: number,
+
+
+    /**
      * The redux dispatch function.
      */
     dispatch: Function,
@@ -75,18 +82,12 @@ type Props = {
      * A value between 0 and 1 indicating the volume of the participant's
      * audio element.
      */
-    initialVolumeValue: number,
+    initialVolumeValue: ?number,
 
     /**
      * Callback to invoke when the popover has been displayed.
      */
     onMenuDisplay: Function,
-
-    /**
-     * Callback to invoke choosing to start a remote control session with
-     * the participant.
-     */
-    onRemoteControlToggle: Function,
 
     /**
      * Callback to invoke when changing the level of the participant's
@@ -136,6 +137,7 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
         // Bind event handler so it is only bound once for every instance.
         this._onShowRemoteMenu = this._onShowRemoteMenu.bind(this);
     }
+
     /**
      * Implements React's {@link Component#render()}.
      *
@@ -154,9 +156,9 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
         return (
             <Popover
                 content = { content }
-                overflowDrawer = { this.props._overflowDrawer }
                 onPopoverOpen = { this._onShowRemoteMenu }
-                position = { this.props.menuPosition }>
+                overflowDrawer = { this.props._overflowDrawer }
+                position = { this.props._menuPosition }>
                 <span className = 'popover-trigger remote-video-menu-trigger'>
                     <Icon
                         ariaLabel = { this.props.t('dialog.remoteUserControls', { username }) }
@@ -197,9 +199,8 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
             _isModerator,
             dispatch,
             initialVolumeValue,
-            onRemoteControlToggle,
             onVolumeChange,
-            remoteControlState,
+            _remoteControlState,
             participantID
         } = this.props;
 
@@ -246,13 +247,21 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
             }
         }
 
-        if (remoteControlState) {
+        if (_remoteControlState) {
+            let onRemoteControlToggle = null;
+
+            if (_remoteControlState === REMOTE_CONTROL_MENU_STATES.STARTED) {
+                onRemoteControlToggle = () => dispatch(stopController(true));
+            } else if (_remoteControlState === REMOTE_CONTROL_MENU_STATES.NOT_STARTED) {
+                onRemoteControlToggle = () => dispatch(requestRemoteControl(participantID));
+            }
+
             buttons.push(
                 <RemoteControlButton
                     key = 'remote-control'
                     onClick = { onRemoteControlToggle }
                     participantID = { participantID }
-                    remoteControlState = { remoteControlState } />
+                    remoteControlState = { _remoteControlState } />
             );
         }
 

@@ -23,7 +23,8 @@ import { showToolbox } from '../toolbox/actions';
 import { isButtonEnabled } from '../toolbox/functions';
 
 import { SEND_MESSAGE, OPEN_CHAT, CLOSE_CHAT } from './actionTypes';
-import { addMessage, clearMessages, toggleChat } from './actions';
+import { addMessage, clearMessages } from './actions';
+import { closeChat } from './actions.any';
 import { ChatPrivacyDialog } from './components';
 import {
     CHAT_VIEW_MODAL_ID,
@@ -179,8 +180,10 @@ StateListenerRegistry.register(
  * @returns {void}
  */
 function _addChatMsgListener(conference, store) {
-    if ((typeof APP !== 'undefined' && !isButtonEnabled('chat'))
-        || store.getState()['features/base/config'].iAmRecorder) {
+    const state = store.getState();
+
+    if ((typeof APP !== 'undefined' && !isButtonEnabled('chat', state))
+        || state['features/base/config'].iAmRecorder) {
         // We don't register anything on web if the chat button is not enabled in interfaceConfig
         // or we are in iAmRecorder mode
         return;

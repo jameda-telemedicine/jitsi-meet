@@ -1,7 +1,7 @@
 // @flow
 
 import VideoLayout from '../../../modules/UI/videolayout/VideoLayout.js';
-import { CONFERENCE_JOINED, CONFERENCE_WILL_LEAVE } from '../base/conference';
+import { CONFERENCE_WILL_LEAVE } from '../base/conference';
 import {
     getLocalParticipant,
     PARTICIPANT_JOINED,
@@ -31,10 +31,6 @@ MiddlewareRegistry.register(store => next => action => {
     const result = next(action);
 
     switch (action.type) {
-    case CONFERENCE_JOINED:
-        VideoLayout.mucJoined();
-        break;
-
     case CONFERENCE_WILL_LEAVE:
         VideoLayout.reset();
         break;
