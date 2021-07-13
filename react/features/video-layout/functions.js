@@ -5,7 +5,8 @@ import { getFeatureFlag, TILE_VIEW_ENABLED } from '../base/flags';
 import {
     getPinnedParticipant,
     getParticipantCount,
-    pinParticipant
+    pinParticipant,
+    getParticipantCountWithFake
 } from '../base/participants';
 import {
     ASPECT_RATIO_BREAKPOINT,
@@ -54,15 +55,36 @@ export function getCurrentLayout(state: Object) {
 
 /**
  * Returns how many columns should be displayed in tile view. The number
- * returned will be between 1 and 5, inclusive.
+ * returned will be between 1 and 7, inclusive.
  *
  * @param {Object} state - The redux store state.
  * @returns {number}
  */
-export function getMaxColumnCount() {
-    const configuredMax = interfaceConfig.TILE_VIEW_MAX_COLUMNS || 5;
+export function getMaxColumnCount(state: Object) {
+    const configuredMax = interfaceConfig.TILE_VIEW_MAX_COLUMNS || DEFAULT_MAX_COLUMNS;
+    const { disableResponsiveTiles } = state['features/base/config'];
 
-    return Math.min(Math.max(configuredMax, 1), 5);
+    if (!disableResponsiveTiles) {
+        const { clientWidth } = state['features/base/responsive-ui'];
+        const participantCount = getParticipantCount(state);
+
+        // If there are just two participants in a conference, enforce single-column view for mobile size.
+        if (participantCount === 2 && clientWidth < ASPECT_RATIO_BREAKPOINT) {
+            return Math.min(1, Math.max(configuredMax, 1));
+        }
+
+        // Enforce single column view at very small screen widths.
+        if (clientWidth < SINGLE_COLUMN_BREAKPOINT) {
+            return Math.min(1, Math.max(configuredMax, 1));
+        }
+
+        // Enforce two column view below breakpoint.
+        if (clientWidth < TWO_COLUMN_BREAKPOINT) {
+            return Math.min(2, Math.max(configuredMax, 1));
+        }
+    }
+
+    return Math.min(Math.max(configuredMax, 1), ABSOLUTE_MAX_COLUMNS);
 }
 
 /**
@@ -74,11 +96,13 @@ export function getMaxColumnCount() {
  * @returns {Object} An object is return with the desired number of columns,
  * rows, and visible rows (the rest should overflow) for the tile view layout.
  */
-export function getTileViewGridDimensions(state: Object, maxColumns: number = getMaxColumnCount()) {
+export function getTileViewGridDimensions(state: Object) {
+    const maxColumns = getMaxColumnCount(state);
+
     // When in tile view mode, we must discount ourselves (the local participant) because our
     // tile is not visible.
     const { iAmRecorder } = state['features/base/config'];
-    const numberOfParticipants = state['features/base/participants'].length - (iAmRecorder ? 1 : 0);
+    const numberOfParticipants = getParticipantCountWithFake(state) - (iAmRecorder ? 1 : 0);
 
     const columnsToMaintainASquare = Math.ceil(Math.sqrt(numberOfParticipants));
     const columns = Math.min(columnsToMaintainASquare, maxColumns);
