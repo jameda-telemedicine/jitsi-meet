@@ -2,6 +2,7 @@
 
 import VideoLayout from '../../../modules/UI/videolayout/VideoLayout.js';
 import { CONFERENCE_WILL_LEAVE } from '../base/conference';
+import { MEDIA_TYPE } from '../base/media';
 import {
     getLocalParticipant,
     PARTICIPANT_JOINED,
@@ -60,7 +61,7 @@ MiddlewareRegistry.register(store => next => action => {
         break;
 
     case TRACK_ADDED:
-        if (!action.track.local) {
+        if (action.track.mediaType !== MEDIA_TYPE.AUDIO) {
             VideoLayout._updateLargeVideoIfDisplayed(action.track.participantId, true);
         }
 
@@ -75,7 +76,7 @@ MiddlewareRegistry.register(store => next => action => {
         break;
     }
     case TRACK_REMOVED:
-        if (!action.track.local) {
+        if (!action.track.local && action.track.mediaType !== MEDIA_TYPE.AUDIO) {
             VideoLayout.updateVideoMutedForNoTracks(action.track.jitsiTrack.getParticipantId());
         }
 
