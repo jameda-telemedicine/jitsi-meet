@@ -46,10 +46,7 @@ class NotificationsContainer extends AbstractNotificationsContainer<Props> {
         }
 
         return (
-            <FlagGroup
-                id = 'notifications-container'
-                label = { this.props.t('notify.groupTitle') }
-                onDismissed = { this._onDismissed }>
+            <FlagGroup onDismissed = { this._onDismissed }>
                 { this._renderFlags() }
             </FlagGroup>
         );

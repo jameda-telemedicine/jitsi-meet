@@ -363,11 +363,6 @@ export function parseURIString(uri: ?string) {
     }
     obj.room = room;
 
-    if (contextRootEndIndex > 1) {
-        // The part of the pathname from the beginning to the room name is the tenant.
-        obj.tenant = pathname.substring(1, contextRootEndIndex);
-    }
-
     return obj;
 }
 
@@ -519,7 +514,7 @@ export function urlObjectToString(o: Object): ?string {
     // pathname
 
     // Web's ExternalAPI roomName
-    const room = o.roomName || o.room;
+    const room = _fixRoom(o.roomName || o.room);
 
     if (room
             && (url.pathname.endsWith('/')
@@ -547,11 +542,27 @@ export function urlObjectToString(o: Object): ?string {
         }
     }
 
+    const { browserName } = o;
+
+    if (browserName !== null) {
+        let { search } = url;
+
+        if (search.indexOf('?browserName=') === -1 && search.indexOf('&browserName=') === -1) {
+            search.startsWith('?') || (search = `?${search}`);
+            search.length === 1 || (search += '&');
+            const encodeBrowserName = encodeURIComponent(browserName);
+
+            search += `browserName=${encodeBrowserName}`;
+
+            url.search = search;
+        }
+    }
+
     // fragment/hash
 
     let { hash } = url;
 
-    for (const urlPrefix of [ 'config', 'interfaceConfig', 'devices', 'userInfo', 'appData' ]) {
+    for (const urlPrefix of [ 'config', 'interfaceConfig', 'devices', 'userInfo', 'appData', 'inst' ]) {
         const urlParamsArray
             = _objectToURLParamsArray(
                 o[`${urlPrefix}Overwrite`]

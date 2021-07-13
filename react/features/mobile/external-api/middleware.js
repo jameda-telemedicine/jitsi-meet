@@ -117,6 +117,7 @@ MiddlewareRegistry.register(store => next => action => {
         break;
     }
 
+    case CONFERENCE_JOINED:
     case CONFERENCE_LEFT:
     case CONFERENCE_WILL_JOIN:
         _sendConferenceEvent(store, action);

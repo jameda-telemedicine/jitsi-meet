@@ -136,8 +136,7 @@ const config = {
             test: /\/node_modules\/@atlaskit\/modal-dialog\/.*\.js$/,
             resolve: {
                 alias: {
-                    'react-focus-lock': `${__dirname}/react/features/base/util/react-focus-lock-wrapper.js`,
-                    '../styled/Modal': `${__dirname}/react/features/base/dialog/components/web/ThemedDialog.js`
+                    'react-focus-lock': `${__dirname}/react/features/base/util/react-focus-lock-wrapper.js`
                 }
             }
         }, {
@@ -224,7 +223,7 @@ module.exports = [
             ...config.plugins,
             ...getBundleAnalyzerPlugin('alwaysontop')
         ],
-        performance: getPerformanceHints(800 * 1024)
+        performance: getPerformanceHints(850 * 1024)
     }),
     Object.assign({}, config, {
         entry: {

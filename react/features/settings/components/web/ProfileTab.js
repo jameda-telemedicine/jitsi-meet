@@ -1,6 +1,6 @@
 // @flow
 
-import Button from '@atlaskit/button/standard-button';
+import Button from '@atlaskit/button';
 import { FieldTextStateless } from '@atlaskit/field-text';
 import React from 'react';
 
@@ -108,7 +108,6 @@ class ProfileTab extends AbstractDialogTab<Props> {
      */
     render() {
         const {
-            authEnabled,
             displayName,
             email,
             t
@@ -141,7 +140,6 @@ class ProfileTab extends AbstractDialogTab<Props> {
                             value = { email } />
                     </div>
                 </div>
-                { authEnabled && this._renderAuth() }
             </div>
         );
     }

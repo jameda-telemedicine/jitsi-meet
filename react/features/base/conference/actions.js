@@ -135,8 +135,8 @@ function _addConferenceListeners(conference, dispatch, state) {
             // TODO Maybe the app needs to learn about Jicofo's intent and
             // transfer that intent to lib-jitsi-meet instead of lib-jitsi-meet
             // acting on Jicofo's intent without the app's knowledge.
-            dispatch(setAudioMuted(audioMuted));
-            dispatch(setVideoMuted(videoMuted));
+            // dispatch(setAudioMuted(audioMuted));
+            // dispatch(setVideoMuted(videoMuted));
 
             // Remove the tracks from peerconnection as well.
             for (const track of localTracks) {

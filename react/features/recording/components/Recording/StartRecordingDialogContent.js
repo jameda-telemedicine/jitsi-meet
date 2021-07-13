@@ -260,7 +260,7 @@ class StartRecordingDialogContent extends Component<Props> {
                         ..._dialogStyles.text,
                         ...styles.title
                     }}>
-                    { label }
+                    { t('recording.serviceDescription') }
                 </Text>
                 { switchContent }
             </Container>

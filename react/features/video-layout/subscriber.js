@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import { StateListenerRegistry, equals } from '../base/redux';
 import { isFollowMeActive } from '../follow-me';
 
-import { setRemoteParticipantsWithScreenShare } from './actions';
+import { setParticipantsWithScreenShare } from './actions';
 import { getAutoPinSetting, updateAutoPinnedParticipant } from './functions';
 
 /**
@@ -20,7 +20,7 @@ StateListenerRegistry.register(
             return;
         }
 
-        const oldScreenSharesOrder = store.getState()['features/video-layout'].remoteScreenShares || [];
+        const oldScreenSharesOrder = store.getState()['features/video-layout'].screenShares || [];
         const knownSharingParticipantIds = tracks.reduce((acc, track) => {
             if (track.mediaType === 'video' && track.videoType === 'desktop') {
                 const skipTrack = getAutoPinSetting() === 'remote-only' && track.local;
@@ -49,7 +49,7 @@ StateListenerRegistry.register(
 
         if (!equals(oldScreenSharesOrder, newScreenSharesOrder)) {
             store.dispatch(
-                setRemoteParticipantsWithScreenShare(newScreenSharesOrder));
+                setParticipantsWithScreenShare(newScreenSharesOrder));
 
             updateAutoPinnedParticipant(oldScreenSharesOrder, store);
         }

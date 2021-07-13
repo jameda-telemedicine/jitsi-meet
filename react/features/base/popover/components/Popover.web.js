@@ -29,7 +29,7 @@ const DIALOG_TO_PADDING_POSITION = {
  * @returns {string}
  */
 function _mapPositionToPaddingClass(position = 'left') {
-    return DIALOG_TO_PADDING_POSITION[position.split('-')[0]];
+    return DIALOG_TO_PADDING_POSITION[position.split(' ')[0]];
 }
 
 /**
@@ -201,38 +201,17 @@ class Popover extends Component<Props, State> {
      * @returns {ReactElement}
      */
     render() {
-        const { children, className, content, id, overflowDrawer, position } = this.props;
-
-        if (overflowDrawer) {
-            return (
-                <div
-                    className = { className }
-                    id = { id }
-                    ref = { this._drawerContainerRef }>
-                    { children }
-                    <DrawerPortal>
-                        <Drawer
-                            isOpen = { this.state.showDialog }
-                            onClose = { this._onHideDialog }>
-                            { content }
-                        </Drawer>
-                    </DrawerPortal>
-                </div>
-            );
-        }
-
         return (
             <div
-                className = { className }
-                id = { id }
-                onKeyPress = { this._onKeyPress }
+                className = { this.props.className }
+                id = { this.props.id }
                 onMouseEnter = { this._onShowDialog }
                 onMouseLeave = { this._onHideDialog }>
                 <InlineDialog
                     content = { this._renderContent() }
                     isOpen = { this.state.showDialog }
-                    placement = { position }>
-                    { children }
+                    position = { this.props.position }>
+                    { this.props.children }
                 </InlineDialog>
             </div>
         );
@@ -260,12 +239,10 @@ class Popover extends Component<Props, State> {
      * Displays the {@code InlineDialog} and calls any registered onPopoverOpen
      * callbacks.
      *
-     * @param {Object} event - The mouse event or the keypress event to intercept.
      * @private
      * @returns {void}
      */
-    _onShowDialog(event) {
-        event.stopPropagation();
+    _onShowDialog() {
         if (!this.props.disablePopover) {
             this.setState({ showDialog: true });
 

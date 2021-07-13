@@ -55,7 +55,7 @@ type Props = {
     /**
      * Handles long press on the thumbnail.
      */
-    _onThumbnailLongPress: ?Function,
+    _onShowRemoteVideoMenu: ?Function,
 
     /**
      * Whether to show the dominant speaker indicator or not.
@@ -121,7 +121,7 @@ function Thumbnail(props: Props) {
         _audioMuted: audioMuted,
         _largeVideo: largeVideo,
         _onClick,
-        _onThumbnailLongPress,
+        _onShowRemoteVideoMenu,
         _renderDominantSpeakerIndicator: renderDominantSpeakerIndicator,
         _renderModeratorIndicator: renderModeratorIndicator,
         _styles,
@@ -141,7 +141,7 @@ function Thumbnail(props: Props) {
     return (
         <Container
             onClick = { _onClick }
-            onLongPress = { _onThumbnailLongPress }
+            onLongPress = { participant.local ? undefined : _onShowRemoteVideoMenu }
             style = { [
                 styles.thumbnail,
                 participant.pinned && !tileView
@@ -231,7 +231,7 @@ function _mapDispatchToProps(dispatch: Function, ownProps): Object {
          *
          * @returns {void}
          */
-        _onThumbnailLongPress() {
+        _onShowRemoteVideoMenu() {
             const { participant } = ownProps;
 
             if (participant.local) {

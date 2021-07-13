@@ -228,7 +228,7 @@ export default class LargeVideoManager {
             const isAudioOnly = APP.conference.isAudioOnly();
             const showAvatar
                 = isVideoContainer
-                    && ((isAudioOnly && videoType !== VIDEO_TYPE.DESKTOP) || !isVideoRenderable);
+                && ((isAudioOnly && videoType !== VIDEO_TYPE.DESKTOP) || !isVideoRenderable);
 
             let promise;
 
@@ -244,7 +244,7 @@ export default class LargeVideoManager {
                 if ((!shouldDisplayTileView(state) || participant?.pinned) // In theory the tile view may not be
                 // enabled yet when we auto pin the participant.
 
-                        && participant && !participant.local && !participant.isFakeParticipant) {
+                    && participant && !participant.local && !participant.isFakeParticipant) {
                     // remote participant only
                     const track = getTrackByMediaTypeAndParticipant(
                         state['features/base/tracks'], MEDIA_TYPE.VIDEO, id);
@@ -376,7 +376,7 @@ export default class LargeVideoManager {
             widthToUse -= theme.participantsPaneWidth;
         }
 
-        if (isOpen && window.innerWidth > 580) {
+        if (isOpen) {
             /**
              * If chat state is open, we re-compute the container width
              * by subtracting the default width of the chat.

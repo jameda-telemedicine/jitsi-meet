@@ -54,6 +54,14 @@ UI.isFullScreen = function() {
 };
 
 /**
+ * Returns true if the etherpad window is currently visible.
+ * @returns {Boolean} - true if the etherpad window is currently visible.
+ */
+UI.isEtherpadVisible = function() {
+    return Boolean(etherpadManager && etherpadManager.isVisible());
+};
+
+/**
  * Notify user that server has shut down.
  */
 UI.notifyGracefulShutdown = function() {
@@ -363,6 +371,14 @@ UI.notifyTokenAuthFailed = function() {
     });
 };
 
+UI.notifyInternalError = function(error) {
+    messageHandler.showError({
+        descriptionArguments: { error },
+        descriptionKey: 'dialog.internalError',
+        titleKey: 'dialog.internalErrorTitle'
+    });
+};
+
 UI.notifyFocusDisconnected = function(focus, retrySec) {
     messageHandler.participantNotification(
         null, 'notify.focus',
@@ -370,6 +386,16 @@ UI.notifyFocusDisconnected = function(focus, retrySec) {
         { component: focus,
             ms: retrySec }
     );
+};
+
+/**
+ * Notifies interested listeners that the raise hand property has changed.
+ *
+ * @param {boolean} isRaisedHand indicates the current state of the
+ * "raised hand"
+ */
+UI.onLocalRaiseHandChanged = function(isRaisedHand) {
+    eventEmitter.emit(UIEvents.LOCAL_RAISE_HAND_CHANGED, isRaisedHand);
 };
 
 /**
@@ -394,6 +420,48 @@ UI.getLargeVideoID = function() {
  */
 UI.getLargeVideo = function() {
     return VideoLayout.getLargeVideo();
+};
+
+/**
+ * Handles user's features changes.
+ */
+UI.onUserFeaturesChanged = user => VideoLayout.onUserFeaturesChanged(user);
+
+/**
+ * Returns the number of known remote videos.
+ *
+ * @returns {number} The number of remote videos.
+ */
+UI.getRemoteVideosCount = () => VideoLayout.getRemoteVideosCount();
+
+/**
+ * Returns the video type of the remote participant's video.
+ * This is needed for the torture clients to determine the video type of the
+ * remote participants.
+ *
+ * @param {string} participantID - The id of the remote participant.
+ * @returns {string} The video type "camera" or "desktop".
+ */
+UI.getRemoteVideoType = participantID => VideoLayout.getRemoteVideoType(participantID);
+
+/**
+ * Sets the remote control active status for a remote participant.
+ *
+ * @param {string} participantID - The id of the remote participant.
+ * @param {boolean} isActive - The new remote control active status.
+ * @returns {void}
+ */
+UI.setRemoteControlActiveStatus = function(participantID, isActive) {
+    VideoLayout.setRemoteControlActiveStatus(participantID, isActive);
+};
+
+/**
+ * Sets the remote control active status for the local participant.
+ *
+ * @returns {void}
+ */
+UI.setLocalRemoteControlActiveChanged = function() {
+    VideoLayout.setLocalRemoteControlActiveChanged();
 };
 
 // TODO: Export every function separately. For now there is no point of doing

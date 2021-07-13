@@ -4,6 +4,7 @@ import { jitsiLocalStorage } from '@jitsi/js-utils';
 import EventEmitter from 'events';
 import Logger from 'jitsi-meet-logger';
 
+import * as JitsiMeetConferenceEvents from './ConferenceEvents';
 import { openConnection } from './connection';
 import { ENDPOINT_TEXT_MESSAGE_NAME } from './modules/API/constants';
 import { AUDIO_ONLY_SCREEN_SHARE_NO_TRACK } from './modules/UI/UIErrors';
@@ -89,8 +90,7 @@ import {
     participantMutedUs,
     participantPresenceChanged,
     participantRoleChanged,
-    participantUpdated,
-    updateRemoteParticipantFeatures
+    participantUpdated
 } from './react/features/base/participants';
 import {
     getUserSelectedCameraDeviceId,
@@ -127,13 +127,14 @@ import {
     isPrejoinPageVisible,
     makePrecallTest
 } from './react/features/prejoin';
-import { disableReceiver, stopReceiver } from './react/features/remote-control';
 import { setScreenAudioShareState, isScreenAudioShared } from './react/features/screen-share/';
 import { toggleScreenshotCaptureEffect } from './react/features/screenshot-capture';
 import { AudioMixerEffect } from './react/features/stream-effects/audio-mixer/AudioMixerEffect';
 import { createPresenterEffect } from './react/features/stream-effects/presenter';
 import { endpointMessageReceived } from './react/features/subtitles';
 import UIEvents from './service/UI/UIEvents';
+import * as RemoteControlEvents
+    from './service/remotecontrol/RemoteControlEvents';
 
 const logger = Logger.getLogger(__filename);
 
@@ -484,26 +485,23 @@ export default {
 
         // Always get a handle on the audio input device so that we have statistics (such as "No audio input" or
         // "Are you trying to speak?" ) even if the user joins the conference muted.
-        const initialDevices = config.disableInitialGUM ? [] : [ 'audio' ];
-        const requestedAudio = !config.disableInitialGUM;
+        const initialDevices = [ 'audio' ];
+        const requestedAudio = true;
         let requestedVideo = false;
 
-        if (!config.disableInitialGUM
-                && !options.startWithVideoMuted
+        if (!options.startWithVideoMuted
                 && !options.startAudioOnly
                 && !options.startScreenSharing) {
             initialDevices.push('video');
             requestedVideo = true;
         }
 
-        if (!config.disableInitialGUM) {
-            JitsiMeetJS.mediaDevices.addEventListener(
-                JitsiMediaDevicesEvents.PERMISSION_PROMPT_IS_SHOWN,
-                browserName =>
-                    APP.store.dispatch(
-                        mediaPermissionPromptVisibilityChanged(true, browserName))
-            );
-        }
+        JitsiMeetJS.mediaDevices.addEventListener(
+            JitsiMediaDevicesEvents.PERMISSION_PROMPT_IS_SHOWN,
+            browserName =>
+                APP.store.dispatch(
+                    mediaPermissionPromptVisibilityChanged(true, browserName))
+        );
 
         JitsiMeetJS.mediaDevices.addEventListener(
             JitsiMediaDevicesEvents.SLOW_GET_USER_MEDIA,
@@ -704,11 +702,38 @@ export default {
      */
     createInitialLocalTracksAndConnect(roomName, options = {}) {
         const { tryCreateLocalTracks, errors } = this.createInitialLocalTracks(options);
+        const {
+            audioAndVideoError,
+            audioOnlyError,
+            screenSharingError,
+            videoOnlyError
+        } = errors;
 
         return Promise.all([ tryCreateLocalTracks, connect(roomName) ])
             .then(([ tracks, con ]) => {
-
-                this._displayErrorsForCreateInitialLocalTracks(errors);
+                // FIXME If there will be microphone error it will cover any
+                // screensharing dialog, but it's still better than in
+                // the reverse order where the screensharing dialog will
+                // sometimes be closing the microphone alert ($.prompt.close();
+                // is called). Need to figure out dialogs chaining to fix that.
+                if (screenSharingError) {
+                    this._handleScreenSharingError(screenSharingError);
+                }
+                if (audioAndVideoError || audioOnlyError) {
+                    if (audioOnlyError || videoOnlyError) {
+                        // If both requests for 'audio' + 'video' and 'audio'
+                        // only failed, we assume that there are some problems
+                        // with user's microphone and show corresponding dialog.
+                        APP.store.dispatch(notifyMicError(audioOnlyError));
+                        APP.store.dispatch(notifyCameraError(videoOnlyError));
+                    } else {
+                        // If request for 'audio' + 'video' failed, but request
+                        // for 'audio' only was OK, we assume that we had
+                        // problems with camera and show corresponding dialog.
+                        APP.store.dispatch(
+                            notifyCameraError(audioAndVideoError));
+                    }
+                }
 
                 return [ tracks, con ];
             });
@@ -733,6 +758,7 @@ export default {
         APP.connection = connection = con;
 
         this._createRoom(tracks);
+        APP.remoteControl.init();
 
         // if user didn't give access to mic or camera or doesn't have
         // them at all, we mark corresponding toolbar buttons as muted,
@@ -1509,8 +1535,11 @@ export default {
     async _turnScreenSharingOff(didHaveVideo) {
         this._untoggleScreenSharing = null;
         this.videoSwitchInProgress = true;
+        const { receiver } = APP.remoteControl;
 
-        APP.store.dispatch(stopReceiver());
+        if (receiver) {
+            receiver.stop();
+        }
 
         this._stopProxyConnection();
         if (config.enableScreenshotCapture) {
@@ -1989,9 +2018,8 @@ export default {
             (authEnabled, authLogin) =>
                 APP.store.dispatch(authStatusChanged(authEnabled, authLogin)));
 
-        room.on(JitsiConferenceEvents.PARTCIPANT_FEATURES_CHANGED, user => {
-            APP.store.dispatch(updateRemoteParticipantFeatures(user));
-        });
+        room.on(JitsiConferenceEvents.PARTCIPANT_FEATURES_CHANGED,
+            user => APP.UI.onUserFeaturesChanged(user));
         room.on(JitsiConferenceEvents.USER_JOINED, (id, user) => {
             // The logic shared between RN and web.
             commonUserJoinedHandling(APP.store, room, user);
@@ -2000,7 +2028,6 @@ export default {
                 return;
             }
 
-            APP.store.dispatch(updateRemoteParticipantFeatures(user));
             logger.log(`USER ${id} connected:`, user);
             APP.UI.addUser(user);
         });
@@ -2172,7 +2199,32 @@ export default {
             JitsiConferenceEvents.LOCK_STATE_CHANGED,
             (...args) => APP.store.dispatch(lockStateChanged(room, ...args)));
 
+        APP.remoteControl.on(RemoteControlEvents.ACTIVE_CHANGED, isActive => {
+            room.setLocalParticipantProperty(
+                'remoteControlSessionStatus',
+                isActive
+            );
+            APP.UI.setLocalRemoteControlActiveChanged();
+        });
+
+        /* eslint-disable max-params */
+        room.on(
+            JitsiConferenceEvents.PARTICIPANT_PROPERTY_CHANGED,
+            (participant, name, oldValue, newValue) => {
+                switch (name) {
+                case 'remoteControlSessionStatus':
+                    APP.UI.setRemoteControlActiveStatus(
+                        participant.getId(),
+                        newValue);
+                    break;
+                default:
+
+                    // ignore
+                }
+            });
+
         room.on(JitsiConferenceEvents.KICKED, (participant, reason, isReplaced) => {
+            APP.UI.hideStats();
             if (isReplaced) {
                 // this event triggers when the local participant is kicked, `participant`
                 // is the kicker. In replace participant case, kicker is undefined,
@@ -2191,6 +2243,8 @@ export default {
                 APP.API.notifyReadyToClose();
             }
             APP.store.dispatch(kickedOut(room, participant));
+
+            // FIXME close
         });
 
         room.on(JitsiConferenceEvents.PARTICIPANT_KICKED, (kicker, kicked) => {
@@ -2412,7 +2466,7 @@ export default {
                     return this.useAudioStream(stream);
                 })
                 .then(() => {
-                    if (this.localAudio && hasDefaultMicChanged) {
+                    if (hasDefaultMicChanged) {
                         // workaround for the default device to be shown as selected in the
                         // settings even when the real device id was passed to gUM because of the
                         // above mentioned chrome bug.
@@ -2706,7 +2760,7 @@ export default {
                                     // Use the new stream or null if we failed to obtain it.
                                     return useStream(tracks.find(track => track.getType() === mediaType) || null)
                                         .then(() => {
-                                            if (this.localAudio && hasDefaultMicChanged) {
+                                            if (hasDefaultMicChanged) {
                                                 // workaround for the default device to be shown as selected in the
                                                 // settings even when the real device id was passed to gUM because of
                                                 // the above mentioned chrome bug.
@@ -2789,7 +2843,7 @@ export default {
      * requested
      */
     hangup(requestFeedback = false) {
-        APP.store.dispatch(disableReceiver());
+        eventEmitter.emit(JitsiMeetConferenceEvents.BEFORE_HANGUP);
 
         this._stopProxyConnection();
 
@@ -2806,6 +2860,7 @@ export default {
         }
 
         APP.UI.removeAllListeners();
+        APP.remoteControl.removeAllListeners();
 
         let requestFeedbackPromise;
 

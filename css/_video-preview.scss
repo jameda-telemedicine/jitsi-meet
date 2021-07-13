@@ -80,7 +80,7 @@
         }
     }
     // Override @atlaskit/InlineDialog container which is made with styled components
-    & > div:nth-child(2) {
+    & > div > div:nth-child(2) > div > div {
         padding: 0;
     }
 }

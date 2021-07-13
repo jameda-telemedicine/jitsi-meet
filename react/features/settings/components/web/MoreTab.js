@@ -393,6 +393,7 @@ class MoreTab extends AbstractDialogTab<Props, State> {
                                 ? t(`languages:${currentLanguage}`)
                                 : '' }
                             triggerButtonProps = {{
+                                appearance: 'primary',
                                 shouldFitContainer: true
                             }}
                             triggerType = 'button'>

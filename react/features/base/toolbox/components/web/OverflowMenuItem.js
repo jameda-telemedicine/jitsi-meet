@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 
 import { Icon } from '../../../icons';
-import { Tooltip } from '../../../tooltip';
+import Tooltip from '@atlaskit/tooltip';
 
 /**
  * The type of the React {@code Component} props of {@link OverflowMenuItem}.

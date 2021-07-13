@@ -149,8 +149,7 @@ export function isJoinByPhoneDialogVisible(state: Object): boolean {
 export function isPrejoinPageEnabled(state: Object): boolean {
     return navigator.product !== 'ReactNative'
         && state['features/base/config'].prejoinPageEnabled
-        && !state['features/base/settings'].userSelectedSkipPrejoin
-        && !(state['features/base/config'].enableForcedReload && state['features/prejoin'].skipPrejoinOnReload);
+        && !state['features/base/settings'].userSelectedSkipPrejoin;
 }
 
 /**

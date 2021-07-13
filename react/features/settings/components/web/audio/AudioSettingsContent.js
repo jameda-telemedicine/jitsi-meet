@@ -317,24 +317,22 @@ class AudioSettingsContent extends Component<Props, State> {
                             )}
                         </ul>
                     </div>
-                    { outputDevices.length > 0 && (
-                        <div role = 'menuitem'>
-                            <hr className = 'audio-preview-hr' />
-                            <AudioSettingsHeader
-                                IconComponent = { IconVolumeEmpty }
-                                id = { this.speakerHeaderId }
-                                text = { t('settings.speakers') } />
-                            <ul
-                                aria-labelledby = 'speaker_settings_header'
-                                className = 'audio-preview-content-ul'
-                                role = 'radiogroup'
-                                tabIndex = '-1'>
-                                { outputDevices.map((data, i) =>
-                                    this._renderSpeakerEntry(data, i, outputDevices.length, t),
-                                )}
-                            </ul>
-                        </div>)
-                    }
+                    <div role = 'menuitem'>
+                        <hr className = 'audio-preview-hr' />
+                        <AudioSettingsHeader
+                            IconComponent = { IconVolumeEmpty }
+                            id = { this.speakerHeaderId }
+                            text = { t('settings.speakers') } />
+                        <ul
+                            aria-labelledby = 'speaker_settings_header'
+                            className = 'audio-preview-content-ul'
+                            role = 'radiogroup'
+                            tabIndex = '-1'>
+                            { outputDevices.map((data, i) =>
+                                this._renderSpeakerEntry(data, i, outputDevices.length, t),
+                            )}
+                        </ul>
+                    </div>
                 </div>
             </div>
         );

@@ -1,5 +1,6 @@
 /*
- * Copyright @ 2017-present 8x8, Inc.
+ * Copyright @ 2018-present 8x8, Inc.
+ * Copyright @ 2017-2018 Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@
  * limitations under the License.
  */
 
-@import UIKit;
-@import Foundation;
+#import <JitsiMeet/JitsiMeetView.h>
+#import <JitsiMeet/JitsiMeetViewDelegate.h>
+#import <JitsiMeet/JitsiMeetConferenceOptions.h>
+#import <JitsiMeet/JitsiMeetLogger.h>
+#import <JitsiMeet/JitsiMeetBaseLogHandler.h>
+#import <JitsiMeet/InfoPlistUtil.h>
 
-#import <JitsiMeetSDK/JitsiMeetConferenceOptions.h>
 
 @interface JitsiMeet : NSObject
 

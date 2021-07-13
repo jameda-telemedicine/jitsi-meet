@@ -5,6 +5,7 @@ import { ReducerRegistry } from '../base/redux';
 
 import {
     SET_FILMSTRIP_ENABLED,
+    SET_FILMSTRIP_HOVERED,
     SET_FILMSTRIP_VISIBLE,
     SET_HORIZONTAL_VIEW_DIMENSIONS,
     SET_TILE_VIEW_DIMENSIONS,
@@ -103,6 +104,20 @@ ReducerRegistry.register(
             return {
                 ...state,
                 enabled: action.enabled
+            };
+
+        case SET_FILMSTRIP_HOVERED:
+            return {
+                ...state,
+
+                /**
+                 * The indicator which determines whether the {@link Filmstrip}
+                 * is being hovered (over).
+                 *
+                 * @public
+                 * @type {boolean}
+                 */
+                hovered: action.hovered
             };
 
         case SET_FILMSTRIP_VISIBLE:

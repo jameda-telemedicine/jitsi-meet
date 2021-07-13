@@ -7,11 +7,12 @@ import ConnectionIndicatorContent from
 import { isMobileBrowser } from '../../../base/environment/utils';
 import { translate } from '../../../base/i18n';
 import { Icon, IconMenuThumb } from '../../../base/icons';
-import { getLocalParticipant, getParticipantById, PARTICIPANT_ROLE } from '../../../base/participants';
+import { MEDIA_TYPE } from '../../../base/media';
+import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
 import { Popover } from '../../../base/popover';
 import { connect } from '../../../base/redux';
+import { isRemoteTrackMuted } from '../../../base/tracks';
 import { requestRemoteControl, stopController } from '../../../remote-control';
-import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
 import { renderConnectionStatus } from '../../actions.web';
 
 import ConnectionStatusButton from './ConnectionStatusButton';
@@ -324,7 +325,7 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
             );
         }
 
-        if (onVolumeChange && typeof initialVolumeValue === 'number' && !isNaN(initialVolumeValue)) {
+        if (onVolumeChange) {
             buttons.push(
                 <VolumeSlider
                     initialValue = { initialVolumeValue }
@@ -355,55 +356,16 @@ class RemoteVideoMenuTriggerButton extends Component<Props> {
  */
 function _mapStateToProps(state, ownProps) {
     const { participantID } = ownProps;
+    const tracks = state['features/base/tracks'];
     const localParticipant = getLocalParticipant(state);
     const { remoteVideoMenu = {}, disableRemoteMute } = state['features/base/config'];
-    const { disableKick, disableGrantModerator } = remoteVideoMenu;
-    let _remoteControlState = null;
-    const participant = getParticipantById(state, participantID);
-    const _participantDisplayName = participant.name;
-    const _isRemoteControlSessionActive = participant?.remoteControlSessionStatus ?? false;
-    const _supportsRemoteControl = participant?.supportsRemoteControl ?? false;
-    const { active, controller } = state['features/remote-control'];
-    const { requestedParticipant, controlled } = controller;
-    const activeParticipant = requestedParticipant || controlled;
-    const { overflowDrawer } = state['features/toolbox'];
-    const { showConnectionInfo } = state['features/base/connection'];
-
-    if (_supportsRemoteControl
-            && ((!active && !_isRemoteControlSessionActive) || activeParticipant === participantID)) {
-        if (requestedParticipant === participantID) {
-            _remoteControlState = REMOTE_CONTROL_MENU_STATES.REQUESTING;
-        } else if (controlled) {
-            _remoteControlState = REMOTE_CONTROL_MENU_STATES.STARTED;
-        } else {
-            _remoteControlState = REMOTE_CONTROL_MENU_STATES.NOT_STARTED;
-        }
-    }
-
-    const currentLayout = getCurrentLayout(state);
-    let _menuPosition;
-
-    switch (currentLayout) {
-    case LAYOUTS.TILE_VIEW:
-        _menuPosition = 'left-start';
-        break;
-    case LAYOUTS.VERTICAL_FILMSTRIP_VIEW:
-        _menuPosition = 'left-end';
-        break;
-    default:
-        _menuPosition = 'auto';
-    }
+    const { disableKick } = remoteVideoMenu;
 
     return {
+        _isAudioMuted: isRemoteTrackMuted(tracks, MEDIA_TYPE.AUDIO, participantID) || false,
         _isModerator: Boolean(localParticipant?.role === PARTICIPANT_ROLE.MODERATOR),
         _disableKick: Boolean(disableKick),
-        _disableRemoteMute: Boolean(disableRemoteMute),
-        _remoteControlState,
-        _menuPosition,
-        _overflowDrawer: overflowDrawer,
-        _participantDisplayName,
-        _disableGrantModerator: Boolean(disableGrantModerator),
-        _showConnectionInfo: showConnectionInfo
+        _disableRemoteMute: Boolean(disableRemoteMute)
     };
 }
 

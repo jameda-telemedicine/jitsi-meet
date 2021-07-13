@@ -8,7 +8,6 @@ import { JitsiRecordingConstants } from '../base/lib-jitsi-meet';
 import { getLocalParticipant, isLocalParticipantModerator } from '../base/participants';
 import { toState } from '../base/redux';
 import { doGetJSON, parseURIString } from '../base/util';
-import { isVpaasMeeting } from '../billing-counter/functions';
 
 import { INVITE_TYPES, SIP_ADDRESS_REGEX } from './constants';
 import logger from './logger';
@@ -372,7 +371,7 @@ export function invitePeopleAndChatRooms( // eslint-disable-line max-params
 export function isAddPeopleEnabled(state: Object): boolean {
     const { peopleSearchUrl } = state['features/base/config'];
 
-    return state['features/base/jwt'].jwt && Boolean(peopleSearchUrl) && !isVpaasMeeting(state);
+    return state['features/base/jwt'].jwt && Boolean(peopleSearchUrl);
 }
 
 /**

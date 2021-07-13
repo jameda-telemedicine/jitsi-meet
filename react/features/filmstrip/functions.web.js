@@ -17,18 +17,15 @@ import {
 } from '../base/tracks/functions';
 
 import {
-    ASPECT_RATIO_BREAKPOINT,
     DISPLAY_AVATAR,
     DISPLAY_AVATAR_WITH_NAME,
     DISPLAY_BLACKNESS_WITH_NAME,
     DISPLAY_VIDEO,
     DISPLAY_VIDEO_WITH_NAME,
     SCROLL_SIZE,
-    SQUARE_TILE_ASPECT_RATIO,
     STAGE_VIEW_THUMBNAIL_HORIZONTAL_BORDER,
     TILE_ASPECT_RATIO,
     TILE_HORIZONTAL_MARGIN,
-    TILE_VERTICAL_MARGIN,
     VERTICAL_FILMSTRIP_MIN_HORIZONTAL_MARGIN
 } from './constants';
 
@@ -73,10 +70,12 @@ export function shouldRemoteVideosBeVisible(state: Object) {
         participantCount > 2
 
             // Always show the filmstrip when there is another participant to
-            // show and the  local video is pinned, or the toolbar is displayed.
+            // show and the filmstrip is hovered, or local video is pinned, or
+            // the toolbar is displayed.
             || (participantCount > 1
                 && disable1On1Mode !== null
-                && (state['features/toolbox'].visible
+                && (state['features/filmstrip'].hovered
+                    || state['features/toolbox'].visible
                     || ((pinnedParticipant = getPinnedParticipant(state))
                         && pinnedParticipant.local)))
 
@@ -174,41 +173,25 @@ export function calculateThumbnailSizeForVerticalView(clientWidth: number = 0) {
  */
 export function calculateThumbnailSizeForTileView({
     columns,
-    minVisibleRows,
-    rows,
+    visibleRows,
     clientWidth,
-    clientHeight,
-    disableResponsiveTiles
+    clientHeight
 }: Object) {
-    let aspectRatio = TILE_ASPECT_RATIO;
+    // The distance from the top and bottom of the screen, as set by CSS, to
+    // avoid overlapping UI elements.
+    const topBottomPadding = 200;
 
-    if (!disableResponsiveTiles && clientWidth < ASPECT_RATIO_BREAKPOINT) {
-        aspectRatio = SQUARE_TILE_ASPECT_RATIO;
-    }
+    // Minimum space to keep between the sides of the tiles and the sides
+    // of the window.
+    const sideMargins = 30 * 2;
 
-    const viewWidth = clientWidth - (columns * TILE_HORIZONTAL_MARGIN);
-    const viewHeight = clientHeight - (minVisibleRows * TILE_VERTICAL_MARGIN);
+    const verticalMargins = visibleRows * 10;
+    const viewWidth = clientWidth - sideMargins;
+    const viewHeight = clientHeight - topBottomPadding - verticalMargins;
     const initialWidth = viewWidth / columns;
-    const initialHeight = viewHeight / minVisibleRows;
-    const aspectRatioHeight = initialWidth / aspectRatio;
-    const noScrollHeight = (clientHeight / rows) - TILE_VERTICAL_MARGIN;
-    const scrollInitialWidth = (viewWidth - SCROLL_SIZE) / columns;
-    let height = Math.floor(Math.min(aspectRatioHeight, initialHeight));
-    let width = Math.floor(aspectRatio * height);
-
-    if (height > noScrollHeight && width > scrollInitialWidth) { // we will have scroll and we need more space for it.
-        const scrollAspectRatioHeight = scrollInitialWidth / aspectRatio;
-
-        // Recalculating width/height to fit the available space when a scroll is displayed.
-        // NOTE: Math.min(scrollAspectRatioHeight, initialHeight) would be enough to recalculate but since the new
-        // height value can theoretically be dramatically smaller and the scroll may not be neccessary anymore we need
-        // to compare it with noScrollHeight( the optimal height to fit all thumbnails without scroll) and get the
-        // bigger one. This way we ensure that we always strech the thumbnails as close as we can to the edges of the
-        // window.
-        height = Math.floor(Math.max(Math.min(scrollAspectRatioHeight, initialHeight), noScrollHeight));
-        width = Math.floor(aspectRatio * height);
-    }
-
+    const aspectRatioHeight = initialWidth / TILE_ASPECT_RATIO;
+    const height = Math.floor(Math.min(aspectRatioHeight, viewHeight / visibleRows));
+    const width = Math.floor(TILE_ASPECT_RATIO * height);
 
     return {
         height,

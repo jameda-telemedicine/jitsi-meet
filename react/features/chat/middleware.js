@@ -20,8 +20,9 @@ import { MiddlewareRegistry, StateListenerRegistry } from '../base/redux';
 import { playSound, registerSound, unregisterSound } from '../base/sounds';
 import { openDisplayNamePrompt } from '../display-name';
 import { showToolbox } from '../toolbox/actions';
+import { isButtonEnabled } from '../toolbox/functions';
 
-import { ADD_MESSAGE, SEND_MESSAGE, OPEN_CHAT, CLOSE_CHAT } from './actionTypes';
+import { SEND_MESSAGE, OPEN_CHAT, CLOSE_CHAT } from './actionTypes';
 import { addMessage, clearMessages } from './actions';
 import { closeChat } from './actions.any';
 import { ChatPrivacyDialog } from './components';
@@ -32,7 +33,6 @@ import {
     MESSAGE_TYPE_LOCAL,
     MESSAGE_TYPE_REMOTE
 } from './constants';
-import { getUnreadCount } from './functions';
 import { INCOMING_MSG_SOUND_FILE } from './sounds';
 
 declare var APP: Object;
@@ -55,18 +55,9 @@ const PRIVACY_NOTICE_TIMEOUT = 20 * 1000;
 MiddlewareRegistry.register(store => next => action => {
     const { dispatch, getState } = store;
     const localParticipant = getLocalParticipant(getState());
-    let isOpen, unreadCount;
+    let unreadCount;
 
     switch (action.type) {
-    case ADD_MESSAGE:
-        unreadCount = action.hasRead ? 0 : getUnreadCount(getState()) + 1;
-        isOpen = getState()['features/chat'].isOpen;
-
-        if (typeof APP !== 'undefined') {
-            APP.API.notifyChatUpdated(unreadCount, isOpen);
-        }
-        break;
-
     case APP_WILL_MOUNT:
         dispatch(
                 registerSound(INCOMING_MSG_SOUND_ID, INCOMING_MSG_SOUND_FILE));
@@ -189,9 +180,12 @@ StateListenerRegistry.register(
  * @returns {void}
  */
 function _addChatMsgListener(conference, store) {
+    const state = store.getState();
 
-    if (store.getState()['features/base/config'].iAmRecorder) {
-        // We don't register anything on web if we are in iAmRecorder mode
+    if ((typeof APP !== 'undefined' && !isButtonEnabled('chat', state))
+        || state['features/base/config'].iAmRecorder) {
+        // We don't register anything on web if the chat button is not enabled in interfaceConfig
+        // or we are in iAmRecorder mode
         return;
     }
 

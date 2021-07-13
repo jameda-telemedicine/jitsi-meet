@@ -144,7 +144,7 @@
     &-dropdown-container {
         margin-top: 16px;
 
-        & > div:nth-child(2) {
+        & > div > div:nth-child(2) > div > div {
             background: #fff;
             padding: 0;
         }

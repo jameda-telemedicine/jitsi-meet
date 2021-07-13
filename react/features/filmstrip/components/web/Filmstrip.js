@@ -1,7 +1,7 @@
 /* @flow */
 
+import _ from 'lodash';
 import React, { PureComponent } from 'react';
-import { FixedSizeList, FixedSizeGrid } from 'react-window';
 import type { Dispatch } from 'redux';
 
 import {
@@ -13,10 +13,10 @@ import { getToolbarButtons } from '../../../base/config';
 import { translate } from '../../../base/i18n';
 import { Icon, IconMenuDown, IconMenuUp } from '../../../base/icons';
 import { connect } from '../../../base/redux';
-import { showToolbox } from '../../../toolbox/actions.web';
+import { showToolbox, dockToolbox } from '../../../toolbox/actions.web';
 import { isButtonEnabled, isToolboxVisible } from '../../../toolbox/functions.web';
 import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
-import { setFilmstripVisible, setVisibleRemoteParticipants } from '../../actions';
+import { setFilmstripVisible, setVisibleRemoteParticipants, setFilmstripHovered } from '../../actions';
 import { TILE_HORIZONTAL_MARGIN, TILE_VERTICAL_MARGIN, TOOLBAR_HEIGHT } from '../../constants';
 import { shouldRemoteVideosBeVisible } from '../../functions';
 
@@ -56,6 +56,12 @@ type Props = {
      * The height of the filmstrip.
      */
     _filmstripHeight: number,
+
+    /**
+     * Whether or not remote videos are currently being hovered over. Hover
+     * handling is currently being handled detected outside of react.
+     */
+    _hovered: boolean,
 
     /**
      * Whether the filmstrip button is enabled.
@@ -120,6 +126,13 @@ type Props = {
  * @extends Component
  */
 class Filmstrip extends PureComponent <Props> {
+    _isHovered: boolean;
+
+    _notifyOfHoveredStateUpdate: Function;
+
+    _onMouseOut: Function;
+
+    _onMouseOver: Function;
 
     /**
      * Initializes a new {@code Filmstrip} instance.
@@ -130,7 +143,20 @@ class Filmstrip extends PureComponent <Props> {
     constructor(props: Props) {
         super(props);
 
+        // Debounce the method for dispatching the new filmstrip handled state
+        // so that it does not get called with each mouse movement event. This
+        // also works around an issue where mouseout and then a mouseover event
+        // is fired when hovering over remote thumbnails, which are not yet in
+        // react.
+        this._notifyOfHoveredStateUpdate = _.debounce(this._notifyOfHoveredStateUpdate, 100);
+
+        // Cache the current hovered state for _updateHoveredState to always
+        // send the last known hovered state.
+        this._isHovered = false;
+
         // Bind event handlers so they are only bound once for every instance.
+        this._onMouseOut = this._onMouseOut.bind(this);
+        this._onMouseOver = this._onMouseOver.bind(this);
         this._onShortcutToggleFilmstrip = this._onShortcutToggleFilmstrip.bind(this);
         this._onToolbarToggleFilmstrip = this._onToolbarToggleFilmstrip.bind(this);
         this._onTabIn = this._onTabIn.bind(this);
@@ -198,7 +224,9 @@ class Filmstrip extends PureComponent <Props> {
                     id = 'remoteVideos'>
                     <div
                         className = 'filmstrip__videos'
-                        id = 'filmstripLocalVideo'>
+                        id = 'filmstripLocalVideo'
+                        onMouseOut = { this._onMouseOut }
+                        onMouseOver = { this._onMouseOver }>
                         <div id = 'filmstripLocalVideoThumbnail'>
                             {
                                 !tileViewActive && <Thumbnail
@@ -404,6 +432,44 @@ class Filmstrip extends PureComponent <Props> {
         this.props.dispatch(setFilmstripVisible(!this.props._visible));
     }
 
+    /**
+     * If the current hover state does not match the known hover state in redux,
+     * dispatch an action to update the known hover state in redux.
+     *
+     * @private
+     * @returns {void}
+     */
+    _notifyOfHoveredStateUpdate() {
+        if (this.props._hovered !== this._isHovered) {
+            this.props.dispatch(dockToolbox(this._isHovered));
+            this.props.dispatch(setFilmstripHovered(this._isHovered));
+        }
+    }
+
+    /**
+     * Updates the currently known mouseover state and attempt to dispatch an
+     * update of the known hover state in redux.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onMouseOut() {
+        this._isHovered = false;
+        this._notifyOfHoveredStateUpdate();
+    }
+
+    /**
+     * Updates the currently known mouseover state and attempt to dispatch an
+     * update of the known hover state in redux.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onMouseOver() {
+        this._isHovered = true;
+        this._notifyOfHoveredStateUpdate();
+    }
+
     _onShortcutToggleFilmstrip: () => void;
 
     /**
@@ -481,7 +547,7 @@ class Filmstrip extends PureComponent <Props> {
  */
 function _mapStateToProps(state) {
     const toolbarButtons = getToolbarButtons(state);
-    const { visible, remoteParticipants } = state['features/filmstrip'];
+    const { visible, remoteParticipants, hovered } = state['features/filmstrip'];
     const reduceHeight = state['features/toolbox'].visible && toolbarButtons.length;
     const remoteVideosVisible = shouldRemoteVideosBeVisible(state);
     const { isOpen: shiftRight } = state['features/chat'];
@@ -528,6 +594,7 @@ function _mapStateToProps(state) {
         _currentLayout,
         _filmstripHeight: remoteFilmstripHeight,
         _filmstripWidth: remoteFilmstripWidth,
+        _hovered: hovered,
         _isFilmstripButtonEnabled: isButtonEnabled('filmstrip', state),
         _remoteParticipantsLength: remoteParticipants.length,
         _remoteParticipants: remoteParticipants,

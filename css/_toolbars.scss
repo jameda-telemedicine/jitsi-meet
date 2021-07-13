@@ -63,6 +63,10 @@
         width: 33%;
     }
 
+    .button-group-left-space {
+        padding-left: 35px;
+    }
+
     .button-group-center {
         justify-content: center;
     }
@@ -146,7 +150,7 @@
     display: flex;
     font-size: 14px;
     font-weight: 400;
-    height: 40px;
+    height: 22px;
     line-height: 24px;
     padding: 8px 16px;
     box-sizing: border-box;
@@ -198,7 +202,7 @@
 }
 
 .overflow-menu-item-icon {
-    margin-right: 16px;
+    margin-right: 10px;
 
     i {
         display: inline;
@@ -239,19 +243,8 @@
     justify-content: center;
     width: $newToolbarSize;
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            background: $newToolbarButtonHoverColor;
-        }
-    }
-
-    @media (max-width: 320px) {
-        height: 36px;
-        width: 36px;
-    }
-
-    &.toggled {
-        background: $newToolbarButtonToggleColor;
+    &:hover, &.toggled {
+        background: $newToolbarButtonHoverColor;
     }
 
     &.disabled {

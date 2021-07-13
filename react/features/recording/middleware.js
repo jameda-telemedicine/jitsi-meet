@@ -156,7 +156,11 @@ MiddlewareRegistry.register(({ dispatch, getState }) => next => action => {
 
             if (updatedSessionData.status === ON
                 && (!oldSessionData || oldSessionData.status !== ON)) {
-                if (typeof recordingLimit === 'object') {
+                if (initiator) {
+                    const initiatorName = initiator && getParticipantDisplayName(getState, initiator.getId());
+
+                    initiatorName && dispatch(showStartedRecordingNotification(mode, initiatorName));
+                } else if (typeof recordingLimit === 'object') {
                     // Show notification with additional information to the initiator.
                     dispatch(showRecordingLimitNotification(mode));
                 } else {

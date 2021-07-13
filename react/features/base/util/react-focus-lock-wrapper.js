@@ -15,14 +15,13 @@ export default (props: Object) => {
 
     const forwardProps = {
         ...otherProps,
-        crossFrame: false
+        disabled: true
     };
 
     // MoveFocusInside is added in order to initially bring the focus on the dialog.
     return (
         <FocusLock
-            { ...forwardProps }
-            className = 'focus-lock'>
+            { ...forwardProps }>
             <MoveFocusInside>{children}</MoveFocusInside>
         </FocusLock>
     );

@@ -88,19 +88,22 @@ export async function sendCountRequest({ baseUrl, billingId, jwt, tenant }: {
 }
 
 /**
- * Returns the stored billing id (or generates a new one if none is present).
+ * Returns the stored billing id.
  *
  * @returns {string}
  */
 export function getBillingId() {
-    let billingId = jitsiLocalStorage.getItem(BILLING_ID);
+    return jitsiLocalStorage.getItem(BILLING_ID);
+}
 
-    if (!billingId) {
-        billingId = uuid.v4();
-        jitsiLocalStorage.setItem(BILLING_ID, billingId);
-    }
-
-    return billingId;
+/**
+ * Stores the billing id.
+ *
+ * @param {string} value - The id to be stored.
+ * @returns {void}
+ */
+export function setBillingId(value: string) {
+    jitsiLocalStorage.setItem(BILLING_ID, value);
 }
 
 /**
