@@ -1,12 +1,14 @@
 // @flow
 
+import Platform from '../react/Platform';
+
 /**
  * Returns whether or not the current environment is a mobile device.
  *
  * @returns {boolean}
  */
 export function isMobileBrowser() {
-    return false;
+    return Platform.OS === 'android' || Platform.OS === 'ios';
 }
 
 
