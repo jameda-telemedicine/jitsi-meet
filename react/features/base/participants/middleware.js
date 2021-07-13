@@ -88,12 +88,12 @@ MiddlewareRegistry.register(store => next => action => {
         }
 
         participant
-            && store.dispatch(participantUpdated({
-                conference,
-                id,
-                local: participant.id === id,
-                raisedHand: false
-            }));
+        && store.dispatch(participantUpdated({
+            conference,
+            id,
+            local: isLocal,
+            raisedHand: false
+        }));
 
         break;
     }
@@ -211,8 +211,8 @@ StateListenerRegistry.register(
         let id;
 
         if (!localParticipant
-                || (id = localParticipant.id)
-                    === LOCAL_PARTICIPANT_DEFAULT_ID) {
+            || (id = localParticipant.id)
+            === LOCAL_PARTICIPANT_DEFAULT_ID) {
             // The ID of the local participant has been reset already.
             return;
         }
@@ -220,13 +220,13 @@ StateListenerRegistry.register(
         // The ID of the local may be reset only if it is not in use.
         const dispatchLocalParticipantIdChanged
             = forEachConference(
-                state,
-                conference =>
-                    conference === leaving || conference.myUserId() !== id);
+            state,
+            conference =>
+                conference === leaving || conference.myUserId() !== id);
 
         dispatchLocalParticipantIdChanged
-            && dispatch(
-                localParticipantIdChanged(LOCAL_PARTICIPANT_DEFAULT_ID));
+        && dispatch(
+            localParticipantIdChanged(LOCAL_PARTICIPANT_DEFAULT_ID));
     });
 
 /**
@@ -374,8 +374,8 @@ function _maybePlaySounds({ getState, dispatch }, action) {
     // The intention there was to not play user joined notification in big
     // conferences where 100th person is joining.
     if (!action.participant.local
-            && (!startAudioMuted
-                || getParticipantCount(state) < startAudioMuted)) {
+        && (!startAudioMuted
+            || getParticipantCount(state) < startAudioMuted)) {
         const { isReplacing, isReplaced } = action.participant;
 
         if (action.type === PARTICIPANT_JOINED) {
