@@ -156,7 +156,7 @@ MiddlewareRegistry.register(store => next => action => {
 
     case CONNECTION_FAILED:
         !action.error.recoverable
-            && _sendConferenceFailedOnConnectionError(store, action);
+        && _sendConferenceFailedOnConnectionError(store, action);
         break;
 
     case ENTER_PICTURE_IN_PICTURE:
@@ -423,32 +423,32 @@ function _registerForEndpointTextMessages(store) {
 
     conference.on(
         JitsiConferenceEvents.MESSAGE_RECEIVED,
-            (id, message, timestamp) => {
-                sendEvent(
-                    store,
-                    CHAT_MESSAGE_RECEIVED,
-                    /* data */ {
-                        senderId: id,
-                        message,
-                        isPrivate: false,
-                        timestamp
-                    });
-            }
+        (id, message, timestamp) => {
+            sendEvent(
+                store,
+                CHAT_MESSAGE_RECEIVED,
+                /* data */ {
+                    senderId: id,
+                    message,
+                    isPrivate: false,
+                    timestamp
+                });
+        }
     );
 
     conference.on(
         JitsiConferenceEvents.PRIVATE_MESSAGE_RECEIVED,
-            (id, message, timestamp) => {
-                sendEvent(
-                    store,
-                    CHAT_MESSAGE_RECEIVED,
-                    /* data */ {
-                        senderId: id,
-                        message,
-                        isPrivate: true,
-                        timestamp
-                    });
-            }
+        (id, message, timestamp) => {
+            sendEvent(
+                store,
+                CHAT_MESSAGE_RECEIVED,
+                /* data */ {
+                    senderId: id,
+                    message,
+                    isPrivate: true,
+                    timestamp
+                });
+        }
     );
 }
 
@@ -519,10 +519,10 @@ function _normalizeUrl(url: URL) {
 function _sendConferenceEvent(
         store: Object,
         action: {
-            conference: Object,
-            type: string,
-            url: ?string
-        }) {
+        conference: Object,
+        type: string,
+        url: ?string
+    }) {
     const { conference, type, ...data } = action;
 
     // For these (redux) actions, conference identifies a JitsiConference
@@ -566,13 +566,13 @@ function _sendConferenceFailedOnConnectionError(store, action) {
     const { connection } = action;
 
     locationURL
-        && forEachConference(
-            store,
+    && forEachConference(
+        store,
 
-            // If there's any conference in the  base/conference state then the
-            // base/conference feature is supposed to emit a failure.
-            conference => conference.getConnection() !== connection)
-        && sendEvent(
+        // If there's any conference in the  base/conference state then the
+        // base/conference feature is supposed to emit a failure.
+        conference => conference.getConnection() !== connection)
+    && sendEvent(
         store,
         CONFERENCE_TERMINATED,
         /* data */ {
@@ -603,13 +603,13 @@ function _swallowConferenceLeft({ getState }, action, { url }) {
     let swallowConferenceLeft = false;
 
     url
-        && forEachConference(getState, (conference, conferenceURL) => {
-            if (conferenceURL && conferenceURL.toString() === url) {
-                swallowConferenceLeft = true;
-            }
+    && forEachConference(getState, (conference, conferenceURL) => {
+        if (conferenceURL && conferenceURL.toString() === url) {
+            swallowConferenceLeft = true;
+        }
 
-            return !swallowConferenceLeft;
-        });
+        return !swallowConferenceLeft;
+    });
 
     return swallowConferenceLeft;
 }

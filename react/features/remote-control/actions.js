@@ -54,7 +54,7 @@ declare var $: Function;
  * }}
  * @public
  */
-export function openRemoteControlAuthorizationDialog(participantId: string) {
+export function openRemoteControlAuthorizationDialog(participantId) {
     return openDialog(RemoteControlAuthorizationDialog, { participantId });
 }
 

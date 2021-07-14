@@ -82,7 +82,7 @@ export function setLiveStreamKey(streamKey: string) {
  * @returns {Function}
  */
 export function showPendingRecordingNotification(streamType: string) {
-    return async (dispatch: Function) => {
+    return (dispatch: Function) => {
         const isLiveStreaming
             = streamType === JitsiMeetJS.constants.recording.mode.STREAM;
         const dialogProps = isLiveStreaming ? {
@@ -92,14 +92,15 @@ export function showPendingRecordingNotification(streamType: string) {
             descriptionKey: 'recording.pending',
             titleKey: 'dialog.recording'
         };
-        const notification = await dispatch(showNotification({
+        const showNotificationAction = showNotification({
             isDismissAllowed: false,
             ...dialogProps
-        }));
+        });
 
-        if (notification) {
-            dispatch(_setPendingRecordingNotificationUid(notification.uid, streamType));
-        }
+        dispatch(showNotificationAction);
+
+        dispatch(_setPendingRecordingNotificationUid(
+            showNotificationAction.uid, streamType));
     };
 }
 
@@ -158,7 +159,7 @@ export function showStartedRecordingNotification(
         const participantName = getParticipantDisplayName(state, initiatorId);
         let dialogProps = {
             customActionNameKey: undefined,
-            descriptionKey: participantName ? 'liveStreaming.onBy' : 'liveStreaming.on',
+            descriptionKey: 'liveStreaming.onBy',
             descriptionArguments: { name: participantName },
             isDismissAllowed: true,
             titleKey: 'dialog.liveStreaming'
@@ -171,7 +172,7 @@ export function showStartedRecordingNotification(
             dialogProps = {
                 customActionHandler: undefined,
                 customActionNameKey: undefined,
-                descriptionKey: participantName ? 'recording.onBy' : 'recording.on',
+                descriptionKey: 'recording.onBy',
                 descriptionArguments: { name: participantName },
                 isDismissAllowed: true,
                 titleKey: 'dialog.recording'

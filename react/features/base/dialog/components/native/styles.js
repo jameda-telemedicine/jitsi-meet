@@ -189,6 +189,10 @@ ColorSchemeRegistry.register('BottomSheet', {
         underlayColor: ColorPalette.toggled
     },
 
+    expandIcon: {
+        color: schemeColor('icon')
+    },
+
     /**
      * Bottom sheet's base style.
      */

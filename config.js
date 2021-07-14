@@ -6,34 +6,35 @@ var config = {
 
     hosts: {
         // XMPP domain.
-        domain: 'jitsi-meet.example.com',
+        domain: 'meet.jitsi',
 
         // When using authentication, domain for guest users.
         // anonymousdomain: 'guest.example.com',
 
         // Domain for authenticated users. Defaults to <domain>.
-        // authdomain: 'jitsi-meet.example.com',
+        authdomain: 'meet.jitsi',
+
+        // Call control component (Jigasi).
+        // call_control: 'callcontrol.jitsi-meet.example.com',
 
         // Focus component domain. Defaults to focus.<domain>.
         // focus: 'focus.jitsi-meet.example.com',
 
         // XMPP MUC domain. FIXME: use XEP-0030 to discover it.
-        muc: 'conference.jitsi-meet.example.com'
+        muc: 'muc.meet.jitsi'
     },
 
     // BOSH URL. FIXME: use XEP-0156 to discover it.
-    bosh: '//jitsi-meet.example.com/http-bind',
+    bosh: '/http-bind',
 
     // Websocket URL
-    // websocket: 'wss://jitsi-meet.example.com/xmpp-websocket',
+    // websocket: 'wss://meet.jitsi/xmpp-websocket',
 
     // The name of client node advertised in XEP-0115 'c' stanza
     clientNode: 'http://jitsi.org/jitsimeet',
 
     // The real JID of focus participant - can be overridden here
-    // Do not change username - FIXME: Make focus username configurable
-    // https://github.com/jitsi/jitsi-meet/issues/7376
-    // focusUserJid: 'focus@auth.jitsi-meet.example.com',
+    focusUserJid: 'focus@auth.meet.jitsi',
 
 
     // Testing / experimental features.
@@ -345,11 +346,18 @@ var config = {
     // Disables or enables RTX (RFC 4588) (defaults to false).
     // disableRtx: false,
 
-    // Disables or enables TCC support in this client (default: enabled).
+    // Disables or enables TCC (the default is in Jicofo and set to true)
+    // (draft-holmer-rmcat-transport-wide-cc-extensions-01). This setting
+    // affects congestion control, it practically enables send-side bandwidth
+    // estimations.
     // enableTcc: true,
 
-    // Disables or enables REMB support in this client (default: enabled).
-    // enableRemb: true,
+    // Disables or enables REMB (the default is in Jicofo and set to false)
+    // (draft-alvestrand-rmcat-remb-03). This setting affects congestion
+    // control, it practically enables recv-side bandwidth estimations. When
+    // both TCC and REMB are enabled, TCC takes precedence. When both are
+    // disabled, then bandwidth estimations are disabled.
+    // enableRemb: false,
 
     // Enables ICE restart logic in LJM and displays the page reload overlay on
     // ICE failure. Current disabled by default because it's causing issues with
@@ -359,14 +367,22 @@ var config = {
     // TCC sequence numbers starting from 0.
     // enableIceRestart: false,
 
-    // Enables forced reload of the client when the call is migrated as a result of
-    // the bridge going down.
-    // enableForcedReload: true,
+    // Defines the minimum number of participants to start a call (the default
+    // is set in Jicofo and set to 2).
+    // minParticipants: 2,
 
     // Use TURN/UDP servers for the jitsi-videobridge connection (by default
     // we filter out TURN/UDP because it is usually not needed since the
     // bridge itself is reachable via UDP)
     // useTurnUdp: false
+
+    // Enables / disables a data communication channel with the Videobridge.
+    // Values can be 'datachannel', 'websocket', true (treat it as
+    // 'datachannel'), undefined (treat it as 'datachannel') and false (don't
+    // open any channel).
+    // openBridgeChannel: true,
+    openBridgeChannel: 'websocket',
+
 
     // UI
     //
@@ -382,7 +398,7 @@ var config = {
 
     // Whether to use a welcome page or not. In case it's false a random room
     // will be joined when no room is specified.
-    enableWelcomePage: true,
+    enableWelcomePage: false,
 
     // Disable app shortcuts that are registered upon joining a conference
     // disableShortcuts: false,
@@ -393,7 +409,7 @@ var config = {
 
     // Enabling the close page will ignore the welcome page redirection when
     // a call is hangup.
-    // enableClosePage: false,
+    // enableClosePage: true,
 
     // Disable hiding of remote thumbnails when in a 1-on-1 conference call.
     // Setting this to null, will also disable showing the remote videos
@@ -401,7 +417,7 @@ var config = {
     // disable1On1Mode: null | false | true,
 
     // Default language for the user interface.
-    // defaultLanguage: 'en',
+    defaultLanguage: 'de',
 
     // Disables profile and the edit of all fields from the profile settings (display name and email)
     // disableProfile: false,
@@ -656,7 +672,7 @@ var config = {
 
     // If true, any checks to handoff to another application will be prevented
     // and instead the app will continue to display in the current browser.
-    // disableDeepLinking: false,
+    disableDeepLinking: true,
 
     // A property to disable the right click context menu for localVideo
     // the menu has option to flip the locally seen video for local presentations
@@ -669,7 +685,7 @@ var config = {
     // Mainly privacy related settings
 
     // Disables all invite functions from the app (share, invite, dial out...etc)
-    // disableInviteFunctions: true,
+    disableInviteFunctions: true,
 
     // Disables storing the room name to the recents list
     // doNotStoreRoom: true,
@@ -716,7 +732,7 @@ var config = {
          logoImageUrl: 'https://example.com/logo-img.png'
      }
     */
-    // dynamicBrandingUrl: '',
+    // brandingDataUrl: '',
 
     // Sets the background transparency level. '0' is fully transparent, '1' is opaque.
     // backgroundAlpha: 1,
@@ -803,13 +819,12 @@ var config = {
      disableAP
      disableHPF
      disableNS
+     enableLipSync
      enableTalkWhileMuted
      forceJVB121Ratio
-     forceTurnRelay
      hiddenDomain
      ignoreStartMuted
-     websocketKeepAlive
-     websocketKeepAliveUrl
+     startBitrate
      */
 
     /**

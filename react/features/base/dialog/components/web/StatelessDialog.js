@@ -1,7 +1,6 @@
 // @flow
 
-import ButtonGroup from '@atlaskit/button/button-group';
-import Button from '@atlaskit/button/standard-button';
+import Button, { ButtonGroup } from '@atlaskit/button';
 import Modal, { ModalFooter } from '@atlaskit/modal-dialog';
 import _ from 'lodash';
 import React, { Component } from 'react';

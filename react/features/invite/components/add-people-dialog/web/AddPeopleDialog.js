@@ -24,6 +24,7 @@ import {
 
 import CopyMeetingLinkSection from './CopyMeetingLinkSection';
 import DialInSection from './DialInSection';
+import Header from './Header';
 import InviteByEmailSection from './InviteByEmailSection';
 import InviteContactsSection from './InviteContactsSection';
 import LiveStreamSection from './LiveStreamSection';
@@ -149,6 +150,7 @@ function AddPeopleDialog({
     return (
         <Dialog
             cancelKey = { 'dialog.close' }
+            customHeader = { Header }
             hideCancelButton = { true }
             submitDisabled = { true }
             titleKey = 'addPeople.inviteMorePrompt'

@@ -41,7 +41,7 @@
     },
     "calendarSync": {
         "addMeetingURL": "Add a meeting link",
-        "confirmAddLink": "Do you want to add a Jitsi link to this event?",
+        "confirmAddLink": "Do you want to add a {{app}} link to this event?",
         "error": {
             "appConfiguration": "Calendar integration is not properly configured.",
             "generic": "An error has occurred. Please check your calendar settings or try refreshing the calendar.",
@@ -397,7 +397,7 @@
         "answer": "Answer",
         "audioCallTitle": "Incoming call",
         "decline": "Dismiss",
-        "productLabel": "from Jitsi Meet",
+        "productLabel": "from {{app}}",
         "videoCallTitle": "Incoming video call"
     },
     "info": {
@@ -463,7 +463,8 @@
         "toggleParticipantsPane": "Show or hide the participants pane",
         "toggleScreensharing": "Switch between camera and screen sharing",
         "toggleShortcuts": "Show or hide keyboard shortcuts",
-        "videoMute": "Start or stop your camera"
+        "videoMute": "Start or stop your camera",
+        "videoQuality": "Manage call quality"
     },
     "liveStreaming": {
         "limitNotificationDescriptionWeb": "Due to high demand your streaming will be limited to {{limit}} min. For unlimited streaming try <a href={{url}} rel='noopener noreferrer' target='_blank'>{{app}}</a>.",
@@ -485,7 +486,7 @@
         "invalidStreamKey": "Live stream key may be incorrect.",
         "off": "Live Streaming stopped",
         "offBy": "{{name}} stopped the live streaming",
-        "on": "Live Streaming started",
+        "on": "Live Streaming",
         "onBy": "{{name}} started the live streaming",
         "pending": "Starting Live Stream...",
         "serviceName": "Live Streaming service",
@@ -531,6 +532,14 @@
     "lockRoomPassword": "password",
     "lockRoomPasswordUppercase": "Password",
     "me": "me",
+    "notes": {
+        "copyToClipboardButton": "Copy",
+        "description": "Take notes during the video consultation. This way you have documented all information even after the interview. Download this as a file before you say goodbye or copy the text into the clipboard to complete your documents. For reasons of data protection, the notes are deleted when the video consultation hour is ended.",
+        "downloadButton": "Download.txt",
+        "downloadFilename": "Notes",
+        "headerTitle": "Notes",
+        "textAreaPlaceholder": "Type your notes here..."
+    },
     "notify": {
         "connectedOneMember": "{{name}} joined the meeting",
         "connectedThreePlusMembers": "{{name}} and {{count}} others joined the meeting",
@@ -704,7 +713,7 @@
         "loggedIn": "Logged in as {{userName}}",
         "off": "Recording stopped",
         "offBy": "{{name}} stopped the recording",
-        "on": "Recording started",
+        "on": "Recording",
         "onBy": "{{name}} started the recording",
         "pending": "Preparing to record the meeting...",
         "rec": "REC",
@@ -860,7 +869,9 @@
             "videoblur": "Toggle video blur",
             "selectBackground": "Select Background",
             "expand": "Expand",
-            "collapse": "Collapse"
+            "collapse": "Collapse",
+            "fileTransfer": "File transfer",
+            "notes": "Notes"
         },
         "addPeople": "Add people to your call",
         "audioSettings": "Audio settings",
@@ -940,7 +951,9 @@
         "tileViewToggle": "Toggle tile view",
         "toggleCamera": "Toggle camera",
         "videomute": "Start / Stop camera",
-        "selectBackground": "Select background"
+        "selectBackground": "Select background",
+        "fileTransfer": "File Transfer feature is coming soon.",
+        "notes": "Notes"
     },
     "transcribing": {
         "ccButtonTooltip": "Start / Stop subtitles",

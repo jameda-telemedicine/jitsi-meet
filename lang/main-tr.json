@@ -60,7 +60,7 @@
         "today": "Bugün"
     },
     "chat": {
-        "error": "Hata: Mesajınız gönderilmedi. Neden: {{error}}",
+        "error": "Hata: mesajınız gönderilmedi. Gerekçe: {{error}}",
         "fieldPlaceHolder": "Mesajınızı buraya yazın",
         "messagebox": "Bir mesaj yazın",
         "messageTo": "{{recipient}} adlı kişiye özel mesaj",
@@ -415,7 +415,7 @@
         "invalidStreamKey": "Canlı akış anahtarı yanlış olabilir.",
         "off": "Canlı Akış durduruldu",
         "offBy": "{{name}} canlı akışı durdurdu",
-        "on": "Canlı Akış başlatıldı",
+        "on": "Canlı Akış",
         "onBy": "{{name}} canlı akışı başlattı",
         "pending": "Canlı Akış başlatılıyor...",
         "serviceName": "Canlı Akış hizmeti",
@@ -575,7 +575,7 @@
         "live": "CANLI",
         "loggedIn": "{{userName}} olarak giriş yapıldı",
         "off": "Kayıt durdu",
-        "on": "Kayıt başladı",
+        "on": "Kaydediliyor",
         "pending": "Toplantıyı kaydetmeye hazırlanıyor ...",
         "rec": "KAYIT",
         "serviceDescription": "Kaydınız kayıt hizmeti tarafından kaydedilecektir",
@@ -741,7 +741,7 @@
         "noisyAudioInputDesc": "Mikrofonunuz gürültü yapıyor gibi görünüyor, lütfen cihazı kapatmayı veya değiştirmeyi düşünün.",
         "openChat": "Mesajlaşmayı aç",
         "pip": "Resim içinde Resim moduna gir",
-        "privateMessage": "Özel mesaj gönder",
+        "privateMessage": "Özel mesajgönder",
         "profile": "Profilinizi düzenleyin",
         "raiseHand": "Elinizi kaldırın/indirin",
         "raiseYourHand": "Elinizi kaldırın",
@@ -817,7 +817,7 @@
         "domute": "Sustur",
         "domuteOthers": "Diğer herkesi sustur",
         "flip": "Döndür",
-        "kick": "Çıkar",
+        "kick": "Çıkarıldı",
         "moderator": "Yönetici",
         "mute": "Katılımcı sessiz",
         "muted": "Sessiz",
@@ -855,7 +855,7 @@
         "sendFeedback": "Geri bildirim gönder",
         "terms": "Kurallar",
         "title": "Güvenli, tüm özelliklere erişimli ve tamamen ücretsiz görüntülü arama"
-
+       
     },
 
     "lonelyMeetingExperience": {

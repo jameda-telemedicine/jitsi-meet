@@ -70,7 +70,7 @@ module:hook("muc-occupant-pre-join", function (event)
             return;
         end
 
-        if not (room_name == session.jitsi_meet_room or session.jitsi_meet_room == '*') then
+        if not (room_name == session.jitsi_meet_room) then
             module:log('debug', 'skip allowners for auth user and non matching room name: %s, jwt room name: %s', room_name, session.jitsi_meet_room);
             return;
         end

@@ -58,8 +58,7 @@ function AudioSettingsPopup({
     setAudioInputDevice,
     setAudioOutputDevice,
     onClose,
-    outputDevices,
-    popupPlacement
+    outputDevices
 }: Props) {
     return (
         <div className = 'audio-preview'>
@@ -73,7 +72,7 @@ function AudioSettingsPopup({
                     setAudioOutputDevice = { setAudioOutputDevice } /> }
                 isOpen = { isOpen }
                 onClose = { onClose }
-                placement = { popupPlacement }>
+                position = 'top left'>
                 {children}
             </InlineDialog>
         </div>

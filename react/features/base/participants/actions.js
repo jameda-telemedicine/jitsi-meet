@@ -24,7 +24,8 @@ import {
     getLocalParticipant,
     getNormalizedDisplayName,
     getParticipantDisplayName,
-    getParticipantById
+    getParticipantById,
+    figureOutMutedWhileDisconnectedStatus
 } from './functions';
 import logger from './logger';
 
@@ -225,12 +226,15 @@ export function muteRemoteParticipant(id, mediaType) {
  * }}
  */
 export function participantConnectionStatusChanged(id, connectionStatus) {
-    return {
-        type: PARTICIPANT_UPDATED,
-        participant: {
-            connectionStatus,
-            id
-        }
+    return (dispatch, getState) => {
+        dispatch({
+            type: PARTICIPANT_UPDATED,
+            participant: {
+                connectionStatus,
+                id,
+                mutedWhileDisconnected: figureOutMutedWhileDisconnectedStatus(getState(), id, connectionStatus)
+            }
+        });
     };
 }
 

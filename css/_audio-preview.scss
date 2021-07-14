@@ -175,8 +175,8 @@
         top: 14px;
     }
 
-    // Override @atlaskit/InlineDialog container which is made with styled components
-    & > div:nth-child(2) {
+   // Override @atlaskit/InlineDialog container which is made with styled components
+    & > div > div:nth-child(2) > div > div {
         outline: none;
         padding: 0;
     }

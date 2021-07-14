@@ -13,7 +13,6 @@ import { StyleType } from '../../../base/styles';
 import { PrivateMessageButton } from '../../../chat';
 import { hideRemoteVideoMenu } from '../../actions.native';
 
-import ConnectionStatusButton from './ConnectionStatusButton';
 import GrantModeratorButton from './GrantModeratorButton';
 import KickButton from './KickButton';
 import MuteButton from './MuteButton';
@@ -112,7 +111,6 @@ class RemoteVideoMenu extends PureComponent<Props> {
                 <PinButton { ...buttonProps } />
                 <PrivateMessageButton { ...buttonProps } />
                 <MuteEveryoneElseButton { ...buttonProps } />
-                <ConnectionStatusButton { ...buttonProps } />
             </BottomSheet>
         );
     }

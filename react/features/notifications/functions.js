@@ -1,7 +1,5 @@
 // @flow
 
-import { toState } from '../base/redux';
-
 declare var interfaceConfig: Object;
 
 /**
@@ -11,11 +9,9 @@ declare var interfaceConfig: Object;
  * @param {Object|Function} stateful - The redux store state.
  * @returns {boolean}
  */
-export function areThereNotifications(stateful: Object | Function) {
-    const state = toState(stateful);
-    const { enabled, notifications } = state['features/notifications'];
+export function areThereNotifications() {
 
-    return enabled && notifications.length > 0;
+    return false;
 }
 
 /**

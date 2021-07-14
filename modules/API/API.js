@@ -815,8 +815,8 @@ class API {
      * @returns {void}
      */
     notifyReceivedChatMessage(
-            { body, id, nick, privateMessage, ts }: {
-                body: *, id: string, nick: string, privateMessage: boolean, ts: *
+            { body, id, nick, ts }: {
+                body: *, id: string, nick: string, ts: *
             } = {}) {
         if (APP.conference.isLocalId(id)) {
             return;
@@ -827,7 +827,6 @@ class API {
             from: id,
             message: body,
             nick,
-            privateMessage,
             stamp: ts
         });
     }
@@ -904,19 +903,6 @@ class API {
     notifyEndpointTextMessageReceived(data: Object) {
         this._sendEvent({
             name: 'endpoint-text-message-received',
-            data
-        });
-    }
-
-    /**
-     * Notify external application (if API is enabled) that the list of sharing participants changed.
-     *
-     * @param {Object} data - The event data.
-     * @returns {void}
-     */
-    notifySharingParticipantsChanged(data: Object) {
-        this._sendEvent({
-            name: 'content-sharing-participants-changed',
             data
         });
     }
