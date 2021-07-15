@@ -1,7 +1,6 @@
 // @flow
 
 import { jitsiLocalStorage } from '@jitsi/js-utils';
-import uuid from 'uuid';
 
 import { BILLING_ID, VPAAS_TENANT_PREFIX } from './constants';
 import logger from './logger';

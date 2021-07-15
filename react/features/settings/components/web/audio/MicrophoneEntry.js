@@ -209,7 +209,7 @@ export default class MicrophoneEntry extends Component<Props, State> {
                     labelId = { deviceTextId }>
                     {children}
                 </AudioSettingsEntry>
-               <Meter
+                <Meter
                     className = 'audio-preview-meter-mic'
                     isDisabled = { hasError }
                     level = { this.state.level } />

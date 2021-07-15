@@ -52,12 +52,10 @@ var interfaceConfig = {
         'camera',
         'closedcaptions',
         'desktop',
-        'fullscreen',
         'hangup',
         'settings',
         'videoquality',
         'filmstrip',
-        'tileview',
         'help',
         'notes'
 

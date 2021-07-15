@@ -11,8 +11,6 @@ import AbstractChat, {
     type Props
 } from '../AbstractChat';
 
-import ChatDialog from './ChatDialog';
-import Header from './ChatDialogHeader';
 import ChatInput from './ChatInput';
 import DisplayNameForm from './DisplayNameForm';
 import KeyboardAvoider from './KeyboardAvoider';

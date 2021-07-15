@@ -487,7 +487,6 @@ class MoreTab extends AbstractDialogTab<Props, State> {
             <div
                 className = 'settings-sub-pane right'>
                 { showLanguageSettings && this._renderLanguageSelect() }
-                { this._renderFramerateSelect() }
             </div>
         );
     }
@@ -504,7 +503,6 @@ class MoreTab extends AbstractDialogTab<Props, State> {
             <div
                 className = 'settings-sub-pane left'>
                 { showPrejoinSettings && this._renderPrejoinScreenSettings() }
-                { this._renderKeyboardShortcutCheckbox() }
                 { showModeratorSettings && this._renderModeratorSettings() }
             </div>
         );
