@@ -3,7 +3,6 @@
 import InlineDialog from '@atlaskit/inline-dialog';
 import React, { Component } from 'react';
 
-import { Drawer, DrawerPortal } from '../../../toolbox/components/web';
 import { isMobileBrowser } from '../../environment/utils';
 
 /**

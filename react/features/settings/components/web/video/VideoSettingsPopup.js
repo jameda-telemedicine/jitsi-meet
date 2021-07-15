@@ -49,7 +49,6 @@ function VideoSettingsPopup({
     children,
     isOpen,
     onClose,
-    popupPlacement,
     setVideoInputDevice,
     videoDeviceIds
 }: Props) {

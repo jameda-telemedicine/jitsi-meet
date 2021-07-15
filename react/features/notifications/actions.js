@@ -3,8 +3,6 @@
 import throttle from 'lodash/throttle';
 import type { Dispatch } from 'redux';
 
-import { NOTIFICATIONS_ENABLED, getFeatureFlag } from '../base/flags';
-
 import {
     CLEAR_NOTIFICATIONS,
     HIDE_NOTIFICATION,
